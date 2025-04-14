@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="800" height="600" viewBox="0 0 800 600" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="800" height="600" fill="#1a1a1a"/>
+  
+  <!-- Grid Pattern -->
+  <path d="M0 0h800v1H0zM0 100h800v1H0zM0 200h800v1H0zM0 300h800v1H0zM0 400h800v1H0zM0 500h800v1H0zM0 600h800v1H0z" fill="#2a2a2a"/>
+  <path d="M0 0v600h1V0zM100 0v600h1V0zM200 0v600h1V0zM300 0v600h1V0zM400 0v600h1V0zM500 0v600h1V0zM600 0v600h1V0zM700 0v600h1V0zM800 0v600h1V0z" fill="#2a2a2a"/>
+  
+  <!-- Placeholder Text -->
+  <text x="400" y="300" text-anchor="middle" fill="#666" font-family="Arial" font-size="24">
+    Project Image Coming Soon
+  </text>
+</svg>
