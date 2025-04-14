@@ -115,9 +115,8 @@ export default function ResumeSection() {
                   <Button
                     variant="outline"
                     className="gap-2 group min-w-[140px] bg-white/5 hover:bg-white/10 text-white border border-white/20 button-border-glow"
-                    asChild
                   >
-                    <a href="/Arhaan_Resume.pdf" download>
+                    <a href="/Arhaan_Resume.pdf" download className="flex items-center gap-2">
                       <Download className="h-4 w-4 transition-transform group-hover:scale-110" />
                       Download PDF
                     </a>
@@ -125,12 +124,12 @@ export default function ResumeSection() {
                   <Button
                     variant="outline"
                     className="gap-2 group min-w-[140px] bg-white/5 hover:bg-white/10 text-white border border-white/20 button-border-glow"
-                    asChild
                   >
                     <a
                       href="https://drive.google.com/drive/folders/1S55QbJu8Pv5a8wAxj5SMgOviAwjTbmKl?usp=sharing"
                       target="_blank"
                       rel="noopener noreferrer"
+                      className="flex items-center gap-2"
                     >
                       <Users className="h-4 w-4 transition-transform group-hover:scale-110" />
                       References

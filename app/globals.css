@@ -475,3 +475,7 @@ body::before {
   -ms-overflow-style: none;  /* IE and Edge */
   scrollbar-width: none;  /* Firefox */
 }
+
+.perspective-1000 {
+  perspective: 1000px;
+}
