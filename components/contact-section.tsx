@@ -11,12 +11,20 @@ const formSchema = z.object({
   name: z.string().min(2, "Name must be at least 2 characters"),
   email: z.string().email("Please enter a valid email"),
   subject: z.string().min(3, "Subject must be at least 3 characters"),
-  phone: z.string().optional(),
+  phone: z.string()
+    .optional()
+    .refine((val) => !val || /^\+?[1-9]\d{1,14}$/.test(val), {
+      message: "Please enter a valid phone number (e.g., +1234567890)"
+    }),
   company: z.string().optional(),
   message: z.string().min(10, "Message must be at least 10 characters"),
   inquiryType: z.string().min(1, "Please select an inquiry type"),
   availability: z.string().optional(),
-  website: z.string().optional(),
+  website: z.string()
+    .optional()
+    .refine((val) => !val || /^(https?:\/\/)?([a-zA-Z0-9-]+\.)+[a-zA-Z]{2,}(\/[^\s]*)?$/.test(val), {
+      message: "Please enter a valid website URL (e.g., example.com or www.example.com)"
+    }),
 })
 
 type FormData = z.infer<typeof formSchema>
