@@ -11,14 +11,6 @@ export function LoadingAnimation() {
           <motion.div
             key={i}
             className="w-1.5 h-1.5 bg-white rounded-full"
-            style={{
-              WebkitBackfaceVisibility: "hidden",
-              backfaceVisibility: "hidden",
-              WebkitTransform: "translateZ(0)",
-              transform: "translateZ(0)",
-              WebkitPerspective: "1000",
-              perspective: "1000",
-            }}
             animate={{
               y: [0, -4, 0],
               opacity: [0.5, 1, 0.5],

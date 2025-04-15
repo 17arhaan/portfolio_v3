@@ -13,12 +13,6 @@ export default function GradientBubbles() {
         style={{
           background: "radial-gradient(circle, rgba(60,7,83,0.4) 0%, rgba(145,10,103,0.3) 50%, rgba(0,0,0,0) 100%)",
           filter: "blur(100px)",
-          WebkitBackfaceVisibility: "hidden",
-          backfaceVisibility: "hidden",
-          WebkitTransform: "translateZ(0)",
-          transform: "translateZ(0)",
-          WebkitPerspective: "1000",
-          perspective: "1000",
         }}
         animate={{
           scale: [1, 1.3, 1],
@@ -39,12 +33,6 @@ export default function GradientBubbles() {
         style={{
           background: "radial-gradient(circle, rgba(114,4,85,0.3) 0%, rgba(145,10,103,0.2) 50%, rgba(0,0,0,0) 100%)",
           filter: "blur(80px)",
-          WebkitBackfaceVisibility: "hidden",
-          backfaceVisibility: "hidden",
-          WebkitTransform: "translateZ(0)",
-          transform: "translateZ(0)",
-          WebkitPerspective: "1000",
-          perspective: "1000",
         }}
         animate={{
           scale: [1, 1.2, 1],
@@ -66,12 +54,6 @@ export default function GradientBubbles() {
         style={{
           background: "radial-gradient(circle, rgba(60,7,83,0.3) 0%, rgba(114,4,85,0.2) 50%, rgba(0,0,0,0) 100%)",
           filter: "blur(70px)",
-          WebkitBackfaceVisibility: "hidden",
-          backfaceVisibility: "hidden",
-          WebkitTransform: "translateZ(0)",
-          transform: "translateZ(0)",
-          WebkitPerspective: "1000",
-          perspective: "1000",
         }}
         animate={{
           scale: [1, 1.25, 1],
@@ -93,12 +75,6 @@ export default function GradientBubbles() {
         style={{
           background: "radial-gradient(circle, rgba(145,10,103,0.2) 0%, rgba(114,4,85,0.1) 50%, rgba(0,0,0,0) 100%)",
           filter: "blur(60px)",
-          WebkitBackfaceVisibility: "hidden",
-          backfaceVisibility: "hidden",
-          WebkitTransform: "translateZ(0)",
-          transform: "translateZ(0)",
-          WebkitPerspective: "1000",
-          perspective: "1000",
         }}
         animate={{
           scale: [1, 1.15, 1],
@@ -119,12 +95,6 @@ export default function GradientBubbles() {
         style={{
           background: "radial-gradient(circle, rgba(60,7,83,0.2) 0%, rgba(114,4,85,0.1) 50%, rgba(0,0,0,0) 100%)",
           filter: "blur(50px)",
-          WebkitBackfaceVisibility: "hidden",
-          backfaceVisibility: "hidden",
-          WebkitTransform: "translateZ(0)",
-          transform: "translateZ(0)",
-          WebkitPerspective: "1000",
-          perspective: "1000",
         }}
         animate={{
           scale: [1, 1.2, 1],

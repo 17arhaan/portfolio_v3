@@ -14,27 +14,9 @@ export function GlowEffect({ children, glowColor = "rgba(99, 102, 241, 0.5)", in
         style={{
           background: `radial-gradient(circle at center, ${glowColor} 0%, transparent 70%)`,
           opacity: intensity,
-          WebkitBackfaceVisibility: "hidden",
-          backfaceVisibility: "hidden",
-          WebkitTransform: "translateZ(0)",
-          transform: "translateZ(0)",
-          WebkitPerspective: "1000",
-          perspective: "1000",
-          WebkitFilter: "blur(12px)",
-          filter: "blur(12px)",
         }}
       />
-      <div 
-        className="relative"
-        style={{
-          WebkitBackfaceVisibility: "hidden",
-          backfaceVisibility: "hidden",
-          WebkitTransform: "translateZ(0)",
-          transform: "translateZ(0)",
-        }}
-      >
-        {children}
-      </div>
+      <div className="relative">{children}</div>
     </div>
   )
 } 

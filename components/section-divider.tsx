@@ -14,14 +14,6 @@ export default function SectionDivider({ light = false }: SectionDividerProps) {
       viewport={{ once: true }}
       transition={{ duration: 0.7 }}
       className="relative h-24 w-full overflow-hidden"
-      style={{
-        WebkitBackfaceVisibility: "hidden",
-        backfaceVisibility: "hidden",
-        WebkitTransform: "translateZ(0)",
-        transform: "translateZ(0)",
-        WebkitPerspective: "1000",
-        perspective: "1000",
-      }}
     >
       <div className="absolute inset-0 flex items-center justify-center">
         <div className="w-full max-w-5xl px-4 flex items-center">
@@ -33,26 +25,12 @@ export default function SectionDivider({ light = false }: SectionDividerProps) {
             className={`w-8 h-8 mx-4 rounded-full flex items-center justify-center ${
               light ? "bg-white/5" : "bg-black/30"
             } backdrop-blur-sm border border-white/10`}
-            style={{
-              WebkitBackfaceVisibility: "hidden",
-              backfaceVisibility: "hidden",
-              WebkitTransform: "translateZ(0)",
-              transform: "translateZ(0)",
-              WebkitPerspective: "1000",
-              perspective: "1000",
-            }}
           >
             <motion.div
               className="w-2 h-2 rounded-full"
               style={{
                 background: "radial-gradient(circle, #3C0753 0%, #910A67 100%)",
                 boxShadow: "0 0 10px rgba(145, 10, 103, 0.5)",
-                WebkitBackfaceVisibility: "hidden",
-                backfaceVisibility: "hidden",
-                WebkitTransform: "translateZ(0)",
-                transform: "translateZ(0)",
-                WebkitPerspective: "1000",
-                perspective: "1000",
               }}
               animate={{
                 scale: [1, 1.2, 1],
