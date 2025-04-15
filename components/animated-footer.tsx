@@ -1,15 +1,17 @@
 "use client"
 
 import { useEffect, useRef, useState } from "react"
-import { motion, useAnimation } from "framer-motion"
+import { motion, useAnimation, AnimatePresence } from "framer-motion"
 import Image from "next/image"
 import { Github, Linkedin, Mail, Twitter, ExternalLink, Home, Briefcase, Code, Cpu, FileText, Award } from "lucide-react"
 
 export default function AnimatedFooter() {
   const [currentYear] = useState(new Date().getFullYear())
   const [isHovered, setIsHovered] = useState(false)
+  const [isVideoOpen, setIsVideoOpen] = useState(false)
   const controls = useAnimation()
   const particlesRef = useRef<HTMLDivElement>(null)
+  const videoRef = useRef<HTMLVideoElement>(null)
 
   // Animate the particles
   useEffect(() => {
@@ -117,7 +119,8 @@ export default function AnimatedFooter() {
               animate={controls}
               onHoverStart={() => setIsHovered(true)}
               onHoverEnd={() => setIsHovered(false)}
-              className="mb-2 signature-container"
+              onClick={() => setIsVideoOpen(true)}
+              className="mb-2 signature-container cursor-pointer"
             >
               <div className="w-72 h-24 relative">
                 <Image
@@ -131,6 +134,45 @@ export default function AnimatedFooter() {
                 />
               </div>
             </motion.div>
+
+            {/* Video Modal */}
+            <AnimatePresence>
+              {isVideoOpen && (
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.5, ease: "easeInOut" }}
+                  className="fixed inset-0 bg-black/90 z-50 flex items-center justify-center"
+                  onClick={() => {
+                    if (videoRef.current) {
+                      videoRef.current.pause();
+                      videoRef.current.currentTime = 0;
+                    }
+                    setIsVideoOpen(false);
+                  }}
+                >
+                  <motion.video
+                    ref={videoRef}
+                    initial={{ scale: 0.9, opacity: 0 }}
+                    animate={{ scale: 1, opacity: 1 }}
+                    exit={{ scale: 0.9, opacity: 0 }}
+                    transition={{ duration: 0.5, ease: "easeOut" }}
+                    className="w-full max-w-4xl rounded-lg shadow-2xl"
+                    src="/ArhaanGirdhar_MC.mp4"
+                    autoPlay
+                    playsInline
+                    onClick={(e) => e.stopPropagation()}
+                    onEnded={() => {
+                      setTimeout(() => {
+                        setIsVideoOpen(false);
+                      }, 500);
+                    }}
+                  />
+                </motion.div>
+              )}
+            </AnimatePresence>
+
             <div className="space-y-3">
               <p className="text-white/80 text-sm max-w-md">
                 <span className="font-medium text-white">Arhaan Girdhar</span> — Computer Science student specializing
