@@ -66,6 +66,8 @@ export default function Navbar({ experienceRef, projectsRef, skillsRef, certific
   const scrollToSection = (item: NavItem) => {
     if (item.id === "home") {
       window.scrollTo({ top: 0, behavior: "smooth" })
+    } else if (item.id === "about") {
+      document.getElementById('about')?.scrollIntoView({ behavior: 'smooth' })
     } else if (item.ref && item.ref.current) {
       item.ref.current.scrollIntoView({ behavior: "smooth" })
     } else if (item.id === "contact") {
@@ -154,6 +156,59 @@ export default function Navbar({ experienceRef, projectsRef, skillsRef, certific
       )}
 
       <CinematicVideo isOpen={isVideoOpen} onClose={() => setIsVideoOpen(false)} />
+
+      <style jsx global>{`
+        .nav-button {
+          position: relative;
+          overflow: hidden;
+        }
+        .nav-button::before {
+          content: '';
+          position: absolute;
+          top: -50%;
+          left: -50%;
+          width: 200%;
+          height: 200%;
+          background: radial-gradient(
+            circle at center,
+            rgba(255, 255, 255, 0.1) 0%,
+            rgba(255, 255, 255, 0.05) 30%,
+            transparent 60%
+          );
+          opacity: 0;
+          transition: opacity 0.3s ease;
+          animation: gradientMove 8s infinite linear;
+        }
+        .nav-button:hover::before {
+          opacity: 1;
+        }
+        .active-nav-item::before {
+          opacity: 1;
+          background: radial-gradient(
+            circle at center,
+            rgba(255, 255, 255, 0.15) 0%,
+            rgba(255, 255, 255, 0.1) 30%,
+            transparent 60%
+          );
+        }
+        @keyframes gradientMove {
+          0% {
+            transform: translate(0%, 0%) rotate(0deg);
+          }
+          25% {
+            transform: translate(5%, 5%) rotate(5deg);
+          }
+          50% {
+            transform: translate(0%, 0%) rotate(0deg);
+          }
+          75% {
+            transform: translate(-5%, -5%) rotate(-5deg);
+          }
+          100% {
+            transform: translate(0%, 0%) rotate(0deg);
+          }
+        }
+      `}</style>
     </>
   )
 }

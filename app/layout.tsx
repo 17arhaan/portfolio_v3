@@ -7,6 +7,7 @@ import { SpeedInsights } from "@vercel/speed-insights/next"
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
+  metadataBase: new URL('https://arhaanportfolio.in'),
   title: 'Arhaan Girdhar | Portfolio',
   description: 'Personal portfolio website showcasing projects in web development, artificial intelligence, and computer vision.',
   keywords: [

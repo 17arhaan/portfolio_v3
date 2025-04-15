@@ -68,8 +68,8 @@ const workExperience = [
     company: "Coming Soon",
     location: "On-Site | DEL , IN",
     period: "Summer 2025",
-    description: null,
-    skills: null,
+    description: [],
+    skills: [],
     logoUrl: null,
   },
 ]
