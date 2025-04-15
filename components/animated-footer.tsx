@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react"
 import { motion, useAnimation } from "framer-motion"
 import Image from "next/image"
-import { Github, Linkedin, Mail, Twitter, ExternalLink, Home, Briefcase, Code, Cpu, FileText } from "lucide-react"
+import { Github, Linkedin, Mail, Twitter, ExternalLink, Home, Briefcase, Code, Cpu, FileText, Award } from "lucide-react"
 
 export default function AnimatedFooter() {
   const [currentYear] = useState(new Date().getFullYear())
@@ -162,6 +162,7 @@ export default function AnimatedFooter() {
                 { name: "Experience", icon: Briefcase },
                 { name: "Projects", icon: Code },
                 { name: "Skills", icon: Cpu },
+                { name: "Certifications", icon: Award },
                 { name: "Resume", icon: FileText },
                 { name: "Contact", icon: Mail },
               ].map((item) => (

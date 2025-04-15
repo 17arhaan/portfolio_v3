@@ -12,53 +12,19 @@ interface LandingPageProps {
 }
 
 export default function LandingPage({ experienceRef }: LandingPageProps) {
-  const parallaxRef = useRef<HTMLDivElement>(null)
-  const titleRef = useRef<HTMLHeadingElement>(null)
-  const subtitleRef = useRef<HTMLParagraphElement>(null)
   const [gradientPosition, setGradientPosition] = useState(0)
   const [glowIntensity, setGlowIntensity] = useState(0)
-
-  // Handle parallax effect on scroll
-  useEffect(() => {
-    const handleScroll = () => {
-      if (!parallaxRef.current || !titleRef.current || !subtitleRef.current) return
-
-      const scrollY = window.scrollY
-      const parallaxSpeed = 0.5 // Adjust for more/less parallax effect
-      const viewportHeight = window.innerHeight
-
-      // More elegant fade and movement based on scroll percentage
-      const scrollPercentage = Math.min(scrollY / (viewportHeight * 0.7), 1)
-
-      // Smoother, more elegant transform with cubic-bezier easing
-      titleRef.current.style.transform = `translateY(${scrollY * parallaxSpeed * 0.7}px) scale(${1 - scrollPercentage * 0.1})`
-      subtitleRef.current.style.transform = `translateY(${scrollY * parallaxSpeed}px) scale(${1 - scrollPercentage * 0.05})`
-
-      // Improved opacity transition with slight delay for title vs subtitle
-      const titleOpacity = Math.max(1 - scrollPercentage * 1.3, 0)
-      const subtitleOpacity = Math.max(1 - scrollPercentage * 1.5, 0)
-
-      titleRef.current.style.opacity = titleOpacity.toString()
-      subtitleRef.current.style.opacity = subtitleOpacity.toString()
-
-      // Fade out entire section with slight delay
-      parallaxRef.current.style.opacity = Math.max(1 - scrollPercentage * 1.2, 0).toString()
-    }
-
-    window.addEventListener("scroll", handleScroll)
-    return () => window.removeEventListener("scroll", handleScroll)
-  }, [])
 
   // Animate gradient and glow effects with smoother transitions
   useEffect(() => {
     // Animate gradient position more slowly and smoothly
     const gradientInterval = setInterval(() => {
-      setGradientPosition((prev) => (prev >= 100 ? 0 : prev + 0.2)) // Reduced from 0.5 to 0.2 for smoother movement
+      setGradientPosition((prev) => (prev >= 100 ? 0 : prev + 0.2))
     }, 50)
 
     // Animate glow intensity with smoother sine wave
     const glowInterval = setInterval(() => {
-      setGlowIntensity((prev) => Math.sin(Date.now() * 0.0003) * 0.2 + 0.2) // Reduced frequency and amplitude
+      setGlowIntensity((prev) => Math.sin(Date.now() * 0.0003) * 0.2 + 0.2)
     }, 16)
 
     return () => {
@@ -85,16 +51,15 @@ export default function LandingPage({ experienceRef }: LandingPageProps) {
       #3C0753 70%, 
       #FFFFFF 100%
     )`,
-    backgroundSize: "300% 100%", // Increased from 200% to 300% for smoother movement
+    backgroundSize: "300% 100%",
     backgroundPosition: `${gradientPosition}% 0`,
     WebkitBackgroundClip: "text",
     backgroundClip: "text",
     color: "transparent",
     display: "inline-block",
-    // Enhanced glow effect - more visible but still elegant
     textShadow: `0 0 ${2 + glowIntensity * 2}px rgba(255, 255, 255, ${0.4 + glowIntensity * 0.2}), 
                0 0 ${5 + glowIntensity * 5}px rgba(255, 255, 255, ${0.2 + glowIntensity * 0.1})`,
-    transition: "text-shadow 0.5s ease-out", // Smoother transition
+    transition: "text-shadow 0.5s ease-out",
   }
 
   // Make tagline glow more subtle
@@ -104,7 +69,7 @@ export default function LandingPage({ experienceRef }: LandingPageProps) {
       0 0 ${2 + glowIntensity * 3}px rgba(255, 255, 255, ${0.3 + glowIntensity * 0.1}),
       0 0 ${4 + glowIntensity * 5}px rgba(255, 255, 255, ${0.1 + glowIntensity * 0.1})
     `,
-    transition: "text-shadow 0.5s ease-out", // Smoother transition
+    transition: "text-shadow 0.5s ease-out",
   }
 
   // Make description glow more subtle
@@ -114,35 +79,13 @@ export default function LandingPage({ experienceRef }: LandingPageProps) {
       0 0 ${1 + glowIntensity * 2}px rgba(255, 255, 255, ${0.2 + glowIntensity * 0.1}),
       0 0 ${2 + glowIntensity * 3}px rgba(255, 255, 255, ${0.1 + glowIntensity * 0.05})
     `,
-    transition: "text-shadow 0.5s ease-out", // Smoother transition
-  }
-
-  // Button hover animation variants
-  const buttonVariants = {
-    initial: {
-      scale: 1,
-      boxShadow: `0 0 5px rgba(255, 255, 255, 0.1)`,
-    },
-    hover: {
-      scale: 1.05,
-      boxShadow: `0 0 15px rgba(255, 255, 255, 0.3)`,
-      transition: {
-        scale: { type: "spring", stiffness: 400, damping: 10 },
-        boxShadow: { duration: 0.3 },
-      },
-    },
-    tap: {
-      scale: 0.98,
-      boxShadow: `0 0 10px rgba(255, 255, 255, 0.2)`,
-      transition: { duration: 0.1 },
-    },
+    transition: "text-shadow 0.5s ease-out",
   }
 
   return (
     <section
       id="home"
       className="relative h-screen flex flex-col items-center justify-center overflow-hidden"
-      ref={parallaxRef}
     >
       {/* Star field with parallax effect */}
       <div className="absolute inset-0 w-full h-full overflow-hidden pointer-events-none z-0">
@@ -152,7 +95,6 @@ export default function LandingPage({ experienceRef }: LandingPageProps) {
       {/* Content */}
       <div className="z-10 text-center px-4 max-w-3xl">
         <motion.h1
-          ref={titleRef}
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, ease: "easeOut" }}
@@ -175,7 +117,6 @@ export default function LandingPage({ experienceRef }: LandingPageProps) {
         </motion.p>
 
         <motion.p
-          ref={subtitleRef}
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.3, ease: "easeOut" }}
@@ -202,7 +143,7 @@ export default function LandingPage({ experienceRef }: LandingPageProps) {
                 position: "relative",
                 zIndex: 2,
                 textShadow: `0 0 ${1 + glowIntensity * 2}px rgba(255, 255, 255, ${0.3 + glowIntensity * 0.1})`,
-                transition: "text-shadow 0.5s ease-out", // Smoother transition
+                transition: "text-shadow 0.5s ease-out",
               }}
             >
               View My Work
@@ -218,7 +159,7 @@ export default function LandingPage({ experienceRef }: LandingPageProps) {
                 position: "relative",
                 zIndex: 2,
                 textShadow: `0 0 ${1 + glowIntensity * 2}px rgba(255, 255, 255, ${0.3 + glowIntensity * 0.1})`,
-                transition: "text-shadow 0.5s ease-out", // Smoother transition
+                transition: "text-shadow 0.5s ease-out",
               }}
             >
               Contact Me
@@ -245,7 +186,7 @@ export default function LandingPage({ experienceRef }: LandingPageProps) {
               style={{
                 color: `rgba(255, 255, 255, ${0.6 + glowIntensity * 0.1})`,
                 filter: `drop-shadow(0 0 ${1 + glowIntensity}px rgba(255, 255, 255, ${0.1 + glowIntensity * 0.05}))`,
-                transition: "color 0.5s ease, filter 0.5s ease", // Smoother transition
+                transition: "color 0.5s ease, filter 0.5s ease",
               }}
             >
               <Icon className="w-5 h-5" />
@@ -263,14 +204,14 @@ export default function LandingPage({ experienceRef }: LandingPageProps) {
       >
         <motion.div
           animate={{ y: [0, 10, 0] }}
-          transition={{ duration: 2, repeat: Number.POSITIVE_INFINITY, repeatType: "loop", ease: "easeInOut" }} // Smoother animation
+          transition={{ duration: 2, repeat: Number.POSITIVE_INFINITY, repeatType: "loop", ease: "easeInOut" }}
           className="flex flex-col items-center"
         >
           <span
             className="text-sm mb-2 text-white/50"
             style={{
               textShadow: `0 0 ${1 + glowIntensity}px rgba(255, 255, 255, ${0.1 + glowIntensity * 0.05})`,
-              transition: "text-shadow 0.5s ease-out", // Smoother transition
+              transition: "text-shadow 0.5s ease-out",
             }}
           >
             Scroll Down
@@ -280,7 +221,7 @@ export default function LandingPage({ experienceRef }: LandingPageProps) {
             style={{
               color: `rgba(255, 255, 255, ${0.4 + glowIntensity * 0.1})`,
               filter: `drop-shadow(0 0 ${1 + glowIntensity}px rgba(255, 255, 255, ${0.1 + glowIntensity * 0.05}))`,
-              transition: "color 0.5s ease, filter 0.5s ease", // Smoother transition
+              transition: "color 0.5s ease, filter 0.5s ease",
             }}
           />
         </motion.div>

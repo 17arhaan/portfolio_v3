@@ -187,11 +187,11 @@ const allCategories = [
 export default function ProjectsSection() {
   const [activeCategory, setActiveCategory] = useState("all")
   const [filteredProjects, setFilteredProjects] = useState(projects)
-  const [selectedProject, setSelectedProject] = useState(null)
-  const modalRef = useRef(null)
+  const [selectedProject, setSelectedProject] = useState<typeof projects[0] | null>(null)
+  const modalRef = useRef<HTMLDivElement | null>(null)
 
   // Filter projects based on category
-  const filterProjects = (category) => {
+  const filterProjects = (category: string) => {
     let filtered = projects
 
     // Filter by category
@@ -203,13 +203,13 @@ export default function ProjectsSection() {
   }
 
   // Handle category change
-  const handleCategoryChange = (category) => {
+  const handleCategoryChange = (category: string) => {
     setActiveCategory(category)
     filterProjects(category)
   }
 
   // Open project modal
-  const openProjectModal = (project) => {
+  const openProjectModal = (project: typeof projects[0]) => {
     setSelectedProject(project)
     document.body.style.overflow = "hidden" // Prevent scrolling when modal is open
   }
@@ -221,15 +221,24 @@ export default function ProjectsSection() {
   }
 
   // Handle click outside modal to close it
-  const handleModalBackdropClick = (e) => {
-    if (modalRef.current && !modalRef.current.contains(e.target)) {
+  const handleModalBackdropClick = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (modalRef.current && modalRef.current.contains(e.target as Node)) {
       closeProjectModal()
     }
   }
 
+  // Access properties safely
+  const projectTitle = selectedProject ? selectedProject.title : ""
+  const projectImage = selectedProject ? selectedProject.image : "/placeholder.svg"
+  const projectGithubLink = selectedProject ? selectedProject.githubLink : ""
+  const projectDemoLink = selectedProject ? selectedProject.demoLink : ""
+  const projectCategories = selectedProject ? selectedProject.categories : []
+  const projectTags = selectedProject ? selectedProject.tags : []
+  const projectDescription = selectedProject ? selectedProject.description : ""
+
   // Format description to handle line breaks
-  const formatDescription = (description) => {
-    return description.split("\n\n").map((item, idx) => (
+  const formatDescription = (description: string) => {
+    return description.split("\n\n").map((item: string, idx: number) => (
       <motion.div
         key={idx}
         initial={{ opacity: 0, x: 10 }}
@@ -274,6 +283,15 @@ export default function ProjectsSection() {
         >
           A showcase of my technical projects spanning web development, artificial intelligence, and computer vision.
         </motion.p>
+
+        <motion.div
+          initial={{ scaleX: 0, opacity: 0 }}
+          whileInView={{ scaleX: 1, opacity: 1 }}
+          viewport={{ once: true, margin: "-100px" }}
+          transition={{ duration: 0.8, delay: 0.3 }}
+          className="w-48 h-px bg-gradient-to-r from-transparent via-white to-transparent mx-auto mt-6"
+          style={{ boxShadow: "0 0 10px rgba(255, 255, 255, 0.5)" }}
+        />
       </div>
 
       {/* Category filters */}
@@ -326,7 +344,7 @@ export default function ProjectsSection() {
               }}
               whileHover={{
                 scale: 1.02,
-                boxShadow: "0 15px 30px -10px rgba(220, 38, 38, 0.25), 0 0 20px rgba(255, 255, 255, 0.15)",
+                boxShadow: "0 15px 30px -10px rgba(227, 18, 102, 0.25), 0 0 20px rgba(255, 255, 255, 0.15)",
                 zIndex: 1,
               }}
               onClick={() => openProjectModal(project)}
@@ -334,7 +352,7 @@ export default function ProjectsSection() {
               style={{
                 perspective: "1000px",
                 transformStyle: "preserve-3d",
-                boxShadow: "0 10px 30px -10px rgba(220, 38, 38, 0.2), 0 0 15px rgba(255, 255, 255, 0.1)",
+                boxShadow: "0 10px 30px -10px rgba(227, 18, 102, 0.2), 0 0 15px rgba(255, 255, 255, 0.1)",
               }}
             >
               {/* Project image */}
@@ -484,7 +502,7 @@ export default function ProjectsSection() {
                   className="text-xl font-bold text-white italic"
                   style={{ textShadow: "0 0 10px rgba(255,255,255,0.4)" }}
                 >
-                  {selectedProject.title}
+                  {projectTitle}
                 </motion.h2>
                 <motion.div whileHover={{ rotate: 90, scale: 1.1 }} whileTap={{ scale: 0.9 }}>
                   <Button
@@ -517,8 +535,8 @@ export default function ProjectsSection() {
                     }}
                   >
                     <img
-                      src={selectedProject.image || "/placeholder.svg"}
-                      alt={`${selectedProject.title} screenshot`}
+                      src={projectImage}
+                      alt={`${projectTitle} screenshot`}
                       className="w-full h-full object-cover"
                     />
 
@@ -528,9 +546,9 @@ export default function ProjectsSection() {
 
                   {/* Project links */}
                   <div className="flex space-x-3">
-                    {selectedProject.githubLink && (
+                    {projectGithubLink && (
                       <motion.a
-                        href={selectedProject.githubLink}
+                        href={projectGithubLink}
                         target="_blank"
                         rel="noopener noreferrer"
                         initial={{ opacity: 0, x: -10 }}
@@ -538,20 +556,20 @@ export default function ProjectsSection() {
                         transition={{ delay: 0.2 }}
                         whileHover={{
                           scale: 1.05,
-                          backgroundColor: "rgba(255, 255, 255, 0.15)",
-                          boxShadow: "0 0 15px rgba(220, 38, 38, 0.3), 0 0 10px rgba(255, 255, 255, 0.1)",
+                          backgroundColor: "rgba(227, 18, 102, 0.15)",
+                          boxShadow: "0 0 15px rgba(227, 18, 102, 0.3), 0 0 10px rgba(255, 255, 255, 0.1)",
                         }}
                         whileTap={{ scale: 0.95 }}
-                        className="flex items-center space-x-2 px-3 py-2 rounded-md bg-white/5 text-white/90 border border-white/5 text-sm transition-all duration-300"
+                        className="flex items-center space-x-2 px-3 py-2 rounded-md bg-[#e31266]/5 text-white/90 border border-[#e31266]/20 text-sm transition-all duration-300"
                       >
                         <Github className="h-4 w-4" />
                         <span>GitHub</span>
                       </motion.a>
                     )}
 
-                    {selectedProject.demoLink && (
+                    {projectDemoLink && (
                       <motion.a
-                        href={selectedProject.demoLink}
+                        href={projectDemoLink}
                         target="_blank"
                         rel="noopener noreferrer"
                         initial={{ opacity: 0, x: -10 }}
@@ -559,11 +577,11 @@ export default function ProjectsSection() {
                         transition={{ delay: 0.3 }}
                         whileHover={{
                           scale: 1.05,
-                          backgroundColor: "rgba(255, 255, 255, 0.15)",
-                          boxShadow: "0 0 15px rgba(220, 38, 38, 0.3), 0 0 10px rgba(255, 255, 255, 0.1)",
+                          backgroundColor: "rgba(227, 18, 102, 0.15)",
+                          boxShadow: "0 0 15px rgba(227, 18, 102, 0.3), 0 0 10px rgba(255, 255, 255, 0.1)",
                         }}
                         whileTap={{ scale: 0.95 }}
-                        className="flex items-center space-x-2 px-3 py-2 rounded-md bg-white/5 text-white/90 border border-white/5 text-sm transition-all duration-300"
+                        className="flex items-center space-x-2 px-3 py-2 rounded-md bg-[#e31266]/5 text-white/90 border border-[#e31266]/20 text-sm transition-all duration-300"
                       >
                         <ExternalLink className="h-4 w-4" />
                         <span>Live Demo</span>
@@ -578,11 +596,11 @@ export default function ProjectsSection() {
                     transition={{ delay: 0.4 }}
                   >
                     <div className="flex items-center mb-2">
-                      <Filter className="h-4 w-4 mr-2 text-white/70" />
+                      <Filter className="h-4 w-4 mr-2 text-[#e31266]" />
                       <span className="text-sm text-white/80 italic">Categories</span>
                     </div>
                     <div className="flex flex-wrap gap-2">
-                      {selectedProject.categories.map((category, index) => (
+                      {projectCategories.map((category, index) => (
                         <motion.div
                           key={index}
                           initial={{ opacity: 0, scale: 0.8 }}
@@ -590,10 +608,10 @@ export default function ProjectsSection() {
                           transition={{ delay: 0.5 + index * 0.1 }}
                           whileHover={{
                             scale: 1.1,
-                            backgroundColor: "rgba(255, 255, 255, 0.15)",
-                            boxShadow: "0 0 10px rgba(220, 38, 38, 0.2), 0 0 5px rgba(255, 255, 255, 0.1)",
+                            backgroundColor: "rgba(227, 18, 102, 0.15)",
+                            boxShadow: "0 0 10px rgba(227, 18, 102, 0.2), 0 0 5px rgba(255, 255, 255, 0.1)",
                           }}
-                          className="inline-flex items-center px-2.5 py-1 text-xs rounded-full bg-white/5 text-white/90 border border-white/5 cursor-default transition-all duration-300"
+                          className="inline-flex items-center px-2.5 py-1 text-xs rounded-full bg-[#e31266]/5 text-white/90 border border-[#e31266]/20 cursor-default transition-all duration-300"
                         >
                           {category.toUpperCase()}
                         </motion.div>
@@ -608,11 +626,11 @@ export default function ProjectsSection() {
                     transition={{ delay: 0.5 }}
                   >
                     <div className="flex items-center mb-2">
-                      <Tag className="h-4 w-4 mr-2 text-white/70" />
+                      <Tag className="h-4 w-4 mr-2 text-[#e31266]" />
                       <span className="text-sm text-white/80 italic">Technologies</span>
                     </div>
                     <div className="flex flex-wrap gap-2">
-                      {selectedProject.tags.map((tag, index) => (
+                      {projectTags.map((tag, index) => (
                         <motion.div
                           key={index}
                           initial={{ opacity: 0, scale: 0.8 }}
@@ -620,10 +638,10 @@ export default function ProjectsSection() {
                           transition={{ delay: 0.6 + index * 0.05 }}
                           whileHover={{
                             scale: 1.1,
-                            backgroundColor: "rgba(255, 255, 255, 0.15)",
-                            boxShadow: "0 0 10px rgba(220, 38, 38, 0.2), 0 0 5px rgba(255, 255, 255, 0.1)",
+                            backgroundColor: "rgba(227, 18, 102, 0.15)",
+                            boxShadow: "0 0 10px rgba(227, 18, 102, 0.2), 0 0 5px rgba(255, 255, 255, 0.1)",
                           }}
-                          className="inline-flex items-center px-2.5 py-1 text-xs rounded-full bg-white/5 text-white/90 border border-white/5 cursor-default transition-all duration-300"
+                          className="inline-flex items-center px-2.5 py-1 text-xs rounded-full bg-[#e31266]/5 text-white/90 border border-[#e31266]/20 cursor-default transition-all duration-300"
                         >
                           {tag}
                         </motion.div>
@@ -649,7 +667,7 @@ export default function ProjectsSection() {
                     transition={{ duration: 0.4, delay: 0.4 }}
                     className="space-y-3 text-white/90"
                   >
-                    {formatDescription(selectedProject.description)}
+                    {formatDescription(projectDescription)}
                   </motion.div>
                 </div>
               </div>

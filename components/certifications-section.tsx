@@ -5,9 +5,8 @@ import { motion, useMotionValue, useTransform } from "framer-motion"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
-import { Calendar, Award, ExternalLink, CheckCircle, Clock } from "lucide-react"
+import { Calendar, Award, ExternalLink, CheckCircle, Clock, Github } from "lucide-react"
 import Image from "next/image"
-import { GradientBackground } from "@/components/ui/gradient-background"
 import { GlowEffect } from "./ui/glow-effect"
 
 // Sample certifications data
@@ -131,9 +130,8 @@ export default function CertificationsSection() {
   }
 
   return (
-    <section id="certifications" className="py-20 bg-black/30 relative overflow-hidden">
-      <GradientBackground />
-      <div className="container px-12 max-w-[2000px] mx-auto relative z-10">
+    <section id="certifications" className="py-20 relative w-full">
+      <div className="max-w-[90vw] mx-auto">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -142,12 +140,28 @@ export default function CertificationsSection() {
           className="text-center mb-12"
         >
           <h2 className="text-3xl font-bold mb-4 text-white">Professional Certifications</h2>
-          <p className="text-white/70 max-w-2xl mx-auto">
-            Industry-recognized credentials that validate my expertise and technical skills.
-          </p>
+          <motion.p
+            initial={{ opacity: 0, y: 10 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-100px" }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+            className="mt-3 text-sm md:text-base text-white/80 max-w-2xl mx-auto italic"
+            style={{ textShadow: "0 0 5px rgba(255,255,255,0.3)" }}
+          >
+            A showcase of my professional certifications and achievements.
+          </motion.p>
+
+          <motion.div
+            initial={{ scaleX: 0, opacity: 0 }}
+            whileInView={{ scaleX: 1, opacity: 1 }}
+            viewport={{ once: true, margin: "-100px" }}
+            transition={{ duration: 0.8, delay: 0.3 }}
+            className="w-48 h-px bg-gradient-to-r from-transparent via-white to-transparent mx-auto mt-6"
+            style={{ boxShadow: "0 0 10px rgba(255, 255, 255, 0.5)" }}
+          />
         </motion.div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 max-w-[2000px] mx-auto">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-20 place-items-center">
           {certificationsData.map((cert, index) => {
             const x = useMotionValue(0)
             const y = useMotionValue(0)
@@ -180,7 +194,10 @@ export default function CertificationsSection() {
                 transition={{ duration: 0.5, delay: index * 0.1 }}
                 viewport={{ once: true, margin: "-100px" }}
                 whileHover={{ y: -5 }}
-                className="h-full perspective-1000"
+                className="h-full perspective-1000 w-[450px]"
+                style={{
+                  maxWidth: "100%"
+                }}
                 onMouseMove={handleMouseMove}
                 onMouseLeave={handleMouseLeave}
               >
@@ -192,111 +209,138 @@ export default function CertificationsSection() {
                   }}
                   className="h-full"
                 >
-                  <GlowEffect
-                    glowColor="rgba(99, 102, 241, 0.5)"
-                    intensity={0.7}
-                  >
-                    <Card className="h-full overflow-hidden border border-white/10 bg-white/5 backdrop-blur-sm">
-                      <CardHeader className="pb-2">
-                        <div className="flex justify-between items-start">
-                          <div className="flex-1">
-                            <CardTitle className="text-xl text-white group-hover:text-primary transition-colors duration-300">
-                              {cert.title}
-                            </CardTitle>
-                            <CardDescription className="flex items-center mt-1 text-white/70">
-                              <Award className="h-4 w-4 mr-1" />
-                              {cert.issuer}
-                              <span className="mx-2">•</span>
-                              <Calendar className="h-4 w-4 mr-1" />
-                              {cert.date}
-                              {cert.expiryDate && <span> - {cert.expiryDate}</span>}
-                            </CardDescription>
+                  <Card className="h-full overflow-hidden border border-white/10 bg-transparent w-[450px] p-4">
+                    <CardHeader className="pb-1 px-8">
+                      <div className="flex justify-between items-start gap-6">
+                        <div className="flex-1 min-w-0">
+                          <CardTitle className="text-xl text-white group-hover:text-primary transition-colors duration-300 line-clamp-2">
+                            {cert.title}
+                          </CardTitle>
+                          <CardDescription className="flex items-center mt-2 text-white/70 text-sm">
+                            <Award className="h-4 w-4 mr-2 flex-shrink-0" />
+                            <span className="truncate">{cert.issuer}</span>
+                            <span className="mx-2">•</span>
+                            <Calendar className="h-4 w-4 mr-2 flex-shrink-0" />
+                            <span>{cert.date}</span>
+                            {cert.expiryDate && <span> - {cert.expiryDate}</span>}
+                          </CardDescription>
+                        </div>
+                        <div className="flex-shrink-0">
+                          <div className="relative h-24 w-24 rounded-md overflow-hidden border border-white/10">
+                            <Image 
+                              src={cert.image} 
+                              alt={cert.title} 
+                              fill 
+                              className="object-contain p-3" 
+                            />
                           </div>
-                          <div className="flex-shrink-0 ml-4">
-                            <div className="relative h-16 w-16 rounded-md overflow-hidden border border-white/10">
-                              <Image 
-                                src={cert.image} 
-                                alt={cert.title} 
-                                fill 
-                                className="object-contain p-1" 
-                              />
+                        </div>
+                      </div>
+                    </CardHeader>
+                    <CardContent className="flex flex-col px-8">
+                      <div
+                        className={`transition-all duration-300 ${
+                          expandedId === cert.id ? "max-h-[500px]" : "max-h-24"
+                        } overflow-hidden`}
+                      >
+                        <p className="text-sm text-white/70 mb-4">{cert.description}</p>
+
+                        {expandedId === cert.id && (
+                          <motion.div 
+                            initial={{ opacity: 0 }} 
+                            animate={{ opacity: 1 }} 
+                            transition={{ duration: 0.3 }}
+                            className="space-y-4 mt-4"
+                          >
+                            <div className="mb-4">
+                              <p className="text-sm font-medium mb-1 text-white">Credential ID</p>
+                              <p className="text-sm text-white/70">{cert.credentialId}</p>
                             </div>
-                          </div>
-                        </div>
-                      </CardHeader>
-                      <CardContent className="flex flex-col">
-                        <div
-                          className={`transition-all duration-300 ${
-                            expandedId === cert.id ? "max-h-[500px]" : "max-h-24"
-                          } overflow-hidden`}
-                        >
-                          <p className="text-sm text-white/70 mb-4">{cert.description}</p>
 
-                          {expandedId === cert.id && (
-                            <motion.div 
-                              initial={{ opacity: 0 }} 
-                              animate={{ opacity: 1 }} 
-                              transition={{ duration: 0.3 }}
-                              className="space-y-4"
+                            <div className="mb-4">
+                              <p className="text-sm font-medium mb-2 text-white">Skills</p>
+                              <div className="flex flex-wrap gap-2">
+                                {cert.skills.map((skill) => (
+                                  <Badge
+                                    key={skill}
+                                    variant="secondary"
+                                    className="text-xs font-medium bg-white/10 text-white/90 hover:bg-white/20 transition-colors"
+                                  >
+                                    {skill}
+                                  </Badge>
+                                ))}
+                              </div>
+                            </div>
+                          </motion.div>
+                        )}
+                      </div>
+
+                      <div className="mt-6">
+                        <motion.div
+                          whileHover={{ scale: 1.02 }}
+                          whileTap={{ scale: 0.98 }}
+                          className="relative"
+                        >
+                          <GlowEffect glowColor="rgba(255, 255, 255, 0.5)" intensity={0.7}>
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              className="w-full bg-transparent text-white/90 hover:bg-white/10 hover:text-white border-white/20"
+                              onClick={() => toggleExpand(cert.id)}
                             >
-                              <div className="mb-4">
-                                <p className="text-sm font-medium mb-1 text-white">Credential ID</p>
-                                <p className="text-sm text-white/70">{cert.credentialId}</p>
-                              </div>
-
-                              <div className="mb-4">
-                                <p className="text-sm font-medium mb-2 text-white">Skills</p>
-                                <div className="flex flex-wrap gap-2">
-                                  {cert.skills.map((skill) => (
-                                    <Badge key={skill} variant="secondary" className="bg-white/10 text-white/90">
-                                      {skill}
-                                    </Badge>
-                                  ))}
-                                </div>
-                              </div>
-                            </motion.div>
-                          )}
-                        </div>
-
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          onClick={() => toggleExpand(cert.id)}
-                          className="text-xs w-full justify-center mt-2 text-white/70 hover:text-white"
-                        >
-                          {expandedId === cert.id ? "Show Less" : "Show More"}
-                        </Button>
-                      </CardContent>
-                      <CardFooter className="pt-0">
-                        <div className="w-full space-y-2">
-                          {new Date(cert.date) > new Date() ? (
-                            <Button variant="outline" size="sm" className="w-full gap-2 text-white/70 border-white/20 hover:bg-white/10">
-                              <Clock className="h-4 w-4" />
-                              Ongoing
+                              {expandedId === cert.id ? "Show Less" : "Show More"}
                             </Button>
-                          ) : Array.isArray(cert.credentialURL) ? (
-                            cert.credentialURL.map((credential, index) => (
-                              <Button key={index} variant="outline" size="sm" className="w-full gap-2 text-white/70 border-white/20 hover:bg-white/10" asChild>
+                          </GlowEffect>
+                        </motion.div>
+                      </div>
+                    </CardContent>
+                    <CardFooter className="pt-0">
+                      <div className="w-full space-y-2">
+                        {new Date(cert.date) > new Date() ? (
+                          <Button variant="outline" size="sm" className="w-full gap-2 bg-transparent text-white/70 border-white/20 hover:bg-white/10">
+                            <Clock className="h-4 w-4" />
+                            Ongoing
+                          </Button>
+                        ) : Array.isArray(cert.credentialURL) ? (
+                          <div className="flex flex-col gap-2">
+                            {cert.credentialURL.map((credential, index) => (
+                              <Button key={index} variant="outline" size="sm" className="w-full gap-2 bg-transparent text-white/70 border-white/20 hover:bg-white/10" asChild>
                                 <a href={credential.url} target="_blank" rel="noopener noreferrer">
                                   <CheckCircle className="h-4 w-4" />
-                                  {credential.title}
-                                  <ExternalLink className="h-3 w-3 ml-1" />
+                                  <span className="truncate">{credential.title}</span>
+                                  <ExternalLink className="h-3 w-3 ml-1 flex-shrink-0" />
                                 </a>
                               </Button>
-                            ))
-                          ) : (
-                            <Button variant="outline" size="sm" className="w-full gap-2 text-white/70 border-white/20 hover:bg-white/10" asChild>
-                              <a href={cert.credentialURL} target="_blank" rel="noopener noreferrer">
-                                <CheckCircle className="h-4 w-4" />
-                                Verify Credential
+                            ))}
+                          </div>
+                        ) : cert.credentialURL ? (
+                          <Button variant="outline" size="sm" className="w-full gap-2 bg-transparent text-white/70 border-white/20 hover:bg-white/10" asChild>
+                            <a href={cert.credentialURL} target="_blank" rel="noopener noreferrer">
+                              <CheckCircle className="h-4 w-4" />
+                              View Credential
+                              <ExternalLink className="h-3 w-3 ml-1" />
+                            </a>
+                          </Button>
+                        ) : (
+                          <div className="flex gap-2">
+                            <Button variant="outline" size="sm" className="w-full gap-2 bg-transparent text-white/70 border-white/20 hover:bg-white/10" asChild>
+                              <a href="https://github.com/17arhaan" target="_blank" rel="noopener noreferrer">
+                                <Github className="h-4 w-4" />
+                                View Code
                                 <ExternalLink className="h-3 w-3 ml-1" />
                               </a>
                             </Button>
-                          )}
-                        </div>
-                      </CardFooter>
-                    </Card>
-                  </GlowEffect>
+                            <Button variant="outline" size="sm" className="w-full gap-2 bg-transparent text-white/70 border-white/20 hover:bg-white/10" asChild>
+                              <a href="https://arhaangirdhar.com" target="_blank" rel="noopener noreferrer">
+                                <ExternalLink className="h-4 w-4" />
+                                View Demo
+                              </a>
+                            </Button>
+                          </div>
+                        )}
+                      </div>
+                    </CardFooter>
+                  </Card>
                 </motion.div>
               </motion.div>
             )

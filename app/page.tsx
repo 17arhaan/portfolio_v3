@@ -11,13 +11,18 @@ import AnimatedFooter from "@/components/animated-footer"
 import GradientBubbles from "@/components/gradient-bubbles"
 import ScrollToTop from "@/components/scroll-to-top"
 import SectionDivider from "@/components/section-divider"
+import CertificationsSection from "@/components/certifications-section"
 import { motion } from "framer-motion"
+import AboutSection from "@/components/about-section"
+import ExperienceSection from "@/components/experience-section"
+import ContactSection from "@/components/contact-section"
 
 export default function Home() {
-  const experienceRef = useRef(null)
-  const projectsRef = useRef(null)
-  const skillsRef = useRef(null)
-  const resumeRef = useRef(null)
+  const experienceRef = useRef<HTMLDivElement>(null)
+  const projectsRef = useRef<HTMLDivElement>(null)
+  const skillsRef = useRef<HTMLDivElement>(null)
+  const certificationsRef = useRef<HTMLDivElement>(null)
+  const resumeRef = useRef<HTMLDivElement>(null)
   const [scrollProgress, setScrollProgress] = useState(0)
 
   // Track scroll progress
@@ -50,10 +55,18 @@ export default function Home() {
       </div>
 
       {/* Navbar */}
-      <Navbar experienceRef={experienceRef} projectsRef={projectsRef} skillsRef={skillsRef} resumeRef={resumeRef} />
+      <Navbar 
+        experienceRef={experienceRef} 
+        projectsRef={projectsRef} 
+        skillsRef={skillsRef} 
+        certificationsRef={certificationsRef}
+        resumeRef={resumeRef} 
+      />
 
       {/* Landing Page */}
-      <LandingPage experienceRef={experienceRef} />
+      <LandingPage />
+
+      <AboutSection />
 
       {/* Section Divider */}
       <SectionDivider />
@@ -82,10 +95,20 @@ export default function Home() {
       {/* Section Divider */}
       <SectionDivider />
 
+      {/* Certifications Section */}
+      <section ref={certificationsRef} id="certifications" className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8">
+        <CertificationsSection />
+      </section>
+
+      {/* Section Divider */}
+      <SectionDivider />
+
       {/* Resume Section */}
       <section ref={resumeRef} id="resume" className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8">
         <ResumeSection />
       </section>
+
+      <ContactSection />
 
       {/* Footer */}
       <AnimatedFooter />

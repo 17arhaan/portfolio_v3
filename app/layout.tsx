@@ -1,5 +1,9 @@
 import type { Metadata } from 'next'
+import { Inter } from 'next/font/google'
 import './globals.css'
+import { ScrollAnimation } from '@/components/scroll-animation'
+
+const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
   title: 'Arhaan Girdhar | Portfolio',
@@ -111,7 +115,11 @@ export default function RootLayout({
           }
         `}</style>
       </head>
-      <body className="antialiased">{children}</body>
+      <body className={inter.className}>
+        <ScrollAnimation>
+          {children}
+        </ScrollAnimation>
+      </body>
     </html>
   )
 }

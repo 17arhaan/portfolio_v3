@@ -1,7 +1,14 @@
 "use client"
 
 import { useState } from "react"
-import { ChevronLeft, ChevronRight, Briefcase, Calendar, MapPin, Award, CheckCircle2, ChevronDown } from "lucide-react"
+import { ChevronLeft } from "lucide-react"
+import { ChevronRight } from "lucide-react"
+import { Briefcase } from "lucide-react"
+import { Calendar } from "lucide-react"
+import { MapPin } from "lucide-react"
+import { Award } from "lucide-react"
+import { CheckCircle2 } from "lucide-react"
+import { ChevronDown } from "lucide-react"
 import { motion, AnimatePresence } from "framer-motion"
 import { Button } from "@/components/ui/button"
 
@@ -21,13 +28,13 @@ const workExperience = [
       "Implemented comprehensive error handling and monitoring systems",
     ],
     skills: ["Frontend Development", "Performance Optimization", "Digital AM"],
-    logoUrl: "/abstract-letter-im.png",
+    logoUrl: "/IM_logo.jpg",
   },
   {
-    id: 2,
+    id: 1,
     role: "Internship Trainee",
     company: "Bharat Electronics Limited",
-    location: "On-Site | DEL , IN",
+    location: "On-Site | GZB , IN",
     period: "Jun 2024 - Jul 2024",
     description: [
       "Developed 7 JavaFX interfaces handling 500+ daily cybersecurity operations",
@@ -37,10 +44,10 @@ const workExperience = [
       "Established standardized testing procedures for all new features",
     ],
     skills: ["Cybersecurity", "System Administration", "UI Development"],
-    logoUrl: "/abstract-geometric-logo.png",
+    logoUrl: "/BEL_logo.jpg",
   },
   {
-    id: 1,
+    id: 2,
     role: "Project Lead",
     company: "Buildspace",
     location: "Remote | LA , US",
@@ -53,24 +60,24 @@ const workExperience = [
       "Established comprehensive documentation and training protocols for team members",
     ],
     skills: ["AI", "Team Leadership", "Project Management"],
-    logoUrl: "/abstract-geometric-logo.png",
+    logoUrl: "/Buildspaceso_logo.jpg",
   },
   {
     id: 0,
     role: "Internship",
     company: "Coming Soon",
-    location: "Remote",
-    period: "June 2025 - July 2025",
-    description: ["Details coming soon", "More information will be available shortly", "Stay tuned for updates"],
-    skills: ["Coming Soon"],
-    logoUrl: "/future-opportunities.png",
+    location: "On-Site | DEL , IN",
+    period: "Summer 2025",
+    description: null,
+    skills: null,
+    logoUrl: null,
   },
 ]
 
 export default function WorkTimeline() {
   const [activeIndex, setActiveIndex] = useState(0)
   const [direction, setDirection] = useState(0) // -1 for left, 1 for right, 0 for initial
-  const [hoveredDot, setHoveredDot] = useState(null)
+  const [hoveredDot, setHoveredDot] = useState<number | null>(null)
   const latestPositionIndex = workExperience.length - 1
 
   const handlePrevious = () => {
@@ -89,7 +96,7 @@ export default function WorkTimeline() {
 
   // Animation variants
   const variants = {
-    enter: (direction) => ({
+    enter: (direction: number) => ({
       x: direction > 0 ? 30 : -30,
       opacity: 0,
     }),
@@ -97,7 +104,7 @@ export default function WorkTimeline() {
       x: 0,
       opacity: 1,
     },
-    exit: (direction) => ({
+    exit: (direction: number) => ({
       x: direction < 0 ? 30 : -30,
       opacity: 0,
     }),
@@ -123,12 +130,21 @@ export default function WorkTimeline() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-100px" }}
           transition={{ duration: 0.6, delay: 0.2 }}
-          className="mt-3 text-sm md:text-base text-white/80 max-w-2xl mx-auto"
+          className="mt-3 text-sm md:text-base text-white/80 max-w-2xl mx-auto italic"
           style={{ textShadow: "0 0 5px rgba(255,255,255,0.3)" }}
         >
           A chronological journey through my career, showcasing key roles and accomplishments in technology and
           leadership.
         </motion.p>
+
+        <motion.div
+          initial={{ scaleX: 0, opacity: 0 }}
+          whileInView={{ scaleX: 1, opacity: 1 }}
+          viewport={{ once: true, margin: "-100px" }}
+          transition={{ duration: 0.8, delay: 0.3 }}
+          className="w-48 h-px bg-gradient-to-r from-transparent via-white to-transparent mx-auto mt-6"
+          style={{ boxShadow: "0 0 10px rgba(255, 255, 255, 0.5)" }}
+        />
       </div>
 
       {/* Timeline navigation */}
@@ -207,10 +223,15 @@ export default function WorkTimeline() {
           className="relative h-0.5 bg-white/10 rounded-full overflow-hidden"
         >
           <motion.div
+            initial={{ width: 0 }}
             animate={{
               width: `${((activeIndex + 1) / workExperience.length) * 100}%`,
             }}
-            transition={{ duration: 0.4 }}
+            transition={{ 
+              duration: 0.6,
+              ease: "easeInOut",
+              delay: 0.2
+            }}
             className="absolute top-0 left-0 h-full bg-white/60 rounded-full"
             style={{
               boxShadow: "0 0 8px rgba(255, 255, 255, 0.3)",

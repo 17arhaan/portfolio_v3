@@ -2,6 +2,59 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Smooth scrolling behavior */
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 80px;
+}
+
+/* Modern scroll reveal animation */
+.scroll-reveal {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.scroll-reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.1);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 4px;
+  transition: background 0.3s ease;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+/* Scroll progress indicator */
+.scroll-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(to right, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0.1));
+  z-index: 1000;
+  transform-origin: 0 50%;
+  transform: scaleX(0);
+  transition: transform 0.1s ease-out;
+}
+
 @layer base {
   :root {
     --background: 0 0% 100%;
@@ -86,13 +139,51 @@ body::before {
   inset: 0;
   background: linear-gradient(
     125deg,
-    rgba(60, 7, 83, 0.2) 0%,
-    rgba(114, 4, 85, 0.2) 50%,
-    rgba(145, 10, 103, 0.2) 100%
+    rgba(60, 7, 83, 0.1) 0%,
+    rgba(114, 4, 85, 0.1) 50%,
+    rgba(145, 10, 103, 0.1) 100%
   );
   z-index: -1;
-  animation: gradientMove 15s ease infinite;
+  animation: gradientMove 8s ease infinite;
   background-size: 400% 400%;
+}
+
+/* Add multiple bubble effects */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background: 
+    /* Main bubbles */
+    radial-gradient(
+      circle at 30% 30%,
+      rgba(220, 38, 38, 0.05) 0%,
+      transparent 50%
+    ),
+    radial-gradient(
+      circle at 70% 70%,
+      rgba(99, 102, 241, 0.05) 0%,
+      transparent 50%
+    ),
+    /* Small bubbles */
+    radial-gradient(
+      circle at 10% 20%,
+      rgba(255, 255, 255, 0.03) 0%,
+      transparent 30%
+    ),
+    radial-gradient(
+      circle at 90% 40%,
+      rgba(255, 255, 255, 0.03) 0%,
+      transparent 20%
+    ),
+    radial-gradient(
+      circle at 50% 80%,
+      rgba(255, 255, 255, 0.03) 0%,
+      transparent 25%
+    );
+  z-index: -1;
+  animation: bubbleMove 20s ease-in-out infinite;
+  opacity: 0.4;
 }
 
 @keyframes gradientMove {
@@ -104,6 +195,29 @@ body::before {
   }
   100% {
     background-position: 0% 50%;
+  }
+}
+
+@keyframes bubbleMove {
+  0% {
+    transform: scale(1) translate(0, 0);
+    background-position: 0% 0%, 100% 100%, 0% 0%, 100% 0%, 50% 100%;
+  }
+  25% {
+    transform: scale(1.1) translate(50px, 50px);
+    background-position: 100% 0%, 0% 100%, 100% 0%, 0% 100%, 100% 0%;
+  }
+  50% {
+    transform: scale(1) translate(100px, 0);
+    background-position: 100% 100%, 0% 0%, 100% 100%, 0% 0%, 0% 100%;
+  }
+  75% {
+    transform: scale(0.9) translate(50px, -50px);
+    background-position: 0% 100%, 100% 0%, 0% 100%, 100% 0%, 100% 100%;
+  }
+  100% {
+    transform: scale(1) translate(0, 0);
+    background-position: 0% 0%, 100% 100%, 0% 0%, 100% 0%, 50% 100%;
   }
 }
 
@@ -190,25 +304,19 @@ body::before {
   height: 2px;
   background: linear-gradient(90deg, rgba(145, 10, 103, 0), rgba(145, 10, 103, 0.8), rgba(145, 10, 103, 0));
   border-radius: 2px;
-  animation: activeNavPulse 3s infinite ease-in-out; /* Slower, smoother animation */
+  animation: activeNavPulse 3s infinite ease-in-out;
 }
 
 @keyframes activeNavPulse {
-  0%,
-  100% {
+  0%, 100% {
     opacity: 0.5;
     box-shadow: 0 0 5px rgba(145, 10, 103, 0.3);
-    width: 60%; /* Start narrower */
+    width: 60%;
   }
   50% {
     opacity: 1;
     box-shadow: 0 0 10px rgba(145, 10, 103, 0.6), 0 0 15px rgba(255, 255, 255, 0.4);
-    width: 80%; /* Stretch wider */
-  }
-  100% {
-    opacity: 0.5;
-    box-shadow: 0 0 5px rgba(145, 10, 103, 0.3);
-    width: 60%; /* Return to narrower */
+    width: 80%;
   }
 }
 
@@ -478,4 +586,66 @@ body::before {
 
 .perspective-1000 {
   perspective: 1000px;
+}
+
+/* Custom button styles */
+@layer components {
+  .btn {
+    @apply bg-white/5 backdrop-blur-sm border border-white/10 text-white/90 hover:bg-white/10 hover:text-white transition-all duration-300;
+  }
+  
+  .btn:hover {
+    @apply shadow-[0_0_15px_rgba(255,255,255,0.3)];
+  }
+
+  .btn-outline {
+    @apply bg-transparent border border-white/20 text-white/90 hover:bg-white/10 hover:text-white transition-all duration-300;
+  }
+
+  .btn-outline:hover {
+    @apply shadow-[0_0_15px_rgba(255,255,255,0.3)];
+  }
+
+  .btn-ghost {
+    @apply bg-transparent text-white/90 hover:bg-white/10 hover:text-white transition-all duration-300;
+  }
+
+  .btn-ghost:hover {
+    @apply shadow-[0_0_15px_rgba(255,255,255,0.3)];
+  }
+}
+
+/* Navbar description styles */
+.nav-description {
+  position: relative;
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 0.9rem;
+  letter-spacing: 0.5px;
+  text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+  transition: all 0.3s ease;
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.4));
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: navDescriptionGlow 3s ease-in-out infinite;
+}
+
+.nav-description:hover {
+  text-shadow: 0 0 15px rgba(255, 255, 255, 0.5), 0 0 30px rgba(255, 255, 255, 0.3);
+  transform: translateY(-1px);
+}
+
+@keyframes navDescriptionGlow {
+  0%, 100% {
+    background: linear-gradient(90deg, rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.4));
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  50% {
+    background: linear-gradient(90deg, rgba(255, 255, 255, 1), rgba(255, 255, 255, 0.6));
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
 }
