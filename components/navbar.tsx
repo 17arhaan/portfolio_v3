@@ -4,212 +4,133 @@ import type React from "react"
 import { useState, useEffect, useRef } from "react"
 import { motion } from "framer-motion"
 import Image from "next/image"
-import Link from "next/link"
-import { Menu, X } from "lucide-react"
-import { CinematicVideo } from "./cinematic-video"
 
 interface NavbarProps {
   experienceRef: React.RefObject<HTMLElement>
   projectsRef: React.RefObject<HTMLElement>
   skillsRef: React.RefObject<HTMLElement>
-  certificationsRef: React.RefObject<HTMLElement>
   resumeRef?: React.RefObject<HTMLElement>
-  progressRef?: React.RefObject<HTMLElement>
 }
 
 interface NavItem {
-  id: string
   name: string
+  id: string
   ref?: React.RefObject<HTMLElement>
 }
 
-export default function Navbar({ experienceRef, projectsRef, skillsRef, certificationsRef, resumeRef, progressRef }: NavbarProps) {
-  const [activeIndex, setActiveIndex] = useState(0)
-  const [isScrolled, setIsScrolled] = useState(false)
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
-  const [isVideoOpen, setIsVideoOpen] = useState(false)
+export default function Navbar({ experienceRef, projectsRef, skillsRef, resumeRef }: NavbarProps) {
+  const [activeSection, setActiveSection] = useState("home")
+  const [scrolled, setScrolled] = useState(false)
+  const navRef = useRef<HTMLDivElement>(null)
+  const indicatorRef = useRef<HTMLDivElement>(null)
 
-  // Define navigation items
+  // Updated navigation items with all sections
   const navItems: NavItem[] = [
-    { id: "home", name: "Home" },
-    { id: "about", name: "About" },
-    { id: "experience", name: "Experience", ref: experienceRef },
-    { id: "projects", name: "Projects", ref: projectsRef },
-    { id: "skills", name: "Skills", ref: skillsRef },
-    { id: "certifications", name: "Certifications", ref: certificationsRef },
-    { id: "resume", name: "Resume", ref: resumeRef },
-    { id: "progress", name: "Progress", ref: progressRef },
-    { id: "contact", name: "Contact" },
+    { name: "Home", id: "home" },
+    { name: "About", id: "about" },
+    { name: "Experience", id: "experience", ref: experienceRef },
+    { name: "Projects", id: "projects", ref: projectsRef },
+    { name: "Skills", id: "skills", ref: skillsRef },
+    { name: "Certifications", id: "certifications" },
+    { name: "Resume", id: "resume", ref: resumeRef },
+    { name: "Progress", id: "progress" },
+    { name: "Contact", id: "contact" }
   ]
 
-  // Update active section based on scroll position
+  // Update scroll handler to include all sections
   useEffect(() => {
     const handleScroll = () => {
-      const sections = ["home", "about", "experience", "projects", "skills", "certifications", "resume", "progress", "contact"]
-      const scrollPosition = window.scrollY + 100
+      const scrollPosition = window.scrollY
+      setScrolled(scrollPosition > 50)
 
-      for (let i = sections.length - 1; i >= 0; i--) {
-        const section = document.getElementById(sections[i])
-        if (section && section.offsetTop <= scrollPosition) {
-          setActiveIndex(i)
+      const sections = [
+        "contact",
+        "progress",
+        "resume",
+        "certifications",
+        "skills",
+        "projects",
+        "experience",
+        "about",
+        "home"
+      ]
+
+      // Find the active section
+      for (const sectionId of sections) {
+        const section = document.getElementById(sectionId)
+        if (section && scrollPosition >= section.offsetTop - 100) {
+          setActiveSection(sectionId)
           break
         }
       }
     }
 
     window.addEventListener("scroll", handleScroll)
-    handleScroll() // Initial check
     return () => window.removeEventListener("scroll", handleScroll)
   }, [])
 
-  // Scroll to section
+  // Updated scrollToSection function
   const scrollToSection = (item: NavItem) => {
     if (item.id === "home") {
       window.scrollTo({ top: 0, behavior: "smooth" })
-    } else if (item.id === "about") {
-      document.getElementById('about')?.scrollIntoView({ behavior: 'smooth' })
     } else if (item.ref && item.ref.current) {
       item.ref.current.scrollIntoView({ behavior: "smooth" })
-    } else if (item.id === "contact") {
-      document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })
+    } else {
+      const element = document.getElementById(item.id)
+      if (element) {
+        const offset = 80
+        const elementPosition = element.getBoundingClientRect().top + window.pageYOffset
+        window.scrollTo({
+          top: elementPosition - offset,
+          behavior: "smooth"
+        })
+      }
     }
-    setIsMobileMenuOpen(false)
   }
 
   return (
-    <>
-      <motion.nav
-        initial={{ y: -100, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        transition={{ duration: 0.5, ease: "easeOut" }}
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 mt-3 ${
-          isScrolled ? "bg-black/40 backdrop-blur-sm shadow-lg" : "bg-transparent"
-        }`}
-      >
-        <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between">
-          <motion.div
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            className="relative w-64 h-16 cursor-pointer ml-[20px]"
-            onClick={() => setIsVideoOpen(true)}
-          >
+    <motion.nav
+      initial={{ y: -100, opacity: 0 }}
+      animate={{ y: 0, opacity: 1 }}
+      transition={{ duration: 0.5, ease: "easeOut" }}
+      className="fixed top-0 left-0 right-0 z-50 transition-all duration-500 bg-black/50 backdrop-blur-md py-3"
+    >
+      <div className="container mx-auto px-4 flex items-center justify-between">
+        {/* Signature Logo */}
+        <motion.div
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+          onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+          style={{ cursor: "pointer" }}
+          className="relative -ml-2 mt-[21px] mr-4"
+        >
+          <div className="w-56 h-20 relative">
             <Image
-              src="sign.png"
-              alt="Arhaan Girdhar"
-              width={960}
-              height={288}
-              className="w-full h-full object-contain"
+              src="/sign.png"
+              alt="Signature"
+              width={224}
+              height={80}
+              className="signature-image"
               style={{ objectFit: "contain" }}
               priority
             />
-          </motion.div>
-
-          <div className="relative flex items-center h-16">
-            {/* Remove the indicator div completely */}
-            
-            {/* Desktop Navigation */}
-            <div className="hidden md:flex items-center space-x-8">
-              {navItems.map((item) => (
-                <NavItem
-                  key={item.id}
-                  label={item.name}
-                  isActive={activeIndex === navItems.indexOf(item)}
-                  onClick={() => scrollToSection(item)}
-                  id={item.id}
-                />
-              ))}
-            </div>
-
-            <button
-              className="md:hidden text-white/70 hover:text-white transition-colors"
-              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            >
-              {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
-            </button>
-          </div>
-        </div>
-      </motion.nav>
-
-      {/* Mobile Menu */}
-      {isMobileMenuOpen && (
-        <motion.div
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: -20 }}
-          className="md:hidden fixed top-16 left-0 right-0 bg-black/30 backdrop-blur-sm border-t border-white/10 z-40"
-        >
-          <div className="container mx-auto px-4 py-4 flex flex-col space-y-4">
-            {navItems.map((item) => (
-              <a
-                key={item.id}
-                href={`#${item.id}`}
-                className={`text-white/70 hover:text-white transition-colors ${
-                  activeIndex === navItems.indexOf(item) ? "text-white font-medium" : ""
-                }`}
-                onClick={() => scrollToSection(item)}
-              >
-                {item.name}
-              </a>
-            ))}
           </div>
         </motion.div>
-      )}
 
-      <CinematicVideo isOpen={isVideoOpen} onClose={() => setIsVideoOpen(false)} />
-
-      <style jsx global>{`
-        .nav-button {
-          position: relative;
-          overflow: hidden;
-        }
-        .nav-button::before {
-          content: '';
-          position: absolute;
-          top: -50%;
-          left: -50%;
-          width: 200%;
-          height: 200%;
-          background: radial-gradient(
-            circle at center,
-            rgba(255, 255, 255, 0.1) 0%,
-            rgba(255, 255, 255, 0.05) 30%,
-            transparent 60%
-          );
-          opacity: 0;
-          transition: opacity 0.3s ease;
-          animation: gradientMove 8s infinite linear;
-        }
-        .nav-button:hover::before {
-          opacity: 1;
-        }
-        .active-nav-item::before {
-          opacity: 1;
-          background: radial-gradient(
-            circle at center,
-            rgba(255, 255, 255, 0.15) 0%,
-            rgba(255, 255, 255, 0.1) 30%,
-            transparent 60%
-          );
-        }
-        @keyframes gradientMove {
-          0% {
-            transform: translate(0%, 0%) rotate(0deg);
-          }
-          25% {
-            transform: translate(5%, 5%) rotate(5deg);
-          }
-          50% {
-            transform: translate(0%, 0%) rotate(0deg);
-          }
-          75% {
-            transform: translate(-5%, -5%) rotate(-5deg);
-          }
-          100% {
-            transform: translate(0%, 0%) rotate(0deg);
-          }
-        }
-      `}</style>
-    </>
+        {/* Navigation Links */}
+        <div className="relative flex items-center h-16 gap-1" ref={navRef}>
+          {navItems.map((item) => (
+            <NavItem
+              key={item.id}
+              label={item.name}
+              isActive={activeSection === item.id}
+              onClick={() => scrollToSection(item)}
+              id={item.id}
+            />
+          ))}
+        </div>
+      </div>
+    </motion.nav>
   )
 }
 
@@ -224,19 +145,23 @@ function NavItem({ label, isActive, onClick, id }: NavItemProps) {
   return (
     <motion.button
       data-id={id}
-      whileHover={{ y: -1 }}
-      whileTap={{ y: 0 }}
+      whileHover={{ scale: 1.05 }}
+      whileTap={{ scale: 0.95 }}
       onClick={onClick}
-      className={`nav-button text-sm px-3 py-2 relative ${
-        isActive ? "text-white font-medium active-nav-item" : "text-white/60 hover:text-white"
+      className={`text-sm transition-all duration-200 px-3 py-2 relative ${
+        isActive ? "text-white font-medium" : "text-white/60 hover:text-white"
       }`}
-      style={{
-        textShadow: isActive
-          ? "0 0 10px rgba(255, 255, 255, 0.6)"
-          : "none",
-      }}
     >
       {label}
+      {isActive && (
+        <motion.div
+          layoutId="activeNavIndicator"
+          className="absolute -bottom-1 left-0 right-0 mx-auto w-2/3 h-0.5 rounded-full bg-gradient-to-r from-[#3C0753] via-[#720455] to-[#910A67]"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.3 }}
+        />
+      )}
     </motion.button>
   )
 }
