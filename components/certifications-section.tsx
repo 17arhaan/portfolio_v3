@@ -209,18 +209,18 @@ export default function CertificationsSection() {
                   }}
                   className="h-full"
                 >
-                  <Card className="h-full overflow-hidden border border-white/10 bg-transparent w-[450px] p-4">
-                    <CardHeader className="pb-1 px-8">
-                      <div className="flex justify-between items-start gap-6">
+                  <Card className="h-full overflow-hidden border border-white/10 bg-transparent w-[450px] p-3.5">
+                    <CardHeader className="pb-1 px-7">
+                      <div className="flex justify-between items-start gap-4">
                         <div className="flex-1 min-w-0">
-                          <CardTitle className="text-xl text-white group-hover:text-primary transition-colors duration-300 line-clamp-2">
+                          <CardTitle className="text-lg text-white group-hover:text-primary transition-colors duration-300 line-clamp-3">
                             {cert.title}
                           </CardTitle>
-                          <CardDescription className="flex items-center mt-2 text-white/70 text-sm">
-                            <Award className="h-4 w-4 mr-2 flex-shrink-0" />
+                          <CardDescription className="flex items-center mt-1 text-white/70 text-xs">
+                            <Award className="h-3.5 w-3.5 mr-1.5 flex-shrink-0" />
                             <span className="truncate">{cert.issuer}</span>
-                            <span className="mx-2">•</span>
-                            <Calendar className="h-4 w-4 mr-2 flex-shrink-0" />
+                            <span className="mx-1.5">•</span>
+                            <Calendar className="h-3.5 w-3.5 mr-1.5 flex-shrink-0" />
                             <span>{cert.date}</span>
                             {cert.expiryDate && <span> - {cert.expiryDate}</span>}
                           </CardDescription>
@@ -231,40 +231,40 @@ export default function CertificationsSection() {
                               src={cert.image} 
                               alt={cert.title} 
                               fill 
-                              className="object-contain p-3" 
+                              className="object-contain p-2" 
                             />
                           </div>
                         </div>
                       </div>
                     </CardHeader>
-                    <CardContent className="flex flex-col px-8">
+                    <CardContent className="flex flex-col px-7">
                       <div
                         className={`transition-all duration-300 ${
-                          expandedId === cert.id ? "max-h-[500px]" : "max-h-24"
+                          expandedId === cert.id ? "max-h-[400px]" : "max-h-20"
                         } overflow-hidden`}
                       >
-                        <p className="text-sm text-white/70 mb-4">{cert.description}</p>
+                        <p className="text-xs text-white/70 mb-3">{cert.description}</p>
 
                         {expandedId === cert.id && (
                           <motion.div 
                             initial={{ opacity: 0 }} 
                             animate={{ opacity: 1 }} 
                             transition={{ duration: 0.3 }}
-                            className="space-y-4 mt-4"
+                            className="space-y-3 mt-3"
                           >
-                            <div className="mb-4">
-                              <p className="text-sm font-medium mb-1 text-white">Credential ID</p>
-                              <p className="text-sm text-white/70">{cert.credentialId}</p>
+                            <div className="mb-3">
+                              <p className="text-xs font-medium mb-1 text-white">Credential ID</p>
+                              <p className="text-xs text-white/70">{cert.credentialId}</p>
                             </div>
 
-                            <div className="mb-4">
-                              <p className="text-sm font-medium mb-2 text-white">Skills</p>
-                              <div className="flex flex-wrap gap-2">
+                            <div className="mb-3">
+                              <p className="text-xs font-medium mb-1.5 text-white">Skills</p>
+                              <div className="flex flex-wrap gap-1.5">
                                 {cert.skills.map((skill) => (
                                   <Badge
                                     key={skill}
                                     variant="secondary"
-                                    className="text-xs font-medium bg-white/10 text-white/90 hover:bg-white/20 transition-colors"
+                                    className="text-[10px] font-medium bg-white/10 text-white/90 hover:bg-white/20 transition-colors"
                                   >
                                     {skill}
                                   </Badge>
@@ -277,65 +277,180 @@ export default function CertificationsSection() {
 
                       <div className="mt-6">
                         <motion.div
-                          whileHover={{ scale: 1.02 }}
-                          whileTap={{ scale: 0.98 }}
-                          className="relative"
+                          whileHover={{ 
+                            scale: 1.03, 
+                            transition: { type: "spring", stiffness: 400, damping: 10 } 
+                          }}
                         >
-                          <GlowEffect glowColor="rgba(255, 255, 255, 0.5)" intensity={0.7}>
-                            <Button
-                              variant="outline"
-                              size="sm"
-                              className="w-full bg-transparent text-white/90 hover:bg-white/10 hover:text-white border-white/20"
-                              onClick={() => toggleExpand(cert.id)}
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            className="w-full bg-black/30 text-white border border-white/20 transition-all duration-300 backdrop-blur-sm hover:border-white/40 hover:bg-white/5 overflow-hidden relative group"
+                            onClick={() => toggleExpand(cert.id)}
+                          >
+                            <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent opacity-0 group-hover:opacity-100 translate-x-[-100%] group-hover:translate-x-[100%] transition-all duration-1000 ease-in-out"></span>
+                            <span
+                              className="relative z-2 group-hover:text-white transition-colors duration-300 flex items-center gap-1.5"
+                              style={{
+                                textShadow: `0 0 4px rgba(255, 255, 255, 0.3)`,
+                                transition: "text-shadow 0.3s ease-out, color 0.3s ease-out",
+                              }}
                             >
                               {expandedId === cert.id ? "Show Less" : "Show More"}
-                            </Button>
-                          </GlowEffect>
+                            </span>
+                          </Button>
                         </motion.div>
                       </div>
                     </CardContent>
                     <CardFooter className="pt-0">
                       <div className="w-full space-y-2">
                         {new Date(cert.date) > new Date() ? (
-                          <Button variant="outline" size="sm" className="w-full gap-2 bg-transparent text-white/70 border-white/20 hover:bg-white/10">
-                            <Clock className="h-4 w-4" />
-                            Ongoing
-                          </Button>
+                          <motion.div
+                            whileHover={{ 
+                              scale: 1.03, 
+                              transition: { type: "spring", stiffness: 400, damping: 10 } 
+                            }}
+                          >
+                            <Button 
+                              variant="outline" 
+                              size="sm" 
+                              className="w-full gap-2 bg-black/30 text-white border border-white/20 transition-all duration-300 backdrop-blur-sm hover:border-white/40 hover:bg-white/5 overflow-hidden relative group"
+                            >
+                              <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent opacity-0 group-hover:opacity-100 translate-x-[-100%] group-hover:translate-x-[100%] transition-all duration-1000 ease-in-out"></span>
+                              <Clock className="h-4 w-4 transition-transform group-hover:scale-110" />
+                              <span
+                                className="relative z-2 group-hover:text-white transition-colors duration-300"
+                                style={{
+                                  textShadow: `0 0 4px rgba(255, 255, 255, 0.3)`,
+                                  transition: "text-shadow 0.3s ease-out, color 0.3s ease-out",
+                                }}
+                              >
+                                Ongoing
+                              </span>
+                            </Button>
+                          </motion.div>
                         ) : Array.isArray(cert.credentialURL) ? (
                           <div className="flex flex-col gap-2">
                             {cert.credentialURL.map((credential, index) => (
-                              <Button key={index} variant="outline" size="sm" className="w-full gap-2 bg-transparent text-white/70 border-white/20 hover:bg-white/10" asChild>
-                                <a href={credential.url} target="_blank" rel="noopener noreferrer">
-                                  <CheckCircle className="h-4 w-4" />
-                                  <span className="truncate">{credential.title}</span>
-                                  <ExternalLink className="h-3 w-3 ml-1 flex-shrink-0" />
-                                </a>
-                              </Button>
+                              <motion.div
+                                key={index}
+                                whileHover={{ 
+                                  scale: 1.03, 
+                                  transition: { type: "spring", stiffness: 400, damping: 10 } 
+                                }}
+                              >
+                                <Button 
+                                  variant="outline" 
+                                  size="sm" 
+                                  className="w-full gap-2 bg-black/30 text-white border border-white/20 transition-all duration-300 backdrop-blur-sm hover:border-white/40 hover:bg-white/5 overflow-hidden relative group" 
+                                  asChild
+                                >
+                                  <a href={credential.url} target="_blank" rel="noopener noreferrer">
+                                    <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent opacity-0 group-hover:opacity-100 translate-x-[-100%] group-hover:translate-x-[100%] transition-all duration-1000 ease-in-out"></span>
+                                    <CheckCircle className="h-4 w-4 transition-transform group-hover:scale-110" />
+                                    <span
+                                      className="relative z-2 group-hover:text-white transition-colors duration-300 truncate"
+                                      style={{
+                                        textShadow: `0 0 4px rgba(255, 255, 255, 0.3)`,
+                                        transition: "text-shadow 0.3s ease-out, color 0.3s ease-out",
+                                      }}
+                                    >
+                                      {credential.title}
+                                    </span>
+                                    <ExternalLink className="h-3 w-3 ml-1 flex-shrink-0 transition-transform group-hover:scale-110" />
+                                  </a>
+                                </Button>
+                              </motion.div>
                             ))}
                           </div>
                         ) : cert.credentialURL ? (
-                          <Button variant="outline" size="sm" className="w-full gap-2 bg-transparent text-white/70 border-white/20 hover:bg-white/10" asChild>
-                            <a href={cert.credentialURL} target="_blank" rel="noopener noreferrer">
-                              <CheckCircle className="h-4 w-4" />
-                              View Credential
-                              <ExternalLink className="h-3 w-3 ml-1" />
-                            </a>
-                          </Button>
+                          <motion.div
+                            whileHover={{ 
+                              scale: 1.03, 
+                              transition: { type: "spring", stiffness: 400, damping: 10 } 
+                            }}
+                          >
+                            <Button 
+                              variant="outline" 
+                              size="sm" 
+                              className="w-full gap-2 bg-black/30 text-white border border-white/20 transition-all duration-300 backdrop-blur-sm hover:border-white/40 hover:bg-white/5 overflow-hidden relative group" 
+                              asChild
+                            >
+                              <a href={cert.credentialURL} target="_blank" rel="noopener noreferrer">
+                                <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent opacity-0 group-hover:opacity-100 translate-x-[-100%] group-hover:translate-x-[100%] transition-all duration-1000 ease-in-out"></span>
+                                <CheckCircle className="h-4 w-4 transition-transform group-hover:scale-110" />
+                                <span
+                                  className="relative z-2 group-hover:text-white transition-colors duration-300"
+                                  style={{
+                                    textShadow: `0 0 4px rgba(255, 255, 255, 0.3)`,
+                                    transition: "text-shadow 0.3s ease-out, color 0.3s ease-out",
+                                  }}
+                                >
+                                  View Credential
+                                </span>
+                                <ExternalLink className="h-3 w-3 ml-1 transition-transform group-hover:scale-110" />
+                              </a>
+                            </Button>
+                          </motion.div>
                         ) : (
                           <div className="flex gap-2">
-                            <Button variant="outline" size="sm" className="w-full gap-2 bg-transparent text-white/70 border-white/20 hover:bg-white/10" asChild>
-                              <a href="https://github.com/17arhaan" target="_blank" rel="noopener noreferrer">
-                                <Github className="h-4 w-4" />
-                                View Code
-                                <ExternalLink className="h-3 w-3 ml-1" />
-                              </a>
-                            </Button>
-                            <Button variant="outline" size="sm" className="w-full gap-2 bg-transparent text-white/70 border-white/20 hover:bg-white/10" asChild>
-                              <a href="https://arhaangirdhar.com" target="_blank" rel="noopener noreferrer">
-                                <ExternalLink className="h-4 w-4" />
-                                View Demo
-                              </a>
-                            </Button>
+                            <motion.div
+                              whileHover={{ 
+                                scale: 1.03, 
+                                transition: { type: "spring", stiffness: 400, damping: 10 } 
+                              }}
+                              className="w-full"
+                            >
+                              <Button 
+                                variant="outline" 
+                                size="sm" 
+                                className="w-full gap-2 bg-black/30 text-white border border-white/20 transition-all duration-300 backdrop-blur-sm hover:border-white/40 hover:bg-white/5 overflow-hidden relative group" 
+                                asChild
+                              >
+                                <a href="https://github.com/17arhaan" target="_blank" rel="noopener noreferrer">
+                                  <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent opacity-0 group-hover:opacity-100 translate-x-[-100%] group-hover:translate-x-[100%] transition-all duration-1000 ease-in-out"></span>
+                                  <Github className="h-4 w-4 transition-transform group-hover:scale-110" />
+                                  <span
+                                    className="relative z-2 group-hover:text-white transition-colors duration-300"
+                                    style={{
+                                      textShadow: `0 0 4px rgba(255, 255, 255, 0.3)`,
+                                      transition: "text-shadow 0.3s ease-out, color 0.3s ease-out",
+                                    }}
+                                  >
+                                    View Code
+                                  </span>
+                                  <ExternalLink className="h-3 w-3 ml-1 transition-transform group-hover:scale-110" />
+                                </a>
+                              </Button>
+                            </motion.div>
+                            <motion.div
+                              whileHover={{ 
+                                scale: 1.03, 
+                                transition: { type: "spring", stiffness: 400, damping: 10 } 
+                              }}
+                              className="w-full"
+                            >
+                              <Button 
+                                variant="outline" 
+                                size="sm" 
+                                className="w-full gap-2 bg-black/30 text-white border border-white/20 transition-all duration-300 backdrop-blur-sm hover:border-white/40 hover:bg-white/5 overflow-hidden relative group" 
+                                asChild
+                              >
+                                <a href="https://arhaangirdhar.com" target="_blank" rel="noopener noreferrer">
+                                  <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent opacity-0 group-hover:opacity-100 translate-x-[-100%] group-hover:translate-x-[100%] transition-all duration-1000 ease-in-out"></span>
+                                  <ExternalLink className="h-4 w-4 transition-transform group-hover:scale-110" />
+                                  <span
+                                    className="relative z-2 group-hover:text-white transition-colors duration-300"
+                                    style={{
+                                      textShadow: `0 0 4px rgba(255, 255, 255, 0.3)`,
+                                      transition: "text-shadow 0.3s ease-out, color 0.3s ease-out",
+                                    }}
+                                  >
+                                    View Demo
+                                  </span>
+                                </a>
+                              </Button>
+                            </motion.div>
                           </div>
                         )}
                       </div>

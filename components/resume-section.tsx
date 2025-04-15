@@ -5,7 +5,7 @@ import { motion } from "framer-motion"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Download, FileText, Eye, GraduationCap, Award, Briefcase, Users } from "lucide-react"
-import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog"
+import { Dialog, DialogContent, DialogTrigger, DialogTitle } from "@/components/ui/dialog"
 
 const highlights = [
   {
@@ -112,38 +112,89 @@ export default function ResumeSection() {
                 <div className="flex flex-wrap justify-center gap-4">
                   <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
                     <DialogTrigger asChild>
-                      <Button className="gap-2 group min-w-[140px] bg-white/10 hover:bg-white/20 text-white border border-white/20 button-border-glow">
-                        <Eye className="h-4 w-4 transition-transform group-hover:scale-110" />
-                        View Resume
-                      </Button>
+                      <motion.div
+                        whileHover={{ 
+                          scale: 1.03, 
+                          transition: { type: "spring", stiffness: 400, damping: 10 } 
+                        }}
+                      >
+                        <Button className="gap-2 group min-w-[140px] bg-black/30 text-white border border-white/20 transition-all duration-300 backdrop-blur-sm hover:border-white/40 hover:bg-white/5 overflow-hidden relative">
+                          <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent opacity-0 group-hover:opacity-100 translate-x-[-100%] group-hover:translate-x-[100%] transition-all duration-1000 ease-in-out"></span>
+                          <Eye className="h-4 w-4" />
+                          <span
+                            className="relative z-2 group-hover:text-white transition-colors duration-300"
+                            style={{
+                              textShadow: `0 0 4px rgba(255, 255, 255, 0.3)`,
+                              transition: "text-shadow 0.3s ease-out, color 0.3s ease-out",
+                            }}
+                          >
+                            View Resume
+                          </span>
+                        </Button>
+                      </motion.div>
                     </DialogTrigger>
                     <DialogContent className="max-w-4xl h-[80vh] bg-black/90 border border-white/10">
+                      <DialogTitle className="sr-only">Resume Preview</DialogTitle>
                       <iframe src="/Arhaan_Resume.pdf" className="w-full h-full" title="Resume" />
                     </DialogContent>
                   </Dialog>
-                  <Button
-                    variant="outline"
-                    className="gap-2 group min-w-[140px] bg-white/5 hover:bg-white/10 text-white border border-white/20 button-border-glow"
+                  
+                  <motion.div
+                    whileHover={{ 
+                      scale: 1.03, 
+                      transition: { type: "spring", stiffness: 400, damping: 10 } 
+                    }}
                   >
-                    <a href="/Arhaan_Resume.pdf" download className="flex items-center gap-2">
-                      <Download className="h-4 w-4 transition-transform group-hover:scale-110" />
-                      Download PDF
-                    </a>
-                  </Button>
-                  <Button
-                    variant="outline"
-                    className="gap-2 group min-w-[140px] bg-white/5 hover:bg-white/10 text-white border border-white/20 button-border-glow"
-                  >
-                    <a
-                      href="https://drive.google.com/drive/folders/1S55QbJu8Pv5a8wAxj5SMgOviAwjTbmKl?usp=sharing"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="flex items-center gap-2"
+                    <Button
+                      variant="outline"
+                      className="gap-2 group min-w-[140px] bg-black/30 text-white border border-white/20 transition-all duration-300 backdrop-blur-sm hover:border-white/40 hover:bg-white/5 overflow-hidden relative"
                     >
-                      <Users className="h-4 w-4 transition-transform group-hover:scale-110" />
-                      References
-                    </a>
-                  </Button>
+                      <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent opacity-0 group-hover:opacity-100 translate-x-[-100%] group-hover:translate-x-[100%] transition-all duration-1000 ease-in-out"></span>
+                      <a href="/Arhaan_Resume.pdf" download className="flex items-center gap-2">
+                        <Download className="h-4 w-4" />
+                        <span
+                          className="relative z-2 group-hover:text-white transition-colors duration-300"
+                          style={{
+                            textShadow: `0 0 4px rgba(255, 255, 255, 0.3)`,
+                            transition: "text-shadow 0.3s ease-out, color 0.3s ease-out",
+                          }}
+                        >
+                          Download PDF
+                        </span>
+                      </a>
+                    </Button>
+                  </motion.div>
+                  
+                  <motion.div
+                    whileHover={{ 
+                      scale: 1.03, 
+                      transition: { type: "spring", stiffness: 400, damping: 10 } 
+                    }}
+                  >
+                    <Button
+                      variant="outline"
+                      className="gap-2 group min-w-[140px] bg-black/30 text-white border border-white/20 transition-all duration-300 backdrop-blur-sm hover:border-white/40 hover:bg-white/5 overflow-hidden relative"
+                    >
+                      <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent opacity-0 group-hover:opacity-100 translate-x-[-100%] group-hover:translate-x-[100%] transition-all duration-1000 ease-in-out"></span>
+                      <a
+                        href="https://drive.google.com/drive/folders/1S55QbJu8Pv5a8wAxj5SMgOviAwjTbmKl?usp=sharing"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex items-center gap-2"
+                      >
+                        <Users className="h-4 w-4" />
+                        <span
+                          className="relative z-2 group-hover:text-white transition-colors duration-300"
+                          style={{
+                            textShadow: `0 0 4px rgba(255, 255, 255, 0.3)`,
+                            transition: "text-shadow 0.3s ease-out, color 0.3s ease-out",
+                          }}
+                        >
+                          References
+                        </span>
+                      </a>
+                    </Button>
+                  </motion.div>
                 </div>
               </div>
 

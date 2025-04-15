@@ -73,10 +73,9 @@ export default function AnimatedFooter() {
   // Social media links
   const socialLinks = [
     { icon: Github, href: "https://github.com/17arhaan", label: "GitHub" },
-    { icon: Linkedin, href: "https://linkedin.com/in/arhaan-girdhar", label: "LinkedIn" },
-    { icon: Twitter, href: "https://twitter.com/arhaan_girdhar", label: "Twitter" },
-    { icon: Mail, href: "mailto:contact@arhaangirdhar.com", label: "Email" },
-    { icon: ExternalLink, href: "https://arhaangirdhar.com", label: "Website" },
+    { icon: Linkedin, href: "https://www.linkedin.com/in/arhaan17/", label: "LinkedIn" },
+    { icon: Code, href: "https://leetcode.com/u/arhaan17/", label: "LeetCode" },
+    { icon: Mail, href: "mailto:17arhaan.connect@gmail.com", label: "Email" },
   ]
 
   return (

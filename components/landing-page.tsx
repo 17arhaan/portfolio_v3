@@ -3,7 +3,7 @@
 import type React from "react"
 import { useRef, useEffect, useState } from "react"
 import { motion } from "framer-motion"
-import { ChevronDown, Linkedin, Github, Code, FileText } from "lucide-react"
+import { ChevronDown, Linkedin, Github, Code, FileText, Mail } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import StarField from "./star-field"
 
@@ -133,38 +133,53 @@ export default function LandingPage({ experienceRef }: LandingPageProps) {
           transition={{ duration: 0.8, delay: 0.4, ease: "easeOut" }}
           className="flex flex-wrap justify-center gap-4 mb-12"
         >
-          <Button
-            variant="outline"
-            className="px-6 py-5 bg-black/30 hover:bg-white/10 text-white rounded-full border border-white/30 transition-all duration-300 button-border-glow backdrop-blur-sm"
-            onClick={scrollToExperience}
+          <motion.div
+            whileHover={{ 
+              scale: 1.03, 
+              transition: { type: "spring", stiffness: 400, damping: 10 } 
+            }}
           >
-            <span
-              style={{
-                position: "relative",
-                zIndex: 2,
-                textShadow: `0 0 ${1 + glowIntensity * 2}px rgba(255, 255, 255, ${0.3 + glowIntensity * 0.1})`,
-                transition: "text-shadow 0.5s ease-out",
-              }}
+            <Button
+              variant="outline"
+              className="px-6 py-5 bg-black/30 text-white rounded-full border border-white/30 transition-all duration-300 backdrop-blur-sm group hover:border-white/50 hover:bg-white/5 overflow-hidden relative"
+              onClick={scrollToExperience}
             >
-              View My Work
-            </span>
-          </Button>
+              <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent opacity-0 group-hover:opacity-100 translate-x-[-100%] group-hover:translate-x-[100%] transition-all duration-1000 ease-in-out"></span>
+              <span
+                className="relative z-2 group-hover:text-white transition-colors duration-300"
+                style={{
+                  textShadow: `0 0 4px rgba(255, 255, 255, 0.3)`,
+                  transition: "text-shadow 0.3s ease-out, color 0.3s ease-out",
+                }}
+              >
+                View My Work
+              </span>
+            </Button>
+          </motion.div>
 
-          <Button
-            variant="outline"
-            className="px-6 py-5 bg-black/30 hover:bg-white/10 text-white rounded-full border border-white/30 transition-all duration-300 button-border-glow backdrop-blur-sm"
+          <motion.div
+            whileHover={{ 
+              scale: 1.03, 
+              transition: { type: "spring", stiffness: 400, damping: 10 } 
+            }}
           >
-            <span
-              style={{
-                position: "relative",
-                zIndex: 2,
-                textShadow: `0 0 ${1 + glowIntensity * 2}px rgba(255, 255, 255, ${0.3 + glowIntensity * 0.1})`,
-                transition: "text-shadow 0.5s ease-out",
-              }}
+            <Button
+              variant="outline"
+              className="px-6 py-5 bg-black/30 text-white rounded-full border border-white/30 transition-all duration-300 backdrop-blur-sm group hover:border-white/50 hover:bg-white/5 overflow-hidden relative"
+              onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}
             >
-              Contact Me
-            </span>
-          </Button>
+              <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent opacity-0 group-hover:opacity-100 translate-x-[-100%] group-hover:translate-x-[100%] transition-all duration-1000 ease-in-out"></span>
+              <span
+                className="relative z-2 group-hover:text-white transition-colors duration-300"
+                style={{
+                  textShadow: `0 0 4px rgba(255, 255, 255, 0.3)`,
+                  transition: "text-shadow 0.3s ease-out, color 0.3s ease-out",
+                }}
+              >
+                Contact Me
+              </span>
+            </Button>
+          </motion.div>
         </motion.div>
 
         {/* Social Icons */}
@@ -174,24 +189,72 @@ export default function LandingPage({ experienceRef }: LandingPageProps) {
           transition={{ duration: 0.8, delay: 0.5, ease: "easeOut" }}
           className="flex justify-center space-x-6 mb-16"
         >
-          {[Linkedin, Github, Code, FileText].map((Icon, index) => (
-            <motion.a
-              key={index}
-              href="#"
-              whileHover={{
-                scale: 1.2,
-                filter: `drop-shadow(0 0 8px rgba(255, 255, 255, 0.5))`,
-                transition: { type: "spring", stiffness: 400, damping: 10 },
-              }}
-              style={{
-                color: `rgba(255, 255, 255, ${0.6 + glowIntensity * 0.1})`,
-                filter: `drop-shadow(0 0 ${1 + glowIntensity}px rgba(255, 255, 255, ${0.1 + glowIntensity * 0.05}))`,
-                transition: "color 0.5s ease, filter 0.5s ease",
-              }}
-            >
-              <Icon className="w-5 h-5" />
-            </motion.a>
-          ))}
+          <motion.a
+            href="https://www.linkedin.com/in/arhaan17/"
+            target="_blank"
+            rel="noopener noreferrer"
+            whileHover={{
+              scale: 1.2,
+              filter: `drop-shadow(0 0 8px rgba(255, 255, 255, 0.5))`,
+              transition: { type: "spring", stiffness: 400, damping: 10 },
+            }}
+            style={{
+              color: `rgba(255, 255, 255, ${0.6 + glowIntensity * 0.1})`,
+              filter: `drop-shadow(0 0 ${1 + glowIntensity}px rgba(255, 255, 255, ${0.1 + glowIntensity * 0.05}))`,
+              transition: "color 0.5s ease, filter 0.5s ease",
+            }}
+          >
+            <Linkedin className="w-5 h-5" />
+          </motion.a>
+          <motion.a
+            href="https://github.com/17arhaan"
+            target="_blank"
+            rel="noopener noreferrer"
+            whileHover={{
+              scale: 1.2,
+              filter: `drop-shadow(0 0 8px rgba(255, 255, 255, 0.5))`,
+              transition: { type: "spring", stiffness: 400, damping: 10 },
+            }}
+            style={{
+              color: `rgba(255, 255, 255, ${0.6 + glowIntensity * 0.1})`,
+              filter: `drop-shadow(0 0 ${1 + glowIntensity}px rgba(255, 255, 255, ${0.1 + glowIntensity * 0.05}))`,
+              transition: "color 0.5s ease, filter 0.5s ease",
+            }}
+          >
+            <Github className="w-5 h-5" />
+          </motion.a>
+          <motion.a
+            href="https://leetcode.com/u/arhaan17/"
+            target="_blank"
+            rel="noopener noreferrer"
+            whileHover={{
+              scale: 1.2,
+              filter: `drop-shadow(0 0 8px rgba(255, 255, 255, 0.5))`,
+              transition: { type: "spring", stiffness: 400, damping: 10 },
+            }}
+            style={{
+              color: `rgba(255, 255, 255, ${0.6 + glowIntensity * 0.1})`,
+              filter: `drop-shadow(0 0 ${1 + glowIntensity}px rgba(255, 255, 255, ${0.1 + glowIntensity * 0.05}))`,
+              transition: "color 0.5s ease, filter 0.5s ease",
+            }}
+          >
+            <Code className="w-5 h-5" />
+          </motion.a>
+          <motion.a
+            href="mailto:17arhaan.connect@gmail.com"
+            whileHover={{
+              scale: 1.2,
+              filter: `drop-shadow(0 0 8px rgba(255, 255, 255, 0.5))`,
+              transition: { type: "spring", stiffness: 400, damping: 10 },
+            }}
+            style={{
+              color: `rgba(255, 255, 255, ${0.6 + glowIntensity * 0.1})`,
+              filter: `drop-shadow(0 0 ${1 + glowIntensity}px rgba(255, 255, 255, ${0.1 + glowIntensity * 0.05}))`,
+              transition: "color 0.5s ease, filter 0.5s ease",
+            }}
+          >
+            <Mail className="w-5 h-5" />
+          </motion.a>
         </motion.div>
       </div>
 

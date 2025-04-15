@@ -66,6 +66,8 @@ export default function Navbar({ experienceRef, projectsRef, skillsRef, certific
       window.scrollTo({ top: 0, behavior: "smooth" })
     } else if (item.ref && item.ref.current) {
       item.ref.current.scrollIntoView({ behavior: "smooth" })
+    } else if (item.id === "contact") {
+      document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })
     }
     setIsMobileMenuOpen(false)
   }

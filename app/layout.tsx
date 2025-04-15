@@ -2,7 +2,8 @@ import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import './globals.css'
 import { ScrollAnimation } from '@/components/scroll-animation'
-
+import { Analytics } from "@vercel/analytics/react"
+import { SpeedInsights } from "@vercel/speed-insights/next"
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
@@ -119,6 +120,8 @@ export default function RootLayout({
         <ScrollAnimation>
           {children}
         </ScrollAnimation>
+        <Analytics />
+        <SpeedInsights />
       </body>
     </html>
   )

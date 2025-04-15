@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Github, Linkedin, Mail, Twitter } from "lucide-react";
+import { Github, Linkedin, Mail, Sparkles, Code } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -21,14 +21,30 @@ export function Footer() {
                 priority
               />
             </div>
-            <p className="text-white/70 text-sm">
-              Turning ideas into reality through code
-            </p>
+            <div className="group relative">
+              <motion.div 
+                className="absolute -inset-1 bg-gradient-to-r from-transparent via-white/10 to-transparent rounded-lg blur opacity-0 group-hover:opacity-100 transition duration-1000"
+                animate={{
+                  backgroundPosition: ["0% 0%", "100% 100%"],
+                }}
+                transition={{
+                  duration: 3,
+                  repeat: Infinity,
+                  repeatType: "reverse",
+                }}
+              />
+              <div className="relative flex items-center space-x-2">
+                <Sparkles className="w-4 h-4 text-white/30" />
+                <p className="text-white/70 text-sm italic">
+                  <span className="text-white/90 font-medium">Turning ideas</span> into <span className="text-white/90 font-medium">reality</span> through <span className="text-white/90 font-medium">code</span>
+                </p>
+              </div>
+            </div>
           </div>
 
           {/* Middle section - Links */}
           <div className="flex flex-col items-center">
-            <h3 className="text-lg font-semibold mb-4">Quick Links</h3>
+            <h3 className="text-lg font-semibold mb-4">Portfolio</h3>
             <ul className="space-y-2 text-center">
               <li>
                 <Link href="#about" className="text-white/70 hover:text-white transition-colors">
@@ -53,7 +69,7 @@ export function Footer() {
             <h3 className="text-lg font-semibold mb-4">Connect</h3>
             <div className="flex space-x-4">
               <motion.a
-                href="https://github.com/yourusername"
+                href="https://github.com/17arhaan"
                 target="_blank"
                 rel="noopener noreferrer"
                 whileHover={{ y: -2 }}
@@ -62,7 +78,7 @@ export function Footer() {
                 <Github className="w-5 h-5" />
               </motion.a>
               <motion.a
-                href="https://linkedin.com/in/yourusername"
+                href="https://www.linkedin.com/in/arhaan17/"
                 target="_blank"
                 rel="noopener noreferrer"
                 whileHover={{ y: -2 }}
@@ -71,20 +87,52 @@ export function Footer() {
                 <Linkedin className="w-5 h-5" />
               </motion.a>
               <motion.a
-                href="https://twitter.com/yourusername"
+                href="https://leetcode.com/u/arhaan17/"
                 target="_blank"
                 rel="noopener noreferrer"
                 whileHover={{ y: -2 }}
                 className="text-white/70 hover:text-white transition-colors"
               >
-                <Twitter className="w-5 h-5" />
+                <Code className="w-5 h-5" />
               </motion.a>
               <motion.a
-                href="mailto:your.email@example.com"
+                href="mailto:17arhaan.connect@gmail.com"
                 whileHover={{ y: -2 }}
                 className="text-white/70 hover:text-white transition-colors"
               >
                 <Mail className="w-5 h-5" />
+              </motion.a>
+            </div>
+            
+            {/* Quick Links below Connections */}
+            <div className="mt-6 flex flex-wrap justify-center md:justify-end gap-x-6 gap-y-2">
+              <motion.a 
+                href="#experience" 
+                whileHover={{ x: 2 }}
+                className="text-sm text-white/60 hover:text-white transition-colors"
+              >
+                Experience
+              </motion.a>
+              <motion.a 
+                href="#skills" 
+                whileHover={{ x: 2 }}
+                className="text-sm text-white/60 hover:text-white transition-colors"
+              >
+                Skills
+              </motion.a>
+              <motion.a 
+                href="#certifications" 
+                whileHover={{ x: 2 }}
+                className="text-sm text-white/60 hover:text-white transition-colors"
+              >
+                Certifications
+              </motion.a>
+              <motion.a 
+                href="#resume" 
+                whileHover={{ x: 2 }}
+                className="text-sm text-white/60 hover:text-white transition-colors"
+              >
+                Resume
               </motion.a>
             </div>
           </div>

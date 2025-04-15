@@ -2,8 +2,10 @@
 
 import { useState, useRef } from "react"
 import { motion, AnimatePresence } from "framer-motion"
-import { Tag, ExternalLink, Github, X, CheckCircle2, ArrowUpRight, Filter } from "lucide-react"
+import { Tag, ExternalLink, Github, X, CheckCircle2, ArrowUpRight, Filter, Award, Calendar } from "lucide-react"
 import { Button } from "@/components/ui/button"
+import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card"
+import Image from "next/image"
 
 // Projects data
 const projects = [
@@ -348,7 +350,7 @@ export default function ProjectsSection() {
                 zIndex: 1,
               }}
               onClick={() => openProjectModal(project)}
-              className="bg-white/5 backdrop-blur-sm rounded-lg overflow-hidden border border-white/10 cursor-pointer group transform transition-all duration-300"
+              className="bg-white/5 backdrop-blur-sm rounded-lg overflow-hidden border border-white/10 cursor-pointer group transform transition-all duration-300 w-[300px] mx-auto"
               style={{
                 perspective: "1000px",
                 transformStyle: "preserve-3d",
@@ -392,12 +394,12 @@ export default function ProjectsSection() {
               </div>
 
               {/* Project info */}
-              <div className="p-5">
+              <div className="p-6">
                 <motion.h3
                   initial={{ y: 5, opacity: 0 }}
                   animate={{ y: 0, opacity: 1 }}
                   transition={{ delay: 0.1 }}
-                  className="text-lg font-semibold text-white mb-2 group-hover:text-white transition-colors duration-200"
+                  className="text-xl font-semibold text-white mb-2 group-hover:text-white transition-colors duration-200"
                   style={{ textShadow: "0 0 8px rgba(255,255,255,0.3)" }}
                 >
                   {project.title}
@@ -418,7 +420,7 @@ export default function ProjectsSection() {
                         backgroundColor: "rgba(255, 255, 255, 0.15)",
                         boxShadow: "0 0 8px rgba(220, 38, 38, 0.3)",
                       }}
-                      className="inline-flex items-center px-2 py-0.5 text-xs rounded-full bg-white/5 text-white/80 border border-white/5 transition-all duration-300"
+                      className="inline-flex items-center px-2.5 py-1 text-sm rounded-full bg-white/5 text-white/80 border border-white/5 transition-all duration-300"
                     >
                       {tag}
                     </motion.span>
@@ -426,7 +428,7 @@ export default function ProjectsSection() {
                   {project.tags.length > 3 && (
                     <motion.span
                       whileHover={{ scale: 1.1 }}
-                      className="inline-flex items-center px-2 py-0.5 text-xs rounded-full bg-white/5 text-white/60"
+                      className="inline-flex items-center px-2.5 py-1 text-sm rounded-full bg-white/5 text-white/60"
                     >
                       +{project.tags.length - 3} more
                     </motion.span>
