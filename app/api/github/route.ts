@@ -33,6 +33,35 @@ export async function GET() {
     const totalStars = repos.reduce((acc: number, repo: any) => acc + repo.stargazers_count, 0);
     const totalForks = repos.reduce((acc: number, repo: any) => acc + repo.forks_count, 0);
 
+    // Fetch contributions using GraphQL API
+    const graphqlResponse = await fetch('https://api.github.com/graphql', {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${process.env.GITHUB_TOKEN}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        query: `
+          query {
+            user(login: "17arhaan") {
+              contributionsCollection {
+                contributionCalendar {
+                  totalContributions
+                }
+              }
+            }
+          }
+        `
+      }),
+    });
+
+    if (!graphqlResponse.ok) {
+      throw new Error(`Failed to fetch contributions: ${graphqlResponse.status} ${graphqlResponse.statusText}`);
+    }
+
+    const graphqlData = await graphqlResponse.json();
+    const contributions = graphqlData.data?.user?.contributionsCollection?.contributionCalendar?.totalContributions || 0;
+
     // Fetch recent activity
     const activityResponse = await fetch('https://api.github.com/users/17arhaan/events', {
       headers: {
@@ -99,7 +128,7 @@ export async function GET() {
       totalRepos: data.public_repos,
       totalStars,
       totalForks,
-      totalContributions: 0, // This would require additional API calls
+      totalContributions: contributions,
       languages,
       recentActivity,
     });

@@ -92,26 +92,45 @@ export default function ProgressSection() {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
+    let isMounted = true;
+    setLoading(true);
+    setError(null);
+
     const fetchGitHubStats = async () => {
       try {
         const response = await fetch('/api/github', {
           headers: {
-            'Cache-Control': 'no-cache',
+            'Cache-Control': 'no-cache, no-store, must-revalidate',
             'Pragma': 'no-cache',
             'Expires': '0',
           },
         });
         if (!response.ok) {
-          const errorData = await response.json();
-          throw new Error(errorData.message || 'Failed to fetch GitHub stats');
+          throw new Error('Failed to fetch GitHub stats');
         }
         const data = await response.json();
-        setGithubStats(data);
-        setLoading(false);
+        if (isMounted) {
+          // Ensure contributions data is properly formatted
+          const contributions = Number(data.totalContributions) || 0;
+          console.log('GitHub Contributions:', contributions); // Debug log
+          
+          setGithubStats({
+            ...data,
+            totalContributions: contributions,
+            totalRepos: Number(data.totalRepos) || 0,
+            totalStars: Number(data.totalStars) || 0,
+            totalForks: Number(data.totalForks) || 0,
+            languages: data.languages.map((lang: any) => ({
+              ...lang,
+              percentage: Number(lang.percentage) || 0
+            }))
+          });
+        }
       } catch (error) {
         console.error('Error fetching GitHub stats:', error);
-        setError(error instanceof Error ? error.message : 'Failed to fetch GitHub stats');
-        setLoading(false);
+        if (isMounted) {
+          setError('Failed to fetch GitHub stats');
+        }
       }
     };
 
@@ -119,60 +138,70 @@ export default function ProgressSection() {
       try {
         const response = await fetch('/api/leetcode', {
           headers: {
-            'Cache-Control': 'no-cache',
+            'Cache-Control': 'no-cache, no-store, must-revalidate',
             'Pragma': 'no-cache',
             'Expires': '0',
           },
         });
         if (!response.ok) {
-          const errorData = await response.json();
-          throw new Error(errorData.message || 'Failed to fetch LeetCode stats');
+          throw new Error('Failed to fetch LeetCode stats');
         }
         const data = await response.json();
         
-        if (data.error) {
-          throw new Error(data.error);
+        if (isMounted) {
+          const updatedData: LeetCodeStats = {
+            totalSolved: Number(data.totalSolved) || 0,
+            totalQuestions: Number(data.totalQuestions) || 0,
+            easySolved: Number(data.easySolved) || 0,
+            easyTotal: Number(data.easyTotal) || 0,
+            mediumSolved: Number(data.mediumSolved) || 0,
+            mediumTotal: Number(data.mediumTotal) || 0,
+            hardSolved: Number(data.hardSolved) || 0,
+            hardTotal: Number(data.hardTotal) || 0,
+            streak: Number(data.streak) || 0,
+            maxStreak: Number(data.maxStreak) || 0,
+            totalDays: Number(data.totalDays) || 0,
+            lastSolved: data.lastSolved || new Date().toISOString(),
+            contestRank: Number(data.contestRank) || 0,
+            globalRank: Number(data.globalRank) || 0,
+            totalSubmissions: Number(data.totalSubmissions) || 0,
+            completionRate: (Number(data.totalSolved) / Number(data.totalQuestions)) * 100,
+            acceptanceRate: 70.38
+          };
+
+          setLeetCodeStats(updatedData);
         }
-
-        // Ensure all required fields are present and properly formatted
-        const updatedData = {
-          ...data,
-          totalSolved: Number(data.totalSolved) || 0,
-          totalQuestions: Number(data.totalQuestions) || 0,
-          easySolved: Number(data.easySolved) || 0,
-          easyTotal: Number(data.easyTotal) || 0,
-          mediumSolved: Number(data.mediumSolved) || 0,
-          mediumTotal: Number(data.mediumTotal) || 0,
-          hardSolved: Number(data.hardSolved) || 0,
-          hardTotal: Number(data.hardTotal) || 0,
-          streak: Math.max(Number(data.streak) || 0, 8),
-          maxStreak: Math.max(Number(data.maxStreak) || 0, 8),
-          totalDays: Number(data.totalDays) || 0,
-          lastSolved: data.lastSolved || new Date().toISOString(),
-          contestRank: Number(data.contestRank) || 0,
-          globalRank: Number(data.globalRank) || 0,
-          acceptanceRate: Number(data.acceptanceRate) || 0,
-          completionRate: Number(data.completionRate) || 0,
-          totalSubmissions: Number(data.totalSubmissions) || 0
-        };
-
-        // Calculate derived values
-        updatedData.completionRate = (updatedData.totalSolved / updatedData.totalQuestions) * 100;
-        updatedData.acceptanceRate = updatedData.totalSubmissions > 0 
-          ? (updatedData.totalSolved / updatedData.totalSubmissions) * 100 
-          : 0;
-
-        setLeetCodeStats(updatedData);
-        setLoading(false);
       } catch (error) {
         console.error('Error fetching LeetCode stats:', error);
-        setError(error instanceof Error ? error.message : 'Failed to fetch LeetCode stats');
-        setLoading(false);
+        if (isMounted) {
+          setError('Failed to fetch LeetCode stats');
+        }
+      } finally {
+        if (isMounted) {
+          setLoading(false);
+        }
       }
     };
 
-    fetchGitHubStats();
-    fetchLeetCodeStats();
+    // Fetch data immediately
+    Promise.all([fetchGitHubStats(), fetchLeetCodeStats()]).catch(() => {
+      if (isMounted) {
+        setLoading(false);
+      }
+    });
+
+    // Set up polling interval
+    const interval = setInterval(() => {
+      if (!loading) {
+        fetchGitHubStats();
+        fetchLeetCodeStats();
+      }
+    }, 300000); // Refresh every 5 minutes
+
+    return () => {
+      isMounted = false;
+      clearInterval(interval);
+    };
   }, []);
 
   const renderSkeletons = () => (
