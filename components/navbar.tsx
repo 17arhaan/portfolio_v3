@@ -14,6 +14,7 @@ interface NavbarProps {
   skillsRef: React.RefObject<HTMLElement>
   certificationsRef: React.RefObject<HTMLElement>
   resumeRef?: React.RefObject<HTMLElement>
+  progressRef?: React.RefObject<HTMLElement>
 }
 
 interface NavItem {
@@ -22,7 +23,7 @@ interface NavItem {
   ref?: React.RefObject<HTMLElement>
 }
 
-export default function Navbar({ experienceRef, projectsRef, skillsRef, certificationsRef, resumeRef }: NavbarProps) {
+export default function Navbar({ experienceRef, projectsRef, skillsRef, certificationsRef, resumeRef, progressRef }: NavbarProps) {
   const [activeIndex, setActiveIndex] = useState(0)
   const [isScrolled, setIsScrolled] = useState(false)
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
@@ -37,13 +38,14 @@ export default function Navbar({ experienceRef, projectsRef, skillsRef, certific
     { id: "skills", name: "Skills", ref: skillsRef },
     { id: "certifications", name: "Certifications", ref: certificationsRef },
     { id: "resume", name: "Resume", ref: resumeRef },
+    { id: "progress", name: "Progress", ref: progressRef },
     { id: "contact", name: "Contact" },
   ]
 
   // Update active section based on scroll position
   useEffect(() => {
     const handleScroll = () => {
-      const sections = ["home", "about", "experience", "projects", "skills", "certifications", "resume", "contact"]
+      const sections = ["home", "about", "experience", "projects", "skills", "certifications", "resume", "progress", "contact"]
       const scrollPosition = window.scrollY + 100
 
       for (let i = sections.length - 1; i >= 0; i--) {

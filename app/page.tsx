@@ -7,6 +7,7 @@ import WorkTimeline from "@/components/work-timeline"
 import ProjectsSection from "@/components/projects-section"
 import SkillsSection from "@/components/skills-section"
 import ResumeSection from "@/components/resume-section"
+import ProgressSection from "@/components/progress-section"
 import AnimatedFooter from "@/components/animated-footer"
 import GradientBubbles from "@/components/gradient-bubbles"
 import ScrollToTop from "@/components/scroll-to-top"
@@ -23,6 +24,7 @@ export default function Home() {
   const skillsRef = useRef<HTMLDivElement>(null)
   const certificationsRef = useRef<HTMLDivElement>(null)
   const resumeRef = useRef<HTMLDivElement>(null)
+  const progressRef = useRef<HTMLDivElement>(null)
   const [scrollProgress, setScrollProgress] = useState(0)
 
   // Track scroll progress
@@ -60,7 +62,8 @@ export default function Home() {
         projectsRef={projectsRef} 
         skillsRef={skillsRef} 
         certificationsRef={certificationsRef}
-        resumeRef={resumeRef} 
+        resumeRef={resumeRef}
+        progressRef={progressRef}
       />
 
       {/* Landing Page */}
@@ -106,6 +109,14 @@ export default function Home() {
       {/* Resume Section */}
       <section ref={resumeRef} id="resume" className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8">
         <ResumeSection />
+      </section>
+
+      {/* Section Divider */}
+      <SectionDivider />
+
+      {/* Progress Section */}
+      <section ref={progressRef} id="progress" className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8">
+        <ProgressSection />
       </section>
 
       <ContactSection />
