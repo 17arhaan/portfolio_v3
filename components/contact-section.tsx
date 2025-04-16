@@ -368,58 +368,57 @@ export default function ContactSection() {
                         className="w-full pl-3 pr-8 py-2 bg-white/10 border border-white/20 rounded-md text-white focus:outline-none focus:ring-1 focus:ring-white/30 focus:border-white/30 transition-all duration-300 appearance-none"
                         defaultValue="+91"
                       >
-                        <option value="+1" className="bg-gray-900">US/Canada</option>
-                        <option value="+44" className="bg-gray-900">UK</option>
-                        <option value="+91" className="bg-gray-900">India</option>
-                        <option value="+971" className="bg-gray-900">UAE</option>
-                        <option value="+61" className="bg-gray-900">Australia</option>
-                        <option value="+49" className="bg-gray-900">Germany</option>
-                        <option value="+33" className="bg-gray-900">France</option>
-                        <option value="+81" className="bg-gray-900">Japan</option>
-                        <option value="+86" className="bg-gray-900">China</option>
-                        <option value="+82" className="bg-gray-900">South Korea</option>
-                        <option value="+65" className="bg-gray-900">Singapore</option>
-                        <option value="+55" className="bg-gray-900">Brazil</option>
-                        <option value="+7" className="bg-gray-900">Russia</option>
-                        <option value="+39" className="bg-gray-900">Italy</option>
-                        <option value="+34" className="bg-gray-900">Spain</option>
-                        <option value="+31" className="bg-gray-900">Netherlands</option>
-                        <option value="+41" className="bg-gray-900">Switzerland</option>
-                        <option value="+46" className="bg-gray-900">Sweden</option>
-                        <option value="+47" className="bg-gray-900">Norway</option>
-                        <option value="+45" className="bg-gray-900">Denmark</option>
-                        <option value="+358" className="bg-gray-900">Finland</option>
-                        <option value="+32" className="bg-gray-900">Belgium</option>
-                        <option value="+43" className="bg-gray-900">Austria</option>
-                        <option value="+353" className="bg-gray-900">Ireland</option>
-                        <option value="+64" className="bg-gray-900">New Zealand</option>
-                        <option value="+52" className="bg-gray-900">Mexico</option>
-                        <option value="+54" className="bg-gray-900">Argentina</option>
-                        <option value="+966" className="bg-gray-900">Saudi Arabia</option>
-                        <option value="+20" className="bg-gray-900">Egypt</option>
-                        <option value="+27" className="bg-gray-900">South Africa</option>
-                        <option value="+234" className="bg-gray-900">Nigeria</option>
-                        <option value="+60" className="bg-gray-900">Malaysia</option>
-                        <option value="+63" className="bg-gray-900">Philippines</option>
-                        <option value="+66" className="bg-gray-900">Thailand</option>
-                        <option value="+84" className="bg-gray-900">Vietnam</option>
-                        <option value="+62" className="bg-gray-900">Indonesia</option>
-                        <option value="+90" className="bg-gray-900">Turkey</option>
-                        <option value="+98" className="bg-gray-900">Iran</option>
-                        <option value="+92" className="bg-gray-900">Pakistan</option>
-                        <option value="+880" className="bg-gray-900">Bangladesh</option>
-                        <option value="+94" className="bg-gray-900">Sri Lanka</option>
-                        <option value="+95" className="bg-gray-900">Myanmar</option>
-                        <option value="+855" className="bg-gray-900">Cambodia</option>
-                        <option value="+856" className="bg-gray-900">Laos</option>
-                        <option value="+977" className="bg-gray-900">Nepal</option>
                         <option value="+93" className="bg-gray-900">Afghanistan</option>
-                        <option value="+968" className="bg-gray-900">Oman</option>
-                        <option value="+974" className="bg-gray-900">Qatar</option>
-                        <option value="+965" className="bg-gray-900">Kuwait</option>
-                        <option value="+962" className="bg-gray-900">Jordan</option>
-                        <option value="+961" className="bg-gray-900">Lebanon</option>
+                        <option value="+54" className="bg-gray-900">Argentina</option>
+                        <option value="+61" className="bg-gray-900">Australia</option>
+                        <option value="+43" className="bg-gray-900">Austria</option>
+                        <option value="+880" className="bg-gray-900">Bangladesh</option>
+                        <option value="+32" className="bg-gray-900">Belgium</option>
+                        <option value="+55" className="bg-gray-900">Brazil</option>
+                        <option value="+855" className="bg-gray-900">Cambodia</option>
+                        <option value="+86" className="bg-gray-900">China</option>
+                        <option value="+45" className="bg-gray-900">Denmark</option>
+                        <option value="+20" className="bg-gray-900">Egypt</option>
+                        <option value="+358" className="bg-gray-900">Finland</option>
+                        <option value="+33" className="bg-gray-900">France</option>
+                        <option value="+49" className="bg-gray-900">Germany</option>
+                        <option value="+91" className="bg-gray-900">India</option>
+                        <option value="+62" className="bg-gray-900">Indonesia</option>
+                        <option value="+353" className="bg-gray-900">Ireland</option>
                         <option value="+972" className="bg-gray-900">Israel</option>
+                        <option value="+39" className="bg-gray-900">Italy</option>
+                        <option value="+81" className="bg-gray-900">Japan</option>
+                        <option value="+962" className="bg-gray-900">Jordan</option>
+                        <option value="+965" className="bg-gray-900">Kuwait</option>
+                        <option value="+856" className="bg-gray-900">Laos</option>
+                        <option value="+961" className="bg-gray-900">Lebanon</option>
+                        <option value="+60" className="bg-gray-900">Malaysia</option>
+                        <option value="+52" className="bg-gray-900">Mexico</option>
+                        <option value="+95" className="bg-gray-900">Myanmar</option>
+                        <option value="+977" className="bg-gray-900">Nepal</option>
+                        <option value="+31" className="bg-gray-900">Netherlands</option>
+                        <option value="+64" className="bg-gray-900">New Zealand</option>
+                        <option value="+234" className="bg-gray-900">Nigeria</option>
+                        <option value="+47" className="bg-gray-900">Norway</option>
+                        <option value="+968" className="bg-gray-900">Oman</option>
+                        <option value="+92" className="bg-gray-900">Pakistan</option>
+                        <option value="+63" className="bg-gray-900">Philippines</option>
+                        <option value="+974" className="bg-gray-900">Qatar</option>
+                        <option value="+7" className="bg-gray-900">Russia</option>
+                        <option value="+966" className="bg-gray-900">Saudi Arabia</option>
+                        <option value="+65" className="bg-gray-900">Singapore</option>
+                        <option value="+27" className="bg-gray-900">South Africa</option>
+                        <option value="+82" className="bg-gray-900">South Korea</option>
+                        <option value="+34" className="bg-gray-900">Spain</option>
+                        <option value="+94" className="bg-gray-900">Sri Lanka</option>
+                        <option value="+46" className="bg-gray-900">Sweden</option>
+                        <option value="+41" className="bg-gray-900">Switzerland</option>
+                        <option value="+66" className="bg-gray-900">Thailand</option>
+                        <option value="+90" className="bg-gray-900">Turkey</option>
+                        <option value="+971" className="bg-gray-900">UAE</option>
+                        <option value="+44" className="bg-gray-900">UK</option>
+                        <option value="+1" className="bg-gray-900">US/Canada</option>
+                        <option value="+84" className="bg-gray-900">Vietnam</option>
                       </select>
                       <ChevronDown className="absolute right-2 top-1/2 -translate-y-1/2 w-4 h-4 text-white/40 pointer-events-none" />
                     </div>
@@ -512,10 +511,12 @@ export default function ContactSection() {
                     <Globe className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-white/40" />
                     <input
                       {...register("website")}
-                      type="url"
+                      type="text"
                       id="website"
                       className="w-full pl-10 pr-4 py-2 bg-white/10 border border-white/20 rounded-md text-white placeholder:text-white/30 focus:outline-none focus:ring-1 focus:ring-white/30 focus:border-white/30 transition-all duration-300"
-                      placeholder="https://your-website.com"
+                      placeholder="yourwebsite.in"
+                      pattern="^(https?:\/\/)?([a-zA-Z0-9]([a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?\.)+[a-zA-Z]{2,}$"
+                      title="Please enter a valid website URL (e.g., arhaanportfolio.in or https://arhaanportfolio.in)"
                     />
                   </div>
                 </div>
@@ -530,10 +531,11 @@ export default function ContactSection() {
                   <Calendar className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-white/40" />
                   <input
                     {...register("availability")}
-                    type="text"
+                    type="date"
                     id="availability"
-                    className="w-full pl-10 pr-4 py-2 bg-white/10 border border-white/20 rounded-md text-white placeholder:text-white/30 focus:outline-none focus:ring-1 focus:ring-white/30 focus:border-white/30 transition-all duration-300"
+                    className="w-full pl-10 pr-4 py-2 bg-white/10 border border-white/20 rounded-md text-white placeholder:text-white/30 focus:outline-none focus:ring-1 focus:ring-white/30 focus:border-white/30 transition-all duration-300 [&::-webkit-calendar-picker-indicator]:invert [&::-webkit-calendar-picker-indicator]:opacity-50 [&::-webkit-calendar-picker-indicator]:hover:opacity-100"
                     placeholder="When would you like to connect?"
+                    min={new Date().toISOString().split('T')[0]}
                   />
                 </div>
               </div>

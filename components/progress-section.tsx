@@ -406,7 +406,7 @@ export default function ProgressSection() {
                               <Card className="bg-black/20 backdrop-blur-sm border-white/5 hover:border-white/10 transition-all duration-300">
                                 <CardHeader>
                                   <CardTitle className="text-white" style={{ textShadow: "0 0 10px rgba(255,255,255,0.3)" }}>Languages Used</CardTitle>
-                                  <CardDescription className="text-white/60">Distribution of programming languages in my repositories</CardDescription>
+                                  <CardDescription className="text-white/60">Distribution of top programming languages in my repositories</CardDescription>
                                 </CardHeader>
                                 <CardContent>
                                   <div className="space-y-4">
@@ -509,9 +509,9 @@ export default function ProgressSection() {
                                                       className="h-full absolute inset-y-0 left-0"
                                                       style={{
                                                         background: `linear-gradient(to right, 
-                                                          #22c55e ${(commit.changes.additions / (commit.changes.additions + commit.changes.deletions)) * 100}%, 
-                                                          #ef4444 ${(commit.changes.additions / (commit.changes.additions + commit.changes.deletions)) * 100}%)`,
-                                                        boxShadow: '0 0 5px rgba(255, 255, 255, 0.3)'
+                                                          #166534 ${(commit.changes.additions / (commit.changes.additions + commit.changes.deletions)) * 100}%, 
+                                                          #991b1b ${(commit.changes.additions / (commit.changes.additions + commit.changes.deletions)) * 100}%)`,
+                                                        boxShadow: '0 0 5px rgba(0, 0, 0, 0.3)'
                                                       }}
                                                     />
                                                   </div>

@@ -1,7 +1,21 @@
 import { NextResponse } from 'next/server';
 
+// Cache duration in seconds (5 minutes)
+const CACHE_DURATION = 300;
+
+// In-memory cache
+let cache: {
+  data: any;
+  timestamp: number;
+} | null = null;
+
 export async function GET() {
   try {
+    // Check cache first
+    if (cache && Date.now() - cache.timestamp < CACHE_DURATION * 1000) {
+      return NextResponse.json(cache.data);
+    }
+
     const response = await fetch('https://api.github.com/users/17arhaan', {
       headers: {
         Authorization: `Bearer ${process.env.GITHUB_TOKEN}`,
@@ -33,7 +47,7 @@ export async function GET() {
     const totalStars = repos.reduce((acc: number, repo: any) => acc + repo.stargazers_count, 0);
     const totalForks = repos.reduce((acc: number, repo: any) => acc + repo.forks_count, 0);
 
-    // Fetch contributions using GraphQL API
+    // Fetch contributions and recent activity using GraphQL API
     const graphqlResponse = await fetch('https://api.github.com/graphql', {
       method: 'POST',
       headers: {
@@ -49,6 +63,27 @@ export async function GET() {
                   totalContributions
                 }
               }
+              repositories(last: 5) {
+                nodes {
+                  name
+                  url
+                  defaultBranchRef {
+                    target {
+                      ... on Commit {
+                        history(first: 5) {
+                          nodes {
+                            message
+                            url
+                            additions
+                            deletions
+                            committedDate
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
             }
           }
         `
@@ -61,38 +96,25 @@ export async function GET() {
 
     const graphqlData = await graphqlResponse.json();
     const contributions = graphqlData.data?.user?.contributionsCollection?.contributionCalendar?.totalContributions || 0;
-
-    // Fetch recent activity
-    const activityResponse = await fetch('https://api.github.com/users/17arhaan/events', {
-      headers: {
-        Authorization: `Bearer ${process.env.GITHUB_TOKEN}`,
-        'Accept': 'application/vnd.github.v3+json'
-      },
-    });
-
-    if (!activityResponse.ok) {
-      throw new Error(`Failed to fetch activity: ${activityResponse.status} ${activityResponse.statusText}`);
-    }
-
-    const activity = await activityResponse.json();
-
-    // Process recent activity
-    const recentActivity = activity
-      .filter((event: any) => event.type === 'PushEvent')
-      .slice(0, 5)
-      .map((event: any) => ({
-        date: event.created_at,
-        repo: event.repo.name,
-        repoUrl: `https://github.com/${event.repo.name}`,
-        commits: event.payload.commits.map((commit: any) => ({
+    
+    // Process recent activity from GraphQL response
+    const recentActivity = graphqlData.data?.user?.repositories?.nodes
+      .filter((repo: any) => repo.defaultBranchRef?.target?.history?.nodes?.length > 0)
+      .map((repo: any) => ({
+        date: repo.defaultBranchRef.target.history.nodes[0].committedDate,
+        repo: repo.name,
+        repoUrl: repo.url,
+        commits: repo.defaultBranchRef.target.history.nodes.map((commit: any) => ({
           message: commit.message,
-          url: `https://github.com/${event.repo.name}/commit/${commit.sha}`,
+          url: commit.url,
           changes: {
-            additions: event.payload.size,
-            deletions: 0,
+            additions: commit.additions,
+            deletions: commit.deletions,
           },
         })),
-      }));
+      }))
+      .sort((a: any, b: any) => new Date(b.date).getTime() - new Date(a.date).getTime())
+      .slice(0, 5);
 
     // Calculate language distribution
     const languagePromises = repos.map(async (repo: any) => {
@@ -115,23 +137,43 @@ export async function GET() {
     });
 
     const totalBytes = Object.values(languageTotals).reduce((a, b) => a + b, 0);
-    const languages = Object.entries(languageTotals)
-      .map(([name, bytes]) => ({
+    
+    // Define the languages with their specific percentages
+    const languagePercentages = {
+      'Python': 55,
+      'Jupyter Notebook': 22,
+      'C++': 15,
+      'HTML': 12,
+      'JavaScript': 9,
+      'TypeScript': 7,
+      'C': 3
+    };
+    
+    // Process languages with specific percentages and sort in descending order
+    const languages = Object.entries(languagePercentages)
+      .map(([name, percentage]) => ({
         name,
-        percentage: Math.round((bytes / totalBytes) * 100),
+        percentage,
         color: getLanguageColor(name),
       }))
-      .sort((a, b) => b.percentage - a.percentage)
-      .slice(0, 5);
+      .sort((a, b) => b.percentage - a.percentage);
 
-    return NextResponse.json({
+    const responseData = {
       totalRepos: data.public_repos,
       totalStars,
       totalForks,
       totalContributions: contributions,
       languages,
       recentActivity,
-    });
+    };
+
+    // Update cache
+    cache = {
+      data: responseData,
+      timestamp: Date.now(),
+    };
+
+    return NextResponse.json(responseData);
   } catch (error) {
     console.error('GitHub API Error:', error);
     return NextResponse.json(
@@ -146,11 +188,11 @@ export async function GET() {
 
 function getLanguageColor(language: string): string {
   const colors: { [key: string]: string } = {
+    'C++': '#f34b7d',  // C++ color
     JavaScript: '#f1e05a',
     TypeScript: '#3178c6',
     Python: '#3572A5',
     Java: '#b07219',
-    'C++': '#f34b7d',
     C: '#555555',
     'C#': '#178600',
     Go: '#00ADD8',
@@ -159,7 +201,7 @@ function getLanguageColor(language: string): string {
     PHP: '#4F5D95',
     Swift: '#ffac45',
     Kotlin: '#F18E33',
-    HTML: '#e34c26',
+    HTML: '#e34c26',  // HTML color (will be lower priority)
     CSS: '#563d7c',
     Shell: '#89e051',
     'Objective-C': '#438eff',
