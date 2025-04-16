@@ -423,17 +423,17 @@ export default function ContactSection() {
                       <ChevronDown className="absolute right-2 top-1/2 -translate-y-1/2 w-4 h-4 text-white/40 pointer-events-none" />
                     </div>
                     <div className="relative flex-1">
-                      <Phone className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-white/40" />
-                      <input
-                        {...register("phone")}
-                        type="tel"
-                        id="phone"
+                    <Phone className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-white/40" />
+                    <input
+                      {...register("phone")}
+                      type="tel"
+                      id="phone"
                         maxLength={10}
-                        className="w-full pl-10 pr-4 py-2 bg-white/10 border border-white/20 rounded-md text-white placeholder:text-white/30 focus:outline-none focus:ring-1 focus:ring-white/30 focus:border-white/30 transition-all duration-300"
+                      className="w-full pl-10 pr-4 py-2 bg-white/10 border border-white/20 rounded-md text-white placeholder:text-white/30 focus:outline-none focus:ring-1 focus:ring-white/30 focus:border-white/30 transition-all duration-300"
                         placeholder="1234567890"
                         pattern="[0-9]{10}"
                         title="Please enter a 10-digit phone number"
-                      />
+                    />
                     </div>
                   </div>
                   {errors.phone && (
@@ -513,7 +513,7 @@ export default function ContactSection() {
                       {...register("website")}
                       type="text"
                       id="website"
-                      className="w-full pl-10 pr-4 py-2 bg-white/10 border border-white/20 rounded-md text-white placeholder:text-white/30 focus:outline-none focus:ring-1 focus:ring-white/30 focus:border-white/30 transition-all duration-300"
+                      className="w-full min-w-0 pl-10 pr-4 py-2 bg-white/10 border border-white/20 rounded-md text-white placeholder:text-white/30 focus:outline-none focus:ring-1 focus:ring-white/30 focus:border-white/30 transition-all duration-300 text-sm sm:text-base"
                       placeholder="yourwebsite.in"
                       pattern="^(https?:\/\/)?([a-zA-Z0-9]([a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?\.)+[a-zA-Z]{2,}$"
                       title="Please enter a valid website URL (e.g., arhaanportfolio.in or https://arhaanportfolio.in)"

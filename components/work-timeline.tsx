@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useRef } from "react"
 import { ChevronLeft } from "lucide-react"
 import { ChevronRight } from "lucide-react"
 import { Briefcase } from "lucide-react"
@@ -76,8 +76,10 @@ const workExperience = [
 
 export default function WorkTimeline() {
   const [activeIndex, setActiveIndex] = useState(0)
-  const [direction, setDirection] = useState(0) // -1 for left, 1 for right, 0 for initial
+  const [direction, setDirection] = useState(0)
   const [hoveredDot, setHoveredDot] = useState<number | null>(null)
+  const [touchStart, setTouchStart] = useState<number | null>(null)
+  const [touchEnd, setTouchEnd] = useState<number | null>(null)
   const latestPositionIndex = workExperience.length - 1
 
   const handlePrevious = () => {
@@ -91,6 +93,29 @@ export default function WorkTimeline() {
     if (activeIndex < workExperience.length - 1) {
       setDirection(1)
       setActiveIndex(activeIndex + 1)
+    }
+  }
+
+  const onTouchStart = (e: React.TouchEvent) => {
+    setTouchEnd(null)
+    setTouchStart(e.targetTouches[0].clientX)
+  }
+
+  const onTouchMove = (e: React.TouchEvent) => {
+    setTouchEnd(e.targetTouches[0].clientX)
+  }
+
+  const onTouchEnd = () => {
+    if (!touchStart || !touchEnd) return
+    const distance = touchStart - touchEnd
+    const isLeftSwipe = distance > 50
+    const isRightSwipe = distance < -50
+
+    if (isLeftSwipe) {
+      handleNext()
+    }
+    if (isRightSwipe) {
+      handlePrevious()
     }
   }
 
@@ -111,7 +136,12 @@ export default function WorkTimeline() {
   }
 
   return (
-    <div className="w-full min-h-screen py-24 px-6 md:px-10 flex flex-col items-center justify-center relative">
+    <div 
+      className="w-full min-h-screen py-24 px-6 md:px-10 flex flex-col items-center justify-center relative"
+      onTouchStart={onTouchStart}
+      onTouchMove={onTouchMove}
+      onTouchEnd={onTouchEnd}
+    >
       {/* Add scroll-triggered animations to the section title */}
       <div className="text-center mb-12 relative z-10">
         <motion.h1
@@ -149,15 +179,33 @@ export default function WorkTimeline() {
 
       {/* Timeline navigation */}
       <div className="flex items-center justify-between w-full max-w-5xl mb-8 relative z-10">
-        <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}>
+        <motion.div 
+          whileHover={{ scale: 1.2 }}
+          transition={{ type: "spring", stiffness: 300, damping: 20 }}
+        >
           <Button
             variant="ghost"
             size="icon"
             onClick={handlePrevious}
             disabled={activeIndex === 0}
-            className="text-white hover:bg-white/5 transition-all duration-200"
+            className="text-white hover:bg-transparent transition-all duration-200 relative group"
           >
-            <ChevronLeft className="h-5 w-5" />
+            <motion.div
+              animate={{
+                boxShadow: [
+                  "0 0 0px rgba(255,255,255,0)",
+                  "0 0 15px rgba(255,255,255,0.5)",
+                  "0 0 0px rgba(255,255,255,0)"
+                ]
+              }}
+              transition={{
+                duration: 2,
+                repeat: Infinity,
+                ease: "easeInOut"
+              }}
+              className="absolute inset-0 rounded-full"
+            />
+            <ChevronLeft className="h-6 w-6 relative z-10 group-hover:scale-110 transition-transform drop-shadow-[0_0_5px_rgba(255,255,255,0.5)]" />
           </Button>
         </motion.div>
 
@@ -174,15 +222,33 @@ export default function WorkTimeline() {
           </motion.div>
         </div>
 
-        <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}>
+        <motion.div 
+          whileHover={{ scale: 1.2 }}
+          transition={{ type: "spring", stiffness: 300, damping: 20 }}
+        >
           <Button
             variant="ghost"
             size="icon"
             onClick={handleNext}
             disabled={activeIndex === workExperience.length - 1}
-            className="text-white hover:bg-white/5 transition-all duration-200"
+            className="text-white hover:bg-transparent transition-all duration-200 relative group"
           >
-            <ChevronRight className="h-5 w-5" />
+            <motion.div
+              animate={{
+                boxShadow: [
+                  "0 0 0px rgba(255,255,255,0)",
+                  "0 0 15px rgba(255,255,255,0.5)",
+                  "0 0 0px rgba(255,255,255,0)"
+                ]
+              }}
+              transition={{
+                duration: 2,
+                repeat: Infinity,
+                ease: "easeInOut"
+              }}
+              className="absolute inset-0 rounded-full"
+            />
+            <ChevronRight className="h-6 w-6 relative z-10 group-hover:scale-110 transition-transform drop-shadow-[0_0_5px_rgba(255,255,255,0.5)]" />
           </Button>
         </motion.div>
       </div>

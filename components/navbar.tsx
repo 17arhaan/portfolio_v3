@@ -2,8 +2,9 @@
 
 import type React from "react"
 import { useState, useEffect, useRef } from "react"
-import { motion } from "framer-motion"
+import { motion, AnimatePresence } from "framer-motion"
 import Image from "next/image"
+import { Menu, X } from "lucide-react"
 
 interface NavbarProps {
   experienceRef: React.RefObject<HTMLElement>
@@ -21,6 +22,7 @@ interface NavItem {
 export default function Navbar({ experienceRef, projectsRef, skillsRef, resumeRef }: NavbarProps) {
   const [activeSection, setActiveSection] = useState("home")
   const [scrolled, setScrolled] = useState(false)
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const navRef = useRef<HTMLDivElement>(null)
   const indicatorRef = useRef<HTMLDivElement>(null)
 
@@ -69,6 +71,18 @@ export default function Navbar({ experienceRef, projectsRef, skillsRef, resumeRe
     return () => window.removeEventListener("scroll", handleScroll)
   }, [])
 
+  // Prevent scrolling when mobile menu is open
+  useEffect(() => {
+    if (isMobileMenuOpen) {
+      document.body.style.overflow = 'hidden'
+    } else {
+      document.body.style.overflow = 'unset'
+    }
+    return () => {
+      document.body.style.overflow = 'unset'
+    }
+  }, [isMobileMenuOpen])
+
   // Updated scrollToSection function
   const scrollToSection = (item: NavItem) => {
     if (item.id === "home") {
@@ -95,14 +109,14 @@ export default function Navbar({ experienceRef, projectsRef, skillsRef, resumeRe
       transition={{ duration: 0.5, ease: "easeOut" }}
       className="fixed top-0 left-0 right-0 z-50 transition-all duration-500 bg-black/50 backdrop-blur-md py-3"
     >
-      <div className="container mx-auto px-4 flex items-center justify-between">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between">
         {/* Signature Logo */}
         <motion.div
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
           onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
           style={{ cursor: "pointer" }}
-          className="relative -ml-2 mt-[21px] mr-4"
+          className="relative mt-[21px]"
         >
           <div className="w-56 h-20 relative">
             <Image
@@ -117,8 +131,8 @@ export default function Navbar({ experienceRef, projectsRef, skillsRef, resumeRe
           </div>
         </motion.div>
 
-        {/* Navigation Links */}
-        <div className="relative flex items-center h-16 gap-1" ref={navRef}>
+        {/* Desktop Navigation Links */}
+        <div className="hidden md:flex relative items-center h-16 gap-1" ref={navRef}>
           {navItems.map((item) => (
             <NavItem
               key={item.id}
@@ -129,6 +143,48 @@ export default function Navbar({ experienceRef, projectsRef, skillsRef, resumeRe
             />
           ))}
         </div>
+
+        {/* Mobile Menu Button */}
+        <button
+          className="md:hidden p-2 text-white/60 hover:text-white transition-colors"
+          onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+        >
+          {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+        </button>
+
+        {/* Mobile Menu */}
+        <AnimatePresence>
+          {isMobileMenuOpen && (
+            <motion.div
+              initial={{ opacity: 0, y: -20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              transition={{ duration: 0.2 }}
+              className="fixed inset-0 top-[72px] bg-black/95 backdrop-blur-md md:hidden"
+            >
+              <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex flex-col gap-2 h-[calc(100vh-72px)] overflow-y-auto">
+                {navItems.map((item) => (
+                  <motion.button
+                    key={item.id}
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
+                    onClick={() => {
+                      scrollToSection(item)
+                      setIsMobileMenuOpen(false)
+                    }}
+                    className={`text-left px-4 py-3 rounded-md transition-colors ${
+                      activeSection === item.id
+                        ? "text-white bg-white/10"
+                        : "text-white/60 hover:text-white hover:bg-white/5"
+                    }`}
+                  >
+                    {item.name}
+                  </motion.button>
+                ))}
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
     </motion.nav>
   )

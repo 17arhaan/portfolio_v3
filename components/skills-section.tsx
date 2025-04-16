@@ -62,6 +62,47 @@ import {
   Github,
   Box,
 } from "lucide-react"
+import React from 'react'
+
+// Define the skill categories type
+type SkillCategory = 'programming' | 'frameworks' | 'libraries' | 'tools' | 'platforms' | 'domains' | 'languages';
+
+type CategoryColor = {
+  from: string;
+  via: string;
+  to: string;
+  bg: string;
+};
+
+type CategoryColors = Record<SkillCategory, CategoryColor>;
+
+type CategoryIcons = Record<SkillCategory, React.ReactElement>;
+
+type SkillName = 'Python' | 'JavaScript' | 'TypeScript' | 'Java' | 'C++' | 'C' | 'MySQL' | 'PostgreSQL' |
+                 'ReactJS' | 'NodeJS' | 'Django' | 'Flask' | 'Tailwind CSS' | 'Bootstrap' | 'jQuery' | 'Express.js' | 'Next.js' | 'FastAPI' |
+                 'NumPy' | 'Pandas' | 'Matplotlib' | 'Seaborn' | 'PyTorch' | 'Scikit-learn' | 'OpenCV' | 'OpenMPI' | 'TensorFlow' | 'Transformers' | 'SciPy' | 'CUDA' |
+                 'Microsoft Office' | 'HTML5' | 'CSS3' | 'Git' | 'Jupyter Notebook' | 'MATLAB' | 'JavaFX' | 'Docker' | 'Azure' | 'AWS' |
+                 'GitHub Pages' | 'Vercel' | 'Google Cloud' | 'Heroku' | 'Netlify' |
+                 'Data Structures and Algorithms' | 'Object Oriented Programming' | 'Artificial Intelligence' | 'Database Management' |
+                 'Machine Learning' | 'Deep Learning' | 'Computer Vision' | 'Natural Language Processing' | 'Web Development' |
+                 'Data Science' | 'Cloud Computing' | 'DevOps' |
+                 'English' | 'Hindi';
+
+type SkillDescription = {
+  description: string;
+  applications: string[];
+};
+
+type SkillDescriptions = Record<SkillName, SkillDescription>;
+
+type Skill = {
+  name: SkillName;
+  level: number;
+};
+
+type SkillData = Record<SkillCategory, Skill[]>;
+
+type SkillIcon = Record<SkillName, React.ReactElement>;
 
 // Color schemes for different categories
 const categoryColors = {
@@ -107,7 +148,7 @@ const categoryColors = {
     to: "#B91C1C", // red-700
     bg: "rgba(239, 68, 68, 0.1)", // red-500 with low opacity
   },
-}
+} as const;
 
 // Category icons
 const categoryIcons = {
@@ -527,8 +568,12 @@ const skillDescriptions = {
 }
 
 export default function SkillsSection() {
-  const [activeTab, setActiveTab] = useState("programming")
-  const [selectedSkill, setSelectedSkill] = useState(null)
+  const [activeTab, setActiveTab] = useState<SkillCategory>("programming")
+  const [selectedSkill, setSelectedSkill] = useState<SkillName | null>(null)
+
+  const handleTabChange = (value: string) => {
+    setActiveTab(value as SkillCategory);
+  };
 
   return (
     <section
@@ -574,27 +619,27 @@ export default function SkillsSection() {
         transition={{ duration: 0.5, delay: 0.2, ease: "easeOut" }}
         className="max-w-4xl mx-auto w-full"
       >
-        <Tabs defaultValue="programming" className="w-full" onValueChange={setActiveTab}>
+        <Tabs defaultValue="programming" className="w-full" onValueChange={handleTabChange}>
           <div className="relative">
-            <TabsList className="flex justify-center w-full gap-2 mb-4 sm:mb-8 bg-transparent relative">
-              {Object.keys(skillsData).map((category) => (
+            <TabsList className="flex flex-wrap justify-center w-full gap-2 mb-4 sm:mb-8 bg-transparent relative">
+              {(Object.keys(skillsData) as SkillCategory[]).map((category) => (
                 <TabsTrigger
                   key={category}
                   value={category}
-                  className="text-[10px] sm:text-xs md:text-sm font-medium relative z-10 transition-colors duration-300 px-4 py-2 data-[state=active]:text-white data-[state=active]:bg-blue-900/50 data-[state=inactive]:text-white/70 flex items-center justify-center rounded-md hover:bg-white/5"
+                  className="text-[10px] sm:text-xs md:text-sm font-medium relative z-10 transition-colors duration-300 px-3 py-1.5 sm:px-4 sm:py-2 data-[state=active]:text-white data-[state=active]:bg-blue-900/50 data-[state=inactive]:text-white/70 flex items-center justify-center rounded-md hover:bg-white/5 min-w-[80px] sm:min-w-[100px]"
                   style={{
                     textShadow: activeTab === category ? `0 0 10px ${categoryColors[category].from}` : "none",
                   }}
                 >
                   {categoryIcons[category]}
-                  {category.charAt(0).toUpperCase() + category.slice(1)}
+                  <span className="truncate">{category.charAt(0).toUpperCase() + category.slice(1)}</span>
                 </TabsTrigger>
               ))}
             </TabsList>
           </div>
 
           <AnimatePresence mode="wait">
-            {Object.entries(skillsData).map(([category, skills]) => (
+            {(Object.entries(skillsData) as [SkillCategory, Skill[]][]).map(([category, skills]) => (
               <TabsContent key={category} value={category}>
                 <motion.div
                   initial={{ opacity: 0, x: 50 }}
