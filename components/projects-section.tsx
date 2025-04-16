@@ -72,7 +72,7 @@ const projects = [
       "Plaid API",
       "Chart.js",
     ],
-    demoLink: "https://wealth-rust.vercel.app/dashboard",
+    demoLink: "https://wealth-pi.vercel.app/",
     githubLink: "https://github.com/17arhaan/W.E.A.L.T.H",
     categories: ["web development"],
   },
