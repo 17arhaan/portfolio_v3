@@ -148,7 +148,7 @@ const categoryColors = {
     to: "#B91C1C", // red-700
     bg: "rgba(239, 68, 68, 0.1)", // red-500 with low opacity
   },
-} as const;
+}
 
 // Category icons
 const categoryIcons = {
@@ -315,7 +315,7 @@ const skillsData = {
 }
 
 // Add skill descriptions
-const skillDescriptions = {
+const skillDescriptions: SkillDescriptions = {
   // Programming Languages
   Python: {
     description: "A versatile high-level programming language known for its readability and extensive library support.",
@@ -571,9 +571,9 @@ export default function SkillsSection() {
   const [activeTab, setActiveTab] = useState<SkillCategory>("programming")
   const [selectedSkill, setSelectedSkill] = useState<SkillName | null>(null)
 
-  const handleTabChange = (value: string) => {
-    setActiveTab(value as SkillCategory);
-  };
+  const handleTabChange = (value: SkillCategory) => {
+    setActiveTab(value)
+  }
 
   return (
     <section
@@ -619,29 +619,28 @@ export default function SkillsSection() {
         transition={{ duration: 0.5, delay: 0.2, ease: "easeOut" }}
         className="max-w-4xl mx-auto w-full"
       >
-        <Tabs defaultValue="programming" className="w-full" onValueChange={handleTabChange}>
-          <div className="relative">
-            <TabsList className="flex flex-wrap justify-center w-full gap-2 mb-4 sm:mb-8 bg-transparent relative">
-              {(Object.keys(skillsData) as SkillCategory[]).map((category) => (
-                <TabsTrigger
-                  key={category}
-                  value={category}
-                  className="text-[10px] sm:text-xs md:text-sm font-medium relative z-10 transition-colors duration-300 px-3 py-1.5 sm:px-4 sm:py-2 data-[state=active]:text-white data-[state=active]:bg-blue-900/50 data-[state=inactive]:text-white/70 flex items-center justify-center rounded-md hover:bg-white/5 min-w-[80px] sm:min-w-[100px]"
-                  style={{
-                    textShadow: activeTab === category ? `0 0 10px ${categoryColors[category].from}` : "none",
-                  }}
-                >
-                  {categoryIcons[category]}
-                  <span className="truncate">{category.charAt(0).toUpperCase() + category.slice(1)}</span>
-                </TabsTrigger>
-              ))}
-            </TabsList>
-          </div>
-
-          <AnimatePresence mode="wait">
-            {(Object.entries(skillsData) as [SkillCategory, Skill[]][]).map(([category, skills]) => (
-              <TabsContent key={category} value={category}>
-                <motion.div
+         <Tabs defaultValue="programming" className="w-full" onValueChange={setActiveTab}>          
+          <div className="relative">            
+            <TabsList className="flex justify-center w-full gap-2 mb-4 sm:mb-8 bg-transparent relative">              
+              {Object.keys(skillsData).map((category) => (                
+                <TabsTrigger                  
+                key={category}                  
+                value={category}                  
+                className="text-[10px] sm:text-xs md:text-sm font-medium relative z-10 transition-colors duration-300 px-4 py-2 data-[state=active]:text-white data-[state=active]:bg-blue-900/50 data-[state=inactive]:text-white/70 flex items-center justify-center rounded-md hover:bg-white/5"                  
+                style={{                    
+                  textShadow: activeTab === category ? `0 0 10px ${categoryColors[category].from}` : "none",                  
+                }}                
+                >                  
+                {categoryIcons[category]}                  
+                {category.charAt(0).toUpperCase() + category.slice(1)}                
+                </TabsTrigger>              
+                ))}            
+                </TabsList>          
+                </div>          
+                <AnimatePresence mode="wait">            
+                  {Object.entries(skillsData).map(([category, skills]) => (              
+                    <TabsContent key={category} value={category}>                
+                    <motion.div                  
                   initial={{ opacity: 0, x: 50 }}
                   animate={{ opacity: 1, x: 0 }}
                   exit={{ opacity: 0, x: -50 }}
@@ -753,7 +752,7 @@ export default function SkillsSection() {
                 <div className="mt-4">
                   <h4 className="text-sm font-medium text-white/70 mb-2">Applications</h4>
                   <ul className="grid grid-cols-2 gap-2">
-                    {skillDescriptions[selectedSkill].applications.map((app, index) => (
+                    {skillDescriptions[selectedSkill].applications.map((app: string, index: number) => (
                       <motion.li
                         key={app}
                         initial={{ opacity: 0, x: -10 }}

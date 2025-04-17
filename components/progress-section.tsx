@@ -76,8 +76,12 @@ interface LeetCodeStats {
   maxStreak: number
   totalDays: number
   lastSolved: string
-  contestRank: number
+  contestRating: number
   globalRank: number
+  topPercentage: number
+  attendedContests: number
+  contestBadge: string | null
+  recentContests: any[]
   acceptanceRate: number
   completionRate: number
   totalSubmissions: number
@@ -162,8 +166,12 @@ export default function ProgressSection() {
             maxStreak: Number(data.maxStreak) || 0,
             totalDays: Number(data.totalDays) || 0,
             lastSolved: data.lastSolved || new Date().toISOString(),
-            contestRank: Number(data.contestRank) || 0,
+            contestRating: Number(data.contestRating) || 0,
             globalRank: Number(data.globalRank) || 0,
+            topPercentage: Number(data.topPercentage) || 0,
+            attendedContests: Number(data.attendedContests) || 0,
+            contestBadge: data.contestBadge || null,
+            recentContests: data.recentContests || [],
             totalSubmissions: Number(data.totalSubmissions) || 0,
             completionRate: (Number(data.totalSolved) / Number(data.totalQuestions)) * 100,
             acceptanceRate: 70.38
@@ -812,13 +820,13 @@ export default function ProgressSection() {
                                     <div className="text-center p-4 rounded-lg bg-black/30">
                                       <p className="text-sm text-white/60 mb-1">Global Rank</p>
                                       <p className="text-3xl font-bold text-white" style={{ textShadow: "0 0 10px rgba(255,255,255,0.3)" }}>
-                                        {leetcodeStats.contestRank.toLocaleString()}
+                                        {leetcodeStats.globalRank.toLocaleString()}
                                       </p>
                                     </div>
                                     <div className="text-center p-4 rounded-lg bg-black/30">
-                                      <p className="text-sm text-white/60 mb-1">Contest Rank</p>
+                                      <p className="text-sm text-white/60 mb-1">Contest Rating</p>
                                       <p className="text-3xl font-bold text-white" style={{ textShadow: "0 0 10px rgba(255,255,255,0.3)" }}>
-                                        {leetcodeStats.globalRank.toLocaleString()}
+                                        {Math.ceil(leetcodeStats.contestRating)}
                                       </p>
                                     </div>
                                   </div>

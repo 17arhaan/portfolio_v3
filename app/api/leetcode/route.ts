@@ -2,7 +2,8 @@ import { NextResponse } from 'next/server';
 
 export async function GET() {
   try {
-    const response = await fetch(`https://leetcode-stats-api.herokuapp.com/arhaan17`, {
+    // Fetch user stats
+    const statsResponse = await fetch(`https://leetcode-stats-api.herokuapp.com/arhaan17`, {
       headers: {
         'Content-Type': 'application/json',
         'Accept': 'application/json',
@@ -12,18 +13,67 @@ export async function GET() {
       }
     });
 
-    if (!response.ok) {
-      throw new Error(`Failed to fetch LeetCode data: ${response.status} ${response.statusText}`);
+    if (!statsResponse.ok) {
+      throw new Error(`Failed to fetch LeetCode data: ${statsResponse.status} ${statsResponse.statusText}`);
     }
 
-    const data = await response.json();
+    const statsData = await statsResponse.json();
 
-    if (!data || data.status !== 'success') {
+    if (!statsData || statsData.status !== 'success') {
       throw new Error('Invalid LeetCode data received');
     }
 
+    // Fetch contest history
+    const contestResponse = await fetch('https://leetcode.com/graphql', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+      },
+      body: JSON.stringify({
+        query: `
+          query userContestRankingInfo($username: String!) {
+            userContestRanking(username: $username) {
+              attendedContestsCount
+              rating
+              globalRanking
+              topPercentage
+              badge {
+                name
+              }
+            }
+            userContestRankingHistory(username: $username) {
+              attended
+              trendDirection
+              problemsSolved
+              totalProblems
+              finishTimeInSeconds
+              rating
+              ranking
+              contest {
+                title
+                startTime
+              }
+            }
+          }
+        `,
+        variables: {
+          username: 'arhaan17'
+        }
+      }),
+      next: {
+        revalidate: 300 // 5 minutes
+      }
+    });
+
+    if (!contestResponse.ok) {
+      throw new Error(`Failed to fetch contest data: ${contestResponse.status} ${contestResponse.statusText}`);
+    }
+
+    const contestData = await contestResponse.json();
+
     // Calculate streak from submission calendar
-    const submissionCalendar = data.submissionCalendar || {};
+    const submissionCalendar = statsData.submissionCalendar || {};
     const today = new Date();
     const yesterday = new Date(today);
     yesterday.setDate(yesterday.getDate() - 1);
@@ -91,25 +141,47 @@ export async function GET() {
 
     // Calculate total submissions from submission calendar
     const totalSubmissions = Object.values(submissionCalendar)
-      .reduce((sum: number, count: number) => sum + count, 0);
+      .reduce((sum: number, count: unknown) => sum + (typeof count === 'number' ? count : 0), 0);
+
+    // Process contest data
+    const contestRanking = contestData.data?.userContestRanking || {};
+    const contestHistory = contestData.data?.userContestRankingHistory || [];
+    
+    // Get recent contests (last 5)
+    const recentContests = contestHistory
+      .filter((contest: any) => contest.attended)
+      .sort((a: any, b: any) => b.contest.startTime - a.contest.startTime)
+      .slice(0, 5)
+      .map((contest: any) => ({
+        title: contest.contest.title,
+        rank: contest.ranking,
+        rating: contest.rating,
+        problemsSolved: contest.problemsSolved,
+        totalProblems: contest.totalProblems,
+        date: new Date(contest.contest.startTime * 1000).toISOString()
+      }));
 
     return NextResponse.json({
-      totalSolved: data.totalSolved || 0,
-      totalQuestions: data.totalQuestions || 0,
-      easySolved: data.easySolved || 0,
-      easyTotal: data.totalEasy || 0,
-      mediumSolved: data.mediumSolved || 0,
-      mediumTotal: data.totalMedium || 0,
-      hardSolved: data.hardSolved || 0,
-      hardTotal: data.totalHard || 0,
+      totalSolved: statsData.totalSolved || 0,
+      totalQuestions: statsData.totalQuestions || 0,
+      easySolved: statsData.easySolved || 0,
+      easyTotal: statsData.totalEasy || 0,
+      mediumSolved: statsData.mediumSolved || 0,
+      mediumTotal: statsData.totalMedium || 0,
+      hardSolved: statsData.hardSolved || 0,
+      hardTotal: statsData.totalHard || 0,
       streak: currentStreak,
       maxStreak: maxStreak,
       totalDays: totalActiveDays,
       lastSolved: new Date().toISOString(),
-      contestRank: data.ranking || 0,
-      globalRank: 0,
+      contestRating: contestRanking.rating || 0,
+      globalRank: 997889,
+      topPercentage: contestRanking.topPercentage || 0,
+      attendedContests: contestRanking.attendedContestsCount || 0,
+      contestBadge: contestRanking.badge?.name || null,
+      recentContests,
       acceptanceRate: 70.38,
-      completionRate: data.completionRate || 0,
+      completionRate: statsData.completionRate || 0,
       totalSubmissions: totalSubmissions || 0,
     });
   } catch (error) {
