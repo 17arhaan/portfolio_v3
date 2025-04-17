@@ -140,11 +140,11 @@ export async function GET() {
     
     // Define the languages with their specific percentages
     const languagePercentages = {
-      'Python': 55,
-      'Jupyter Notebook': 22,
-      'C++': 15,
-      'HTML': 12,
-      'JavaScript': 9,
+      'Python': 49,
+      'JavaScript': 8,
+      'Jupyter Notebook': 20,
+      'C++': 14,
+      'HTML': 11,
       'TypeScript': 7,
       'C': 3
     };
