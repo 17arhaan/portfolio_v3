@@ -4,7 +4,7 @@ A modern, responsive portfolio website built with Next.js, TypeScript, and Tailw
 
 ## Live Demo
 
-[![Portfolio Website](https://img.shields.io/badge/Visit%20Portfolio-www.arhaanportfolio.in-blue?style=for-the-badge)](https://www.arhaanportfolio.in)
+[![Portfolio Website](https://img.shields.io/badge/Visit%20Portfolio-www.arhaanportfolio.in-black?style=for-the-badge)](https://www.arhaanportfolio.in)
 
 ## Features
 
@@ -99,5 +99,4 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 For any queries or suggestions, please reach out through:
 
-- GitHub: [17arhaan](https://github.com/17arhaan)
-- Portfolio: [www.arhaanportfolio.in](https://www.arhaanportfolio.in) 
+---> [www.arhaanportfolio.in](https://www.arhaanportfolio.in) 
