@@ -50,7 +50,7 @@ const projects = [
       "GRU",
       "FastAPI",
     ],
-    demoLink: null,
+    demoLink: "https://jarvis-brown-eta.vercel.app/",
     githubLink: "https://github.com/17arhaan/J.A.R.V.I.S",
     categories: ["artificial intelligence", "deep learning"],
   },
