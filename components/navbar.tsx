@@ -10,7 +10,11 @@ interface NavbarProps {
   experienceRef: React.RefObject<HTMLElement>
   projectsRef: React.RefObject<HTMLElement>
   skillsRef: React.RefObject<HTMLElement>
-  resumeRef?: React.RefObject<HTMLElement>
+  certificationsRef: React.RefObject<HTMLElement>
+  resumeRef: React.RefObject<HTMLElement>
+  progressRef: React.RefObject<HTMLElement>
+  guestbookRef: React.RefObject<HTMLElement>
+  testimonialsRef: React.RefObject<HTMLElement>
 }
 
 interface NavItem {
@@ -19,7 +23,16 @@ interface NavItem {
   ref?: React.RefObject<HTMLElement>
 }
 
-export default function Navbar({ experienceRef, projectsRef, skillsRef, resumeRef }: NavbarProps) {
+export default function Navbar({ 
+  experienceRef, 
+  projectsRef, 
+  skillsRef, 
+  certificationsRef,
+  resumeRef,
+  progressRef,
+  guestbookRef,
+  testimonialsRef 
+}: NavbarProps) {
   const [activeSection, setActiveSection] = useState("home")
   const [scrolled, setScrolled] = useState(false)
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
@@ -33,20 +46,24 @@ export default function Navbar({ experienceRef, projectsRef, skillsRef, resumeRe
     { name: "Experience", id: "experience", ref: experienceRef },
     { name: "Projects", id: "projects", ref: projectsRef },
     { name: "Skills", id: "skills", ref: skillsRef },
-    { name: "Certifications", id: "certifications" },
+    { name: "Certifications", id: "certifications", ref: certificationsRef },
     { name: "Resume", id: "resume", ref: resumeRef },
-    { name: "Progress", id: "progress" },
+    { name: "Progress", id: "progress", ref: progressRef },
+    { name: "Guestbook", id: "guestbook", ref: guestbookRef },
+    { name: "Testimonials", id: "testimonials", ref: testimonialsRef },
     { name: "Contact", id: "contact" }
   ]
 
   // Update scroll handler to include all sections
   useEffect(() => {
     const handleScroll = () => {
-      const scrollPosition = window.scrollY
+      const scrollPosition = window.scrollY + window.innerHeight / 2
       setScrolled(scrollPosition > 50)
 
       const sections = [
         "contact",
+        "testimonials",
+        "guestbook",
         "progress",
         "resume",
         "certifications",
@@ -60,7 +77,7 @@ export default function Navbar({ experienceRef, projectsRef, skillsRef, resumeRe
       // Find the active section
       for (const sectionId of sections) {
         const section = document.getElementById(sectionId)
-        if (section && scrollPosition >= section.offsetTop - 100) {
+        if (section && scrollPosition >= section.offsetTop - window.innerHeight / 3) {
           setActiveSection(sectionId)
           break
         }

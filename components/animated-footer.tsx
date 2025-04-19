@@ -5,6 +5,7 @@ import { motion, useAnimation, AnimatePresence } from "framer-motion"
 import Image from "next/image"
 import { Github, Linkedin, Mail, Twitter, ExternalLink, Home, Briefcase, Code, Cpu, FileText, Award, ArrowRight } from "lucide-react"
 import Confetti from "react-confetti"
+import { Github, Linkedin, Mail, Twitter, ExternalLink, Home, Briefcase, Code, Cpu, FileText, Award, ArrowUpRight } from "lucide-react"
 
 export default function AnimatedFooter() {
   const [currentYear] = useState(new Date().getFullYear())
@@ -16,6 +17,7 @@ export default function AnimatedFooter() {
     width: typeof window !== 'undefined' ? window.innerWidth : 0,
     height: typeof window !== 'undefined' ? window.innerHeight : 0,
   })
+  const [isClicked, setIsClicked] = useState(false)
   const controls = useAnimation()
   const particlesRef = useRef<HTMLDivElement>(null)
   const videoRef = useRef<HTMLVideoElement>(null)
@@ -267,6 +269,56 @@ export default function AnimatedFooter() {
                 Turning vision into reality through code, creativity, and continuous learning.
               </p>
             </div>
+            <motion.div
+              animate={controls}
+              onHoverStart={() => setIsHovered(true)}
+              onHoverEnd={() => setIsHovered(false)}
+              onClick={() => {
+                setIsVideoOpen(true)
+                setIsClicked(true)
+                setTimeout(() => setIsClicked(false), 3000)
+              }}
+              className="mb-2 signature-container cursor-pointer"
+            >
+              <div className="w-72 h-24 relative">
+                <motion.div
+                  initial={{ opacity: 0, x: 10 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: 0.5 }}
+                  className="absolute -left-16 top-1/2 transform -translate-y-1/2 flex items-center space-x-1 text-white/40 text-xs"
+                >
+                  {!isClicked ? (
+                    <>
+                      <span>Click!!</span>
+                      <motion.div
+                        animate={{ x: [0, 3, 0] }}
+                        transition={{ duration: 1, repeat: Infinity }}
+                      >
+                        <ArrowUpRight className="h-3 w-3" />
+                      </motion.div>
+                    </>
+                  ) : (
+                    <motion.span
+                      initial={{ scale: 0 }}
+                      animate={{ scale: 1 }}
+                      transition={{ type: "spring", stiffness: 500 }}
+                      className="text-[#e31266]/70 text-xs"
+                    >
+                      Yay !!
+                    </motion.span>
+                  )}
+                </motion.div>
+                <Image
+                  src="/sign.png"
+                  alt="Signature"
+                  width={360}
+                  height={108}
+                  className="signature-image"
+                  style={{ objectFit: "contain" }}
+                  priority
+                />
+              </div>
+            </motion.div>
 
             {/* Video Modal */}
             <AnimatePresence>
