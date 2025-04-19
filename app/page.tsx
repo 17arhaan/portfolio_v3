@@ -8,7 +8,7 @@ import ProjectsSection from "@/components/projects-section"
 import SkillsSection from "@/components/skills-section"
 import ResumeSection from "@/components/resume-section"
 import ProgressSection from "@/components/progress-section"
-import AnimatedFooter from "@/components/animated-footer"
+import Footer from "@/components/footer"
 import GradientBubbles from "@/components/gradient-bubbles"
 import ScrollToTop from "@/components/scroll-to-top"
 import SectionDivider from "@/components/section-divider"
@@ -16,8 +16,7 @@ import CertificationsSection from "@/components/certifications-section"
 import { motion } from "framer-motion"
 import AboutSection from "@/components/about-section"
 import ContactSection from "@/components/contact-section"
-import GuestbookSection from "@/components/guestbook-section"
-import TestimonialsSection from "@/components/testimonials-section"
+import AnimatedFooter from "@/components/animated-footer"
 
 export default function Home() {
   const experienceRef = useRef<HTMLDivElement>(null)
@@ -26,8 +25,6 @@ export default function Home() {
   const certificationsRef = useRef<HTMLDivElement>(null)
   const resumeRef = useRef<HTMLDivElement>(null)
   const progressRef = useRef<HTMLDivElement>(null)
-  const guestbookRef = useRef<HTMLDivElement>(null)
-  const testimonialsRef = useRef<HTMLDivElement>(null)
   const [scrollProgress, setScrollProgress] = useState(0)
 
   // Track scroll progress
@@ -67,12 +64,10 @@ export default function Home() {
         certificationsRef={certificationsRef}
         resumeRef={resumeRef}
         progressRef={progressRef}
-        guestbookRef={guestbookRef}
-        testimonialsRef={testimonialsRef}
       />
 
       {/* Landing Page */}
-      <LandingPage />
+      <LandingPage experienceRef={experienceRef} />
 
       <AboutSection />
 
@@ -122,18 +117,6 @@ export default function Home() {
       {/* Progress Section */}
       <section ref={progressRef} id="progress" className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8">
         <ProgressSection />
-      </section>
-
-      {/* Guestbook Section */}
-      <section ref={guestbookRef} id="guestbook" className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8">
-        <GuestbookSection />
-      </section>
-
-      <SectionDivider />
-
-      {/* Testimonials Section */}
-      <section ref={testimonialsRef} id="testimonials" className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8">
-        <TestimonialsSection />
       </section>
 
       <SectionDivider />

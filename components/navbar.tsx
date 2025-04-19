@@ -5,6 +5,7 @@ import { useState, useEffect, useRef } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import Image from "next/image"
 import { Menu, X } from "lucide-react"
+import confetti from "canvas-confetti"
 
 interface NavbarProps {
   experienceRef: React.RefObject<HTMLElement>
@@ -13,8 +14,7 @@ interface NavbarProps {
   certificationsRef: React.RefObject<HTMLElement>
   resumeRef: React.RefObject<HTMLElement>
   progressRef: React.RefObject<HTMLElement>
-  guestbookRef: React.RefObject<HTMLElement>
-  testimonialsRef: React.RefObject<HTMLElement>
+  videoRef?: React.RefObject<HTMLVideoElement>
 }
 
 interface NavItem {
@@ -30,8 +30,7 @@ export default function Navbar({
   certificationsRef,
   resumeRef,
   progressRef,
-  guestbookRef,
-  testimonialsRef 
+  videoRef
 }: NavbarProps) {
   const [activeSection, setActiveSection] = useState("home")
   const [scrolled, setScrolled] = useState(false)
@@ -49,8 +48,6 @@ export default function Navbar({
     { name: "Certifications", id: "certifications", ref: certificationsRef },
     { name: "Resume", id: "resume", ref: resumeRef },
     { name: "Progress", id: "progress", ref: progressRef },
-    { name: "Guestbook", id: "guestbook", ref: guestbookRef },
-    { name: "Testimonials", id: "testimonials", ref: testimonialsRef },
     { name: "Contact", id: "contact" }
   ]
 
@@ -62,8 +59,6 @@ export default function Navbar({
 
       const sections = [
         "contact",
-        "testimonials",
-        "guestbook",
         "progress",
         "resume",
         "certifications",
@@ -99,6 +94,56 @@ export default function Navbar({
       document.body.style.overflow = 'unset'
     }
   }, [isMobileMenuOpen])
+
+  // Handle video end event
+  useEffect(() => {
+    if (videoRef?.current) {
+      const video = videoRef.current;
+      const handleVideoEnd = () => {
+        // Trigger confetti from navbar
+        const triggerConfetti = () => {
+          // Create multiple confetti bursts from different positions
+          const positions = [
+            { x: 0.1, y: 0 },
+            { x: 0.3, y: 0 },
+            { x: 0.5, y: 0 },
+            { x: 0.7, y: 0 },
+            { x: 0.9, y: 0 },
+            { x: 0.2, y: 0.5 },
+            { x: 0.4, y: 0.5 },
+            { x: 0.6, y: 0.5 },
+            { x: 0.8, y: 0.5 }
+          ];
+
+          positions.forEach((pos) => {
+            confetti({
+              particleCount: 150,
+              spread: 180,
+              origin: pos,
+              angle: 90,
+              gravity: 0.3,
+              ticks: 600,
+              colors: ['#3C0753', '#720455', '#910A67', '#FFFFFF', '#FFD700'],
+              scalar: 2.5,
+              shapes: ['star', 'circle'],
+              disableForReducedMotion: false,
+              drift: 0.2,
+              decay: 0.97,
+              startVelocity: 35,
+              zIndex: 9999
+            });
+          });
+        };
+
+        // Trigger confetti for 7 seconds
+        const interval = setInterval(triggerConfetti, 100);
+        setTimeout(() => clearInterval(interval), 7000);
+      };
+
+      video.addEventListener('ended', handleVideoEnd);
+      return () => video.removeEventListener('ended', handleVideoEnd);
+    }
+  }, [videoRef]);
 
   // Updated scrollToSection function
   const scrollToSection = (item: NavItem) => {

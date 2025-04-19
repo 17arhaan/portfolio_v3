@@ -9,9 +9,10 @@ import StarField from "./star-field"
 
 interface LandingPageProps {
   experienceRef: React.RefObject<HTMLElement>
+  videoRef: React.RefObject<HTMLVideoElement>
 }
 
-export default function LandingPage({ experienceRef }: LandingPageProps) {
+export default function LandingPage({ experienceRef, videoRef }: LandingPageProps) {
   const [gradientPosition, setGradientPosition] = useState(0)
   const [glowIntensity, setGlowIntensity] = useState(0)
 
