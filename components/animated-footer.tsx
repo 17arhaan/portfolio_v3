@@ -3,15 +3,34 @@
 import { useEffect, useRef, useState } from "react"
 import { motion, useAnimation, AnimatePresence } from "framer-motion"
 import Image from "next/image"
-import { Github, Linkedin, Mail, Twitter, ExternalLink, Home, Briefcase, Code, Cpu, FileText, Award } from "lucide-react"
+import { Github, Linkedin, Mail, Twitter, ExternalLink, Home, Briefcase, Code, Cpu, FileText, Award, ArrowRight } from "lucide-react"
+import Confetti from "react-confetti"
 
 export default function AnimatedFooter() {
   const [currentYear] = useState(new Date().getFullYear())
   const [isHovered, setIsHovered] = useState(false)
   const [isVideoOpen, setIsVideoOpen] = useState(false)
+  const [showYay, setShowYay] = useState(false)
+  const [showConfetti, setShowConfetti] = useState(false)
+  const [windowSize, setWindowSize] = useState({
+    width: typeof window !== 'undefined' ? window.innerWidth : 0,
+    height: typeof window !== 'undefined' ? window.innerHeight : 0,
+  })
   const controls = useAnimation()
   const particlesRef = useRef<HTMLDivElement>(null)
   const videoRef = useRef<HTMLVideoElement>(null)
+
+  useEffect(() => {
+    const handleResize = () => {
+      setWindowSize({
+        width: window.innerWidth,
+        height: window.innerHeight,
+      })
+    }
+
+    window.addEventListener('resize', handleResize)
+    return () => window.removeEventListener('resize', handleResize)
+  }, [])
 
   // Animate the particles
   useEffect(() => {
@@ -80,8 +99,48 @@ export default function AnimatedFooter() {
     { icon: Mail, href: "mailto:17arhaan.connect@gmail.com", label: "Email" },
   ]
 
+  const handleSignatureClick = () => {
+    setShowYay(true)
+    setIsVideoOpen(true)
+    setTimeout(() => setShowYay(false), 2000)
+  }
+
+  const handleClickHereClick = () => {
+    // Remove this function since we don't want the text to do anything
+  }
+
+  const handleVideoEnd = () => {
+    setShowConfetti(true)
+    setTimeout(() => {
+      setShowConfetti(false)
+      setIsVideoOpen(false)
+    }, 4000)
+  }
+
   return (
     <footer className="relative w-full py-10 overflow-hidden border-t border-white/10">
+      <AnimatePresence>
+        {showConfetti && (
+          <motion.div
+            initial={{ opacity: 0, y: 100 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 100 }}
+            transition={{ duration: 0.5, ease: "easeOut" }}
+            className="fixed inset-0"
+            style={{ top: "80px" }}
+          >
+            <Confetti
+              width={windowSize.width}
+              height={windowSize.height}
+              recycle={false}
+              numberOfPieces={500}
+              gravity={0.3}
+              style={{ position: "fixed", top: 0 }}
+            />
+          </motion.div>
+        )}
+      </AnimatePresence>
+      
       {/* Animated background */}
       <div className="absolute inset-0 bg-black/50 backdrop-blur-sm">
         {/* Particles container */}
@@ -115,25 +174,99 @@ export default function AnimatedFooter() {
         <div className="grid grid-cols-1 md:grid-cols-[2fr_1fr_1fr] gap-6 mb-8">
           {/* Logo, tagline and description */}
           <div className="flex flex-col items-center md:items-start">
-            <motion.div
-              animate={controls}
-              onHoverStart={() => setIsHovered(true)}
-              onHoverEnd={() => setIsHovered(false)}
-              onClick={() => setIsVideoOpen(true)}
-              className="mb-2 signature-container cursor-pointer"
-            >
-              <div className="w-72 h-24 relative">
-                <Image
-                  src="/sign.png"
-                  alt="Signature"
-                  width={360}
-                  height={108}
-                  className="signature-image"
-                  style={{ objectFit: "contain" }}
-                  priority
-                />
-              </div>
-            </motion.div>
+            <div className="flex items-center gap-4">
+              <motion.div
+                initial={{ opacity: 0, x: -10 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: 1, duration: 0.5 }}
+                className="flex items-center gap-1 text-sm"
+              >
+                <AnimatePresence mode="wait">
+                  {!showYay ? (
+                    <motion.div
+                      key="click-here"
+                      initial={{ opacity: 0, x: -10 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      exit={{ opacity: 0, x: 10 }}
+                      transition={{ duration: 0.3 }}
+                      className="flex items-center gap-1"
+                      whileHover={{
+                        scale: 1.05,
+                        transition: { duration: 0.2 }
+                      }}
+                    >
+                      <motion.span 
+                        className="text-white/40"
+                        animate={{
+                          opacity: [0.4, 0.6, 0.4],
+                        }}
+                        transition={{
+                          duration: 2,
+                          repeat: Infinity,
+                          ease: "easeInOut"
+                        }}
+                      >
+                        Click here
+                      </motion.span>
+                      <motion.div
+                        animate={{
+                          x: [0, 2, 0],
+                        }}
+                        transition={{
+                          duration: 1.5,
+                          repeat: Infinity,
+                          ease: "easeInOut"
+                        }}
+                      >
+                        <ArrowRight className="w-4 h-4" />
+                      </motion.div>
+                    </motion.div>
+                  ) : (
+                    <motion.div
+                      key="yay"
+                      initial={{ opacity: 0, scale: 0.5 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      exit={{ opacity: 0, scale: 0.5 }}
+                      transition={{ duration: 0.3 }}
+                      className="text-red-500 font-medium"
+                    >
+                      Yay!!
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </motion.div>
+
+              <motion.div
+                animate={controls}
+                onHoverStart={() => setIsHovered(true)}
+                onHoverEnd={() => setIsHovered(false)}
+                onClick={handleSignatureClick}
+                className="signature-container cursor-pointer relative"
+              >
+                <div className="w-96 h-32 relative">
+                  <Image
+                    src="/sign.png"
+                    alt="Signature"
+                    width={480}
+                    height={144}
+                    className="signature-image"
+                    style={{ objectFit: "contain" }}
+                    priority
+                  />
+                </div>
+              </motion.div>
+            </div>
+
+            <div className="space-y-3">
+              <p className="text-white/80 text-sm max-w-md">
+                <span className="font-medium text-white">Arhaan Girdhar</span> — Computer Science student specializing
+                in AI & ML at MIT Manipal. Passionate about building innovative solutions at the intersection of
+                technology and creativity.
+              </p>
+              <p className="text-white/60 text-sm italic">
+                Turning vision into reality through code, creativity, and continuous learning.
+              </p>
+            </div>
 
             {/* Video Modal */}
             <AnimatePresence>
@@ -163,26 +296,11 @@ export default function AnimatedFooter() {
                     autoPlay
                     playsInline
                     onClick={(e) => e.stopPropagation()}
-                    onEnded={() => {
-                      setTimeout(() => {
-                        setIsVideoOpen(false);
-                      }, 500);
-                    }}
+                    onEnded={handleVideoEnd}
                   />
                 </motion.div>
               )}
             </AnimatePresence>
-
-            <div className="space-y-3">
-              <p className="text-white/80 text-sm max-w-md">
-                <span className="font-medium text-white">Arhaan Girdhar</span> — Computer Science student specializing
-                in AI & ML at MIT Manipal. Passionate about building innovative solutions at the intersection of
-                technology and creativity.
-              </p>
-              <p className="text-white/60 text-sm italic">
-                Turning vision into reality through code, creativity, and continuous learning.
-              </p>
-            </div>
           </div>
 
           {/* Quick links */}
