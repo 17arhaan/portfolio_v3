@@ -9,12 +9,16 @@ import { getTestimonials } from "@/data/testimonials"
 export type Testimonial = {
   id: string
   name: string
-  role: string
-  company: string
+  email: string
+  website?: string
+  message: string
   image?: string
   rating: number
-  content: string
-  date: string
+  role?: string
+  company?: string
+  showInTestimonials: boolean
+  createdAt: string
+  updatedAt: string
 }
 
 export default function TestimonialsSection() {
@@ -23,17 +27,31 @@ export default function TestimonialsSection() {
 
   // Load and filter testimonials
   useEffect(() => {
-    const loadTestimonials = () => {
-      const allTestimonials = getTestimonials()
-      const highRatedTestimonials = allTestimonials.filter(t => t.rating >= 4)
-      setFilteredTestimonials(highRatedTestimonials)
+    const loadTestimonials = async () => {
+      try {
+        const response = await fetch('/api/testimonials')
+        if (!response.ok) throw new Error('Failed to fetch testimonials')
+        const allTestimonials = await response.json()
+        console.log('Fetched testimonials:', allTestimonials)
+        const highRatedTestimonials = allTestimonials
+          .filter(t => t.rating >= 4 && t.showInTestimonials)
+          .map(t => ({
+            ...t,
+            content: t.message,
+            date: t.createdAt
+          }))
+        console.log('Filtered testimonials:', highRatedTestimonials)
+        setFilteredTestimonials(highRatedTestimonials)
+      } catch (error) {
+        console.error('Error loading testimonials:', error)
+      }
     }
 
     // Initial load
     loadTestimonials()
 
     // Set up interval to check for new testimonials
-    const interval = setInterval(loadTestimonials, 1000)
+    const interval = setInterval(loadTestimonials, 30000) // Check every 30 seconds
 
     return () => clearInterval(interval)
   }, [])
