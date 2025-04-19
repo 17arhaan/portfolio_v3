@@ -1,13 +1,31 @@
 import { NextResponse } from 'next/server'
-import { db } from '@/lib/db'
+
+// Static testimonials data
+const testimonials = [
+  {
+    id: 1,
+    name: "John Doe",
+    role: "Senior Developer",
+    company: "Tech Corp",
+    message: "Arhaan is an exceptional developer with great attention to detail.",
+    rating: 5,
+    image: "/testimonials/john.jpg",
+    createdAt: new Date().toISOString()
+  },
+  {
+    id: 2,
+    name: "Jane Smith",
+    role: "Product Manager",
+    company: "Innovate Inc",
+    message: "Working with Arhaan was a pleasure. Highly recommended!",
+    rating: 5,
+    image: "/testimonials/jane.jpg",
+    createdAt: new Date().toISOString()
+  }
+]
 
 export async function GET() {
   try {
-    const testimonials = await db.testimonial.findMany({
-      orderBy: {
-        createdAt: 'desc'
-      }
-    })
     return NextResponse.json(testimonials)
   } catch (error) {
     console.error('Error fetching testimonials:', error)
@@ -17,21 +35,12 @@ export async function GET() {
 
 export async function POST(request: Request) {
   try {
-    const body = await request.json()
-    const testimonial = await db.testimonial.create({
-      data: {
-        name: body.name,
-        email: body.email,
-        website: body.website,
-        message: body.message,
-        image: body.image,
-        rating: body.rating,
-        role: body.role,
-        company: body.company,
-        showInTestimonials: body.showInTestimonials
-      }
+    // In a real application, you would save this to a database
+    // For now, we'll just return a success message
+    return NextResponse.json({ 
+      message: 'Testimonial received successfully',
+      status: 'success'
     })
-    return NextResponse.json(testimonial)
   } catch (error) {
     console.error('Error creating testimonial:', error)
     return NextResponse.json({ error: 'Failed to create testimonial' }, { status: 500 })

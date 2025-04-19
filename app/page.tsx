@@ -119,8 +119,6 @@ export default function Home() {
         <ProgressSection />
       </section>
 
-      <SectionDivider />
-
       <ContactSection />
 
       {/* Footer */}

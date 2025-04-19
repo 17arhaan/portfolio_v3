@@ -18,7 +18,13 @@ export default function AnimatedFooter() {
   const triggerConfetti = () => {
     const duration = 5 * 1000;
     const animationEnd = Date.now() + duration;
-    const defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 9999 };
+    const defaults = { 
+      startVelocity: 30, 
+      spread: 360, 
+      ticks: 60, 
+      zIndex: 9999,
+      colors: ['#3C0753', '#720455', '#910A67', '#FFFFFF', '#FFD700']
+    };
 
     function randomInRange(min: number, max: number) {
       return Math.random() * (max - min) + min;
@@ -28,7 +34,10 @@ export default function AnimatedFooter() {
       const timeLeft = animationEnd - Date.now();
 
       if (timeLeft <= 0) {
-        setIsClicked(false);
+        // Keep "Yay!!" visible for 4 more seconds after confetti ends
+        setTimeout(() => {
+          setIsClicked(false);
+        }, 4000);
         return clearInterval(interval);
       }
 
@@ -37,12 +46,14 @@ export default function AnimatedFooter() {
       confetti({
         ...defaults,
         particleCount,
-        origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 }
+        origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 },
+        shapes: ['star', 'circle']
       });
       confetti({
         ...defaults,
         particleCount,
-        origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 }
+        origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 },
+        shapes: ['star', 'circle']
       });
     }, 250);
   };
