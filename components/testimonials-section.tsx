@@ -4,8 +4,9 @@ import { motion } from "framer-motion"
 import { Star, Quote } from "lucide-react"
 import { useState, useEffect } from "react"
 import Image from "next/image"
+import { getTestimonials } from "@/data/testimonials"
 
-type Testimonial = {
+export type Testimonial = {
   id: string
   name: string
   role: string
@@ -16,29 +17,37 @@ type Testimonial = {
   date: string
 }
 
-// Initialize with empty array - testimonials will be loaded from your backend
-const testimonials: Testimonial[] = []
-
 export default function TestimonialsSection() {
   const [currentIndex, setCurrentIndex] = useState(0)
   const [filteredTestimonials, setFilteredTestimonials] = useState<Testimonial[]>([])
 
-  // Filter testimonials to only show 4-5 star ratings
+  // Load and filter testimonials
   useEffect(() => {
-    const highRatedTestimonials = testimonials.filter(t => t.rating >= 4)
-    setFilteredTestimonials(highRatedTestimonials)
+    const loadTestimonials = () => {
+      const allTestimonials = getTestimonials()
+      const highRatedTestimonials = allTestimonials.filter(t => t.rating >= 4)
+      setFilteredTestimonials(highRatedTestimonials)
+    }
+
+    // Initial load
+    loadTestimonials()
+
+    // Set up interval to check for new testimonials
+    const interval = setInterval(loadTestimonials, 1000)
+
+    return () => clearInterval(interval)
   }, [])
 
   // Auto-shuffle testimonials every 30 seconds
   useEffect(() => {
-    if (filteredTestimonials.length <= 1) return
+    if (filteredTestimonials.length <= 3) return
 
     const interval = setInterval(() => {
       setCurrentIndex((prev) => {
-        const nextIndex = (prev + 1) % filteredTestimonials.length
+        const nextIndex = (prev + 3) % filteredTestimonials.length
         return nextIndex
       })
-    }, 30000) // 30 seconds
+    }, 30000)
 
     return () => clearInterval(interval)
   }, [filteredTestimonials.length])
@@ -84,6 +93,19 @@ export default function TestimonialsSection() {
     )
   }
 
+  // Get the current 3 testimonials to display
+  const getCurrentTestimonials = () => {
+    const testimonials = []
+    const numToShow = Math.min(3, filteredTestimonials.length)
+    for (let i = 0; i < numToShow; i++) {
+      const index = (currentIndex + i) % filteredTestimonials.length
+      testimonials.push(filteredTestimonials[index])
+    }
+    return testimonials
+  }
+
+  const currentTestimonials = getCurrentTestimonials()
+
   return (
     <section id="testimonials" className="py-24 relative w-full">
       <div className="max-w-7xl mx-auto px-4 sm:px-6">
@@ -116,82 +138,81 @@ export default function TestimonialsSection() {
           />
         </motion.div>
 
-        <div className="relative">
-          {/* Testimonial Carousel */}
-          <motion.div
-            key={currentIndex}
-            initial={{ opacity: 0, x: 100 }}
-            animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: -100 }}
-            transition={{ duration: 0.5 }}
-            className="bg-white/5 backdrop-blur-sm p-8 rounded-lg border border-white/10 relative overflow-hidden"
-          >
-            <Quote className="absolute top-4 right-4 w-8 h-8 text-white/10" />
-            
-            <div className="flex flex-col md:flex-row items-center gap-6">
-              {/* Profile Image */}
-              <div className="w-24 h-24 rounded-full overflow-hidden border-2 border-white/20">
-                <Image
-                  src={filteredTestimonials[currentIndex].image || "/user.png"}
-                  alt={filteredTestimonials[currentIndex].name}
-                  width={96}
-                  height={96}
-                  className="w-full h-full object-cover"
-                  priority
-                />
-              </div>
-
-              {/* Content */}
-              <div className="flex-1">
-                <div className="flex items-center gap-2 mb-2">
-                  {[...Array(5)].map((_, i) => (
-                    <Star
-                      key={i}
-                      className={`w-4 h-4 ${
-                        i < filteredTestimonials[currentIndex].rating
-                          ? "text-yellow-400 fill-yellow-400"
-                          : "text-white/20"
-                      }`}
-                    />
-                  ))}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {currentTestimonials.map((testimonial, index) => (
+            <motion.div
+              key={testimonial.id}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: index * 0.1 }}
+              className="bg-white/5 backdrop-blur-sm p-6 rounded-lg border border-white/10 relative overflow-hidden"
+            >
+              <Quote className="absolute top-4 right-4 w-6 h-6 text-white/10" />
+              
+              <div className="flex flex-col items-center gap-4">
+                {/* Profile Image */}
+                <div className="w-20 h-20 rounded-full overflow-hidden border-2 border-white/20">
+                  <Image
+                    src={testimonial.image || "/user.png"}
+                    alt={testimonial.name}
+                    width={80}
+                    height={80}
+                    className="w-full h-full object-cover"
+                    priority
+                  />
                 </div>
 
-                <p className="text-white/80 mb-4 italic">
-                  "{filteredTestimonials[currentIndex].content}"
-                </p>
+                {/* Content */}
+                <div className="text-center">
+                  <div className="flex items-center justify-center gap-1 mb-2">
+                    {[...Array(5)].map((_, i) => (
+                      <Star
+                        key={i}
+                        className={`w-3 h-3 ${
+                          i < testimonial.rating
+                            ? "text-yellow-400 fill-yellow-400"
+                            : "text-white/20"
+                        }`}
+                      />
+                    ))}
+                  </div>
 
-                <div>
-                  <h4 className="text-white font-medium">
-                    {filteredTestimonials[currentIndex].name}
-                  </h4>
-                  <p className="text-white/60 text-sm">
-                    {filteredTestimonials[currentIndex].role} at{" "}
-                    {filteredTestimonials[currentIndex].company}
+                  <p className="text-white/80 mb-4 italic text-sm">
+                    "{testimonial.content}"
                   </p>
-                  <p className="text-white/40 text-xs mt-1">
-                    {new Date(filteredTestimonials[currentIndex].date).toLocaleDateString()}
-                  </p>
+
+                  <div>
+                    <h4 className="text-white font-medium">
+                      {testimonial.name}
+                    </h4>
+                    <p className="text-white/60 text-xs">
+                      {testimonial.role} at {testimonial.company}
+                    </p>
+                    <p className="text-white/40 text-xs mt-1">
+                      {new Date(testimonial.date).toLocaleDateString()}
+                    </p>
+                  </div>
                 </div>
               </div>
-            </div>
-          </motion.div>
+            </motion.div>
+          ))}
+        </div>
 
-          {/* Progress Indicator */}
-          <div className="flex justify-center gap-2 mt-8">
-            {filteredTestimonials.map((_, index) => (
-              <motion.div
-                key={index}
-                className={`w-2 h-2 rounded-full transition-colors ${
-                  index === currentIndex
-                    ? "bg-white"
-                    : "bg-white/20"
-                }`}
-                initial={{ scale: 0.8 }}
-                animate={{ scale: index === currentIndex ? 1.2 : 1 }}
-                transition={{ duration: 0.3 }}
-              />
-            ))}
-          </div>
+        {/* Progress Indicator */}
+        <div className="flex justify-center gap-2 mt-8">
+          {Array.from({ length: Math.ceil(filteredTestimonials.length / 3) }).map((_, index) => (
+            <motion.div
+              key={index}
+              className={`w-2 h-2 rounded-full transition-colors ${
+                Math.floor(currentIndex / 3) === index
+                  ? "bg-white"
+                  : "bg-white/20"
+              }`}
+              initial={{ scale: 0.8 }}
+              animate={{ scale: Math.floor(currentIndex / 3) === index ? 1.2 : 1 }}
+              transition={{ duration: 0.3 }}
+            />
+          ))}
         </div>
       </div>
     </section>

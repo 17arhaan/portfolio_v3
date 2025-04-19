@@ -7,16 +7,17 @@ import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import * as z from "zod"
 import Image from "next/image"
+import { addTestimonial } from "@/data/testimonials"
 
 const formSchema = z.object({
   name: z.string().min(2, "Name must be at least 2 characters"),
-  email: z.string().email("Please enter a valid email").optional(),
+  email: z.string().email("Please enter a valid email").optional().or(z.literal("")),
   website: z.string().url("Please enter a valid URL").optional().or(z.literal("")),
   message: z.string().min(10, "Message must be at least 10 characters"),
   image: z.any().optional(),
   rating: z.number().min(1).max(5).optional(),
-  role: z.string().min(2, "Role must be at least 2 characters").optional(),
-  company: z.string().min(2, "Company must be at least 2 characters").optional(),
+  role: z.string().optional(),
+  company: z.string().optional(),
   showInTestimonials: z.boolean().default(false)
 })
 
@@ -90,6 +91,22 @@ export default function GuestbookSection() {
       }
 
       setMessages((prev) => [newMessage, ...prev])
+
+      // If consent is given and rating is 4 or 5 stars, add to testimonials
+      if (data.showInTestimonials && data.rating && data.rating >= 4) {
+        const testimonial = {
+          id: `testimonial_${newMessage.id}`,
+          name: data.name,
+          role: data.role || "Guest",
+          company: data.company || "Personal",
+          image: previewImage || "/user.png",
+          rating: data.rating,
+          content: data.message,
+          date: new Date().toISOString(),
+        }
+        addTestimonial(testimonial)
+      }
+
       setSubmitStatus("success")
       reset()
       setPreviewImage(null)
@@ -107,7 +124,9 @@ export default function GuestbookSection() {
   const handleLike = (messageId: string) => {
     setMessages((prev) =>
       prev.map((msg) =>
-        msg.id === messageId ? { ...msg, likes: msg.likes + 1 } : msg
+        msg.id === messageId 
+          ? { ...msg, likes: msg.likes > 0 ? 0 : 1 } 
+          : msg
       )
     )
   }
@@ -447,29 +466,16 @@ export default function GuestbookSection() {
                       )}
                     </div>
                     
-                    {message.rating && (
-                      <div className="flex items-center gap-1 mt-2">
-                        {[...Array(5)].map((_, i) => (
-                          <Star
-                            key={i}
-                            className={`w-4 h-4 ${
-                              i < message.rating!
-                                ? "text-yellow-400 fill-yellow-400"
-                                : "text-white/20"
-                            }`}
-                          />
-                        ))}
-                      </div>
-                    )}
-                    
-                    <p className="mt-3 text-white/80">{message.message}</p>
+                    <p className="mt-4 text-white/80">{message.message}</p>
                     
                     <div className="mt-4 flex items-center space-x-4">
                       <motion.button
                         onClick={() => handleLike(message.id)}
                         whileHover={{ scale: 1.1 }}
                         whileTap={{ scale: 0.9 }}
-                        className="flex items-center space-x-1 text-white/60 hover:text-white transition-colors"
+                        className={`flex items-center space-x-1 transition-colors ${
+                          message.likes > 0 ? "text-red-400" : "text-white/60 hover:text-white"
+                        }`}
                       >
                         <Heart className="w-4 h-4" />
                         <span className="text-sm">{message.likes}</span>
