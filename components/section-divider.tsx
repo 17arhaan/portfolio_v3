@@ -13,7 +13,7 @@ export default function SectionDivider({ light = false }: SectionDividerProps) {
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ duration: 0.7 }}
-      className="relative h-24 w-full overflow-hidden"
+      className="relative h-16 w-full overflow-hidden"
     >
       <div className="absolute inset-0 flex items-center justify-center">
         <div className="w-full max-w-5xl px-4 flex items-center">

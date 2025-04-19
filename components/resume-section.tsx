@@ -31,9 +31,9 @@ export default function ResumeSection() {
   return (
     <section
       id="resume"
-      className="w-full min-h-screen py-8 px-6 md:px-10 flex flex-col items-center justify-start relative"
+      className="w-full py-12 px-6 md:px-10 flex flex-col items-center justify-start relative"
     >
-      <div className="text-center mb-12 relative z-10">
+      <div className="text-center mb-8 relative z-10">
         <motion.h1
           initial={{ opacity: 0, y: -10 }}
           whileInView={{ opacity: 1, y: 0 }}

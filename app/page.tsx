@@ -107,7 +107,7 @@ export default function Home() {
       <SectionDivider />
 
       {/* Resume Section */}
-      <section ref={resumeRef} id="resume" className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8">
+      <section ref={resumeRef} id="resume">
         <ResumeSection />
       </section>
 
