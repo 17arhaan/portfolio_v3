@@ -60,12 +60,14 @@ import {
   GitMerge,
   MessageCircle,
   Github,
+  Folder,
+  Package,
   Box,
 } from "lucide-react"
 import React from 'react'
 
 // Define the skill categories type
-type SkillCategory = 'programming' | 'frameworks' | 'libraries' | 'tools' | 'platforms' | 'domains' | 'languages';
+type SkillCategory = 'programming' | 'frameworks' | 'libraries' | 'tools' | 'platforms' | 'domains' | 'languages' | 'commands';
 
 type CategoryColor = {
   from: string;
@@ -86,7 +88,8 @@ type SkillName = 'Python' | 'JavaScript' | 'TypeScript' | 'Java' | 'C++' | 'C' |
                  'Data Structures and Algorithms' | 'Object Oriented Programming' | 'Artificial Intelligence' | 'Database Management' |
                  'Machine Learning' | 'Deep Learning' | 'Computer Vision' | 'Natural Language Processing' | 'Web Development' |
                  'Data Science' | 'Cloud Computing' | 'DevOps' |
-                 'English' | 'Hindi';
+                 'English' | 'Hindi' |
+                 'PowerShell' | 'Bash' | 'Shell Scripting' | 'cmd' | 'Terminal Navigation' | 'Package Management';
 
 type SkillDescription = {
   description: string;
@@ -105,7 +108,7 @@ type SkillData = Record<SkillCategory, Skill[]>;
 type SkillIcon = Record<SkillName, React.ReactElement>;
 
 // Color schemes for different categories
-const categoryColors = {
+const categoryColors: Record<SkillCategory, CategoryColor> = {
   programming: {
     from: "#3B82F6", // blue-500
     via: "#2563EB", // blue-600
@@ -148,10 +151,16 @@ const categoryColors = {
     to: "#B91C1C", // red-700
     bg: "rgba(239, 68, 68, 0.1)", // red-500 with low opacity
   },
+  commands: {
+    from: "#06B6D4", // cyan-500
+    via: "#0891B2", // cyan-600
+    to: "#0E7490", // cyan-700
+    bg: "rgba(6, 182, 212, 0.1)", // cyan-500 with low opacity
+  },
 }
 
 // Category icons
-const categoryIcons = {
+const categoryIcons: Record<SkillCategory, React.ReactElement> = {
   programming: <Code2 className="w-5 h-5 mr-2 text-blue-400" />,
   frameworks: <LayoutGrid className="w-5 h-5 mr-2 text-emerald-400" />,
   libraries: <Library className="w-5 h-5 mr-2 text-violet-400" />,
@@ -159,10 +168,11 @@ const categoryIcons = {
   platforms: <Cloud className="w-5 h-5 mr-2 text-pink-400" />,
   domains: <Lightbulb className="w-5 h-5 mr-2 text-indigo-400" />,
   languages: <Languages className="w-5 h-5 mr-2 text-red-400" />,
+  commands: <Terminal className="w-5 h-5 mr-2 text-cyan-400" />,
 }
 
 // Skill icons mapping
-const skillIcons = {
+const skillIcons: Record<SkillName, React.ReactElement> = {
   // Programming languages
   Python: <Code2 className="w-4 h-4 mr-2 text-blue-400" />,
   JavaScript: <FileCode className="w-4 h-4 mr-2 text-yellow-400" />,
@@ -235,10 +245,18 @@ const skillIcons = {
   // Languages
   English: <MessageCircle className="w-4 h-4 mr-2 text-blue-500" />,
   Hindi: <MessageCircle className="w-4 h-4 mr-2 text-orange-500" />,
+
+  // Command Shell
+  "PowerShell": <Terminal className="w-4 h-4 mr-2 text-cyan-400" />,
+  "Bash": <Terminal className="w-4 h-4 mr-2 text-green-400" />,
+  "Shell Scripting": <FileCode className="w-4 h-4 mr-2 text-yellow-400" />,
+  "cmd": <Terminal className="w-4 h-4 mr-2 text-purple-400" />,
+  "Terminal Navigation": <Folder className="w-4 h-4 mr-2 text-blue-400" />,
+  "Package Management": <Package className="w-4 h-4 mr-2 text-orange-400" />,
 }
 
 // Updated skills data
-const skillsData = {
+const skillsData: Record<SkillCategory, Skill[]> = {
   programming: [
     { name: "Python", level: 95 },
     { name: "JavaScript", level: 70 },
@@ -311,6 +329,14 @@ const skillsData = {
   languages: [
     { name: "English", level: 95 },
     { name: "Hindi", level: 100 },
+  ],
+  commands: [
+    { name: "PowerShell", level: 85 },
+    { name: "Bash", level: 80 },
+    { name: "Shell Scripting", level: 75 },
+    { name: "cmd", level: 90 },
+    { name: "Terminal Navigation", level: 95 },
+    { name: "Package Management", level: 85 },
   ],
 }
 
@@ -564,7 +590,33 @@ const skillDescriptions: SkillDescriptions = {
   Hindi: {
     description: "One of the most widely spoken languages in India.",
     applications: ["Native Communication", "Cultural Exchange", "Regional Business"]
-  }
+  },
+
+  // Command Shell
+  "PowerShell": {
+    description: "Advanced Windows PowerShell scripting for automation and system administration.",
+    applications: ["Task Automation", "System Administration", "Script Development", "Windows Management"]
+  },
+  "Bash": {
+    description: "Unix shell and command language for Linux/Unix system administration and automation.",
+    applications: ["Shell Scripting", "System Administration", "Task Automation", "Unix/Linux Management"]
+  },
+  "Shell Scripting": {
+    description: "Creating and maintaining shell scripts for process automation and system tasks.",
+    applications: ["Process Automation", "Batch Processing", "System Maintenance", "Task Scheduling"]
+  },
+  "cmd": {
+    description: "Proficient in Windows Command Prompt for system operations and scripting.",
+    applications: ["System Navigation", "File Management", "Process Control", "System Monitoring"]
+  },
+  "Terminal Navigation": {
+    description: "Expert navigation and file management through terminal interfaces.",
+    applications: ["File System Operations", "Directory Management", "Path Navigation", "Resource Location"]
+  },
+  "Package Management": {
+    description: "Managing software packages and dependencies across different platforms.",
+    applications: ["Software Installation", "Dependency Management", "Version Control", "System Updates"]
+  },
 }
 
 export default function SkillsSection() {
@@ -619,19 +671,35 @@ export default function SkillsSection() {
         transition={{ duration: 0.5, delay: 0.2, ease: "easeOut" }}
         className="max-w-4xl mx-auto w-full"
       >
-         <Tabs defaultValue="programming" className="w-full" onValueChange={setActiveTab}>          
+         <Tabs defaultValue="programming" className="w-full" onValueChange={(value) => setActiveTab(value as SkillCategory)}>          
           <div className="relative">            
             <TabsList className="flex justify-center w-full gap-2 mb-4 sm:mb-8 bg-transparent relative">              
-              {Object.keys(skillsData).map((category) => (                
+              {(Object.keys(skillsData) as SkillCategory[]).map((category) => (                
                 <TabsTrigger                  
                 key={category}                  
                 value={category}                  
-                className="text-[10px] sm:text-xs md:text-sm font-medium relative z-10 transition-colors duration-300 px-4 py-2 data-[state=active]:text-white data-[state=active]:bg-blue-900/50 data-[state=inactive]:text-white/70 flex items-center justify-center rounded-md hover:bg-white/5"                  
+                className="text-[10px] sm:text-xs md:text-sm font-medium relative z-10 transition-all duration-300 px-4 py-2 data-[state=active]:text-white data-[state=inactive]:text-white/70 flex items-center justify-center rounded-md hover:bg-white/5"                  
                 style={{                    
-                  textShadow: activeTab === category ? `0 0 10px ${categoryColors[category].from}` : "none",                  
+                  textShadow: activeTab === category ? 
+                    `0 1px 0 ${categoryColors[category as SkillCategory].from},
+                     0 2px 0 ${categoryColors[category as SkillCategory].via},
+                     0 3px 0 ${categoryColors[category as SkillCategory].to},
+                     0 4px 0 rgba(0,0,0,0.1),
+                     0 0 5px ${categoryColors[category as SkillCategory].from},
+                     0 0 10px ${categoryColors[category as SkillCategory].via}` 
+                    : "none",
+                  transform: activeTab === category ? "translateY(-1px)" : "none",
+                  transition: "all 0.3s ease",
+                  background: activeTab === category ? 
+                    `linear-gradient(135deg, ${categoryColors[category as SkillCategory].bg}, ${categoryColors[category as SkillCategory].from}40)` :
+                    'transparent',
+                  border: `1px solid ${activeTab === category ? categoryColors[category as SkillCategory].from + '40' : 'rgba(255,255,255,0.1)'}`,
+                  boxShadow: activeTab === category ? 
+                    `0 0 10px ${categoryColors[category as SkillCategory].bg}, inset 0 0 20px ${categoryColors[category as SkillCategory].bg}` : 
+                    'none'
                 }}                
                 >                  
-                {categoryIcons[category]}                  
+                {categoryIcons[category as SkillCategory]}                  
                 {category.charAt(0).toUpperCase() + category.slice(1)}                
                 </TabsTrigger>              
                 ))}            
@@ -641,83 +709,93 @@ export default function SkillsSection() {
                   {Object.entries(skillsData).map(([category, skills]) => (              
                     <TabsContent key={category} value={category}>                
                     <motion.div                  
-                  initial={{ opacity: 0, x: 50 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  exit={{ opacity: 0, x: -50 }}
-                  transition={{
-                    duration: 0.4,
-                    ease: [0.4, 0, 0.2, 1],
-                    staggerChildren: 0.05,
-                  }}
-                >
-                  <Card
-                    className="border border-white/10 shadow-sm backdrop-blur-sm"
-                    style={{
-                      background: `linear-gradient(135deg, ${categoryColors[category].bg}, rgba(0,0,0,0.5))`,
-                      boxShadow: `0 0 20px ${categoryColors[category].bg}`,
-                    }}
-                  >
-                    <CardContent className="pt-4 sm:pt-6">
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
-                        {skills.map((skill, index) => (
-                          <motion.div
-                            key={skill.name}
-                            initial={{ opacity: 0, x: -20 }}
-                            animate={{ opacity: 1, x: 0 }}
-                            exit={{ opacity: 0, x: 20 }}
-                            transition={{
-                              duration: 0.3,
-                              ease: [0.4, 0, 0.2, 1],
-                              delay: index * 0.05,
-                            }}
-                            className="group cursor-pointer"
-                            onClick={() => skillDescriptions[skill.name] && setSelectedSkill(skill.name)}
-                            style={{
-                              cursor: skillDescriptions[skill.name] ? 'pointer' : 'default'
-                            }}
-                          >
-                            <div className="mb-2 sm:mb-3 flex justify-between items-center">
-                              <span className="font-medium group-hover:text-white text-white/90 transition-colors duration-300 text-sm sm:text-base flex items-center">
-                                {skillIcons[skill.name] || <GraduationCap className="w-4 h-4 mr-2" />}
-                                {skill.name}
-                                {skillDescriptions[skill.name] && (
-                                  <Sparkles className="w-3 h-3 ml-2 text-yellow-400 opacity-0 group-hover:opacity-100 transition-opacity" />
-                                )}
-                              </span>
-                              <span
-                                className="text-white/60 text-xs sm:text-sm px-2 py-0.5 rounded-full"
+                      initial={{ opacity: 0, x: 50, scale: 0.95 }}
+                      animate={{ opacity: 1, x: 0, scale: 1 }}
+                      exit={{ opacity: 0, x: -50, scale: 0.95 }}
+                      transition={{
+                        duration: 0.5,
+                        ease: [0.4, 0, 0.2, 1],
+                        scale: {
+                          duration: 0.4,
+                          ease: "easeOut"
+                        }
+                      }}
+                    >
+                      <Card
+                        className="border border-white/10 shadow-sm backdrop-blur-sm"
+                        style={{
+                          background: `linear-gradient(135deg, ${categoryColors[category as SkillCategory].bg}, rgba(0,0,0,0.5))`,
+                          boxShadow: `0 0 20px ${categoryColors[category as SkillCategory].bg}`,
+                        }}
+                      >
+                        <CardContent className="pt-4 sm:pt-6">
+                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
+                            {skills.map((skill, index) => (
+                              <motion.div
+                                key={skill.name}
+                                initial={{ opacity: 0, y: 20, scale: 0.95 }}
+                                animate={{ opacity: 1, y: 0, scale: 1 }}
+                                exit={{ opacity: 0, y: -20, scale: 0.95 }}
+                                transition={{
+                                  duration: 0.4,
+                                  delay: index * 0.05,
+                                  ease: "easeOut"
+                                }}
+                                className="group cursor-pointer"
+                                onClick={() => skillDescriptions[skill.name] && setSelectedSkill(skill.name)}
                                 style={{
-                                  background: categoryColors[category].bg,
-                                  color: categoryColors[category].from,
+                                  cursor: skillDescriptions[skill.name] ? 'pointer' : 'default'
                                 }}
                               >
-                                {skill.level}%
-                              </span>
-                            </div>
-                            <div className="h-2 sm:h-3 bg-white/10 rounded-full overflow-hidden">
-                              <motion.div
-                                initial={{ width: 0 }}
-                                whileInView={{ width: `${skill.level}%` }}
-                                viewport={{ once: true }}
-                                transition={{ duration: 1, delay: index * 0.05 + 0.2, ease: "easeOut" }}
-                                className="h-full transition-all duration-300"
-                                style={{
-                                  background: `linear-gradient(90deg, ${categoryColors[category].from}, ${categoryColors[category].via}, ${categoryColors[category].to})`,
-                                  boxShadow: `0 0 10px ${categoryColors[category].from}`,
-                                }}
-                              />
-                            </div>
-                          </motion.div>
-                        ))}
-                      </div>
-                    </CardContent>
-                  </Card>
-                </motion.div>
-              </TabsContent>
-            ))}
-          </AnimatePresence>
-        </Tabs>
-      </motion.div>
+                                <div className="mb-2 sm:mb-3 flex justify-between items-center">
+                                  <span className="font-medium group-hover:text-white text-white/90 transition-colors duration-300 text-sm sm:text-base flex items-center">
+                                    {skillIcons[skill.name] || <GraduationCap className="w-4 h-4 mr-2" />}
+                                    {skill.name}
+                                    {skillDescriptions[skill.name] && (
+                                      <Sparkles className="w-3 h-3 ml-2 text-yellow-400 opacity-0 group-hover:opacity-100 transition-opacity" />
+                                    )}
+                                  </span>
+                                  <motion.span
+                                    initial={{ scale: 0.9 }}
+                                    animate={{ scale: 1 }}
+                                    transition={{ duration: 0.3, delay: index * 0.05 }}
+                                    className="text-white/60 text-xs sm:text-sm px-2 py-0.5 rounded-full"
+                                    style={{
+                                      background: categoryColors[category as SkillCategory].bg,
+                                      color: categoryColors[category as SkillCategory].from,
+                                    }}
+                                  >
+                                    {skill.level}%
+                                  </motion.span>
+                                </div>
+                                <div className="h-2 sm:h-3 bg-white/10 rounded-full overflow-hidden">
+                                  <motion.div
+                                    initial={{ width: 0, scale: 0.95 }}
+                                    whileInView={{ width: `${skill.level}%`, scale: 1 }}
+                                    viewport={{ once: true }}
+                                    transition={{ 
+                                      duration: 0.8, 
+                                      delay: index * 0.05 + 0.2, 
+                                      ease: [0.34, 1.56, 0.64, 1]
+                                    }}
+                                    className="h-full transition-all duration-300"
+                                    style={{
+                                      background: `linear-gradient(90deg, ${categoryColors[category as SkillCategory].from}, ${categoryColors[category as SkillCategory].via}, ${categoryColors[category as SkillCategory].to})`,
+                                      boxShadow: `0 0 10px ${categoryColors[category as SkillCategory].from}`,
+                                    }}
+                                  />
+                                </div>
+                              </motion.div>
+                            ))}
+                          </div>
+                        </CardContent>
+                      </Card>
+                    </motion.div>
+                  </TabsContent>
+                ))}
+              </AnimatePresence>
+            </Tabs>
+          </motion.div>
 
       {/* Add Skill Spotlight section */}
       <AnimatePresence mode="wait">
@@ -729,12 +807,33 @@ export default function SkillsSection() {
             transition={{ duration: 0.3 }}
             className="mt-8 w-full max-w-4xl"
           >
-            <Card className="border border-white/10 bg-black/40 backdrop-blur-lg shadow-xl">
-              <CardContent className="p-6">
+            <Card 
+              className="border backdrop-blur-lg shadow-xl relative overflow-hidden group"
+              style={{
+                background: `linear-gradient(135deg, ${categoryColors[activeTab as SkillCategory].bg}, rgba(0,0,0,0.6))`,
+                borderColor: `${categoryColors[activeTab as SkillCategory].from}20`,
+                boxShadow: `0 0 20px ${categoryColors[activeTab as SkillCategory].bg}, inset 0 0 30px ${categoryColors[activeTab as SkillCategory].bg}`,
+              }}
+            >
+              {/* Animated background elements */}
+              <div 
+                className="absolute -bottom-20 -right-20 w-40 h-40 rounded-full transition-transform duration-700 group-hover:scale-150 opacity-0 group-hover:opacity-20"
+                style={{
+                  background: `linear-gradient(135deg, ${categoryColors[activeTab as SkillCategory].from}, ${categoryColors[activeTab as SkillCategory].to})`
+                }}
+              />
+              <div 
+                className="absolute -top-20 -left-20 w-40 h-40 rounded-full transition-transform duration-700 group-hover:scale-150 opacity-0 group-hover:opacity-20"
+                style={{
+                  background: `linear-gradient(315deg, ${categoryColors[activeTab as SkillCategory].from}, ${categoryColors[activeTab as SkillCategory].to})`
+                }}
+              />
+              
+              <CardContent className="p-6 relative z-10">
                 <div className="flex items-start justify-between">
                   <div>
                     <h3 className="text-xl font-semibold text-white flex items-center gap-2">
-                      <Sparkles className="w-5 h-5 text-yellow-400" />
+                      <Sparkles className="w-5 h-5" style={{ color: categoryColors[activeTab as SkillCategory].from }} />
                       {selectedSkill}
                     </h3>
                     <p className="mt-2 text-white/80">
@@ -760,7 +859,10 @@ export default function SkillsSection() {
                         transition={{ delay: index * 0.1 }}
                         className="text-white/90 text-sm flex items-center gap-2"
                       >
-                        <div className="w-1.5 h-1.5 rounded-full bg-blue-400" />
+                        <div 
+                          className="w-1.5 h-1.5 rounded-full" 
+                          style={{ background: categoryColors[activeTab as SkillCategory].from }}
+                        />
                         {app}
                       </motion.li>
                     ))}

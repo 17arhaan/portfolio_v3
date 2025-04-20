@@ -167,6 +167,17 @@ export default function TestimonialsSection() {
               </DialogTrigger>
               <DialogContent className="bg-black/80 border-white/10 text-white backdrop-blur-xl">
                 <DialogTitle className="text-2xl font-bold mb-6">Share Your Experience</DialogTitle>
+                <div className="mb-6 p-4 bg-yellow-500/10 border border-yellow-500/20 rounded-lg">
+                  <p className="text-yellow-200/80 text-sm">
+                    <strong>Note:</strong> Currently, submitted testimonials are stored locally and will only be visible on your device. 
+                    To have your testimonial permanently featured on the website, please:
+                  </p>
+                  <ul className="list-disc list-inside mt-2 text-yellow-200/60 text-sm space-y-1">
+                    <li>Take a screenshot of your filled testimonial</li>
+                    <li>Send it to me via email or LinkedIn</li>
+                    <li>Once approved, it will be added to the website for everyone to see</li>
+                  </ul>
+                </div>
                 <form onSubmit={handleSubmit} className="space-y-6">
                   <div className="space-y-2">
                     <label className="text-sm text-white/80">Name</label>
