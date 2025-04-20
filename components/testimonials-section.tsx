@@ -9,6 +9,16 @@ import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import testimonialsData from "@/data/testimonials.json"
 
+interface Testimonial {
+  id: string
+  name: string
+  role: string
+  company: string
+  content: string
+  rating: number
+  image: string
+}
+
 // Fisher-Yates shuffle algorithm
 function shuffleArray<T>(array: T[]): T[] {
   const newArray = [...array]
@@ -47,8 +57,8 @@ export default function TestimonialsSection() {
   })
   const [preview, setPreview] = useState<string | null>(null)
   const [hoveredRating, setHoveredRating] = useState(0)
-  const [allTestimonials, setAllTestimonials] = useState(testimonialsData.testimonials)
-  const [displayedTestimonials, setDisplayedTestimonials] = useState(allTestimonials.slice(0, 3))
+  const [allTestimonials, setAllTestimonials] = useState<Testimonial[]>(testimonialsData.testimonials)
+  const [displayedTestimonials, setDisplayedTestimonials] = useState<Testimonial[]>(allTestimonials.slice(0, 3))
 
   // Shuffle testimonials every 10 seconds
   useEffect(() => {
@@ -76,7 +86,7 @@ export default function TestimonialsSection() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    const newTestimonialData = {
+    const newTestimonialData: Testimonial = {
       ...newTestimonial,
       id: Date.now().toString(),
       image: preview || "/user.png"
