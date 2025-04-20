@@ -79,7 +79,7 @@ export default function TestimonialsSection() {
     const newTestimonialData = {
       ...newTestimonial,
       id: Date.now().toString(),
-      image: preview || "/default-avatar.jpg"
+      image: preview || "/public/user.png"
     }
     
     // Add to localStorage
