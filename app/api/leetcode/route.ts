@@ -175,7 +175,7 @@ export async function GET() {
       totalDays: totalActiveDays,
       lastSolved: new Date().toISOString(),
       contestRating: contestRanking.rating || 0,
-      globalRank: 997889,
+      globalRank: contestRanking.globalRanking || 0,
       topPercentage: contestRanking.topPercentage || 0,
       attendedContests: contestRanking.attendedContestsCount || 0,
       contestBadge: contestRanking.badge?.name || null,
