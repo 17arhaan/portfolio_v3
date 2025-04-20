@@ -1,7 +1,7 @@
 "use client"
 
 import { motion, AnimatePresence } from "framer-motion"
-import { Star, Quote, Plus, Upload, X, Trash2 } from "lucide-react"
+import { Star, Quote, Plus, Upload, X, Trash2, Check, Loader2 } from "lucide-react"
 import { useState, useCallback, useEffect } from "react"
 import { Dialog, DialogContent, DialogTrigger, DialogTitle } from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button"
@@ -54,6 +54,8 @@ const saveTestimonial = (testimonial: Testimonial) => {
 export default function TestimonialsSection() {
   const [isClient, setIsClient] = useState(false);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitSuccess, setSubmitSuccess] = useState(false);
   const [newTestimonial, setNewTestimonial] = useState({
     name: "",
     role: "",
@@ -103,35 +105,60 @@ export default function TestimonialsSection() {
   }
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    const newTestimonialData: Testimonial = {
-      ...newTestimonial,
-      id: Date.now().toString(),
-      image: preview || "/user.png"
-    }
+    e.preventDefault();
+    setIsSubmitting(true);
+    setSubmitSuccess(false);
     
     try {
-      // Save to localStorage
-      saveTestimonial(newTestimonialData);
-      
-      // Update state
-      const updatedTestimonials = [...allTestimonials, newTestimonialData];
-      setAllTestimonials(updatedTestimonials);
-      setDisplayedTestimonials(updatedTestimonials.slice(0, 3));
-      
-      setIsDialogOpen(false);
-      setNewTestimonial({
-        name: "",
-        role: "",
-        company: "",
-        content: "",
-        rating: 0,
-        image: null
+      // Convert image to base64 if exists
+      let imageBase64 = null;
+      if (newTestimonial.image) {
+        const reader = new FileReader();
+        imageBase64 = await new Promise((resolve) => {
+          reader.onloadend = () => resolve(reader.result);
+          reader.readAsDataURL(newTestimonial.image!);
+        });
+      }
+
+      // Send testimonial to email
+      const response = await fetch('/api/send-testimonial', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          ...newTestimonial,
+          image: imageBase64
+        }),
       });
-      setPreview(null);
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || 'Failed to submit testimonial');
+      }
+
+      setSubmitSuccess(true);
+      
+      // Reset form and close dialog after a delay
+      setTimeout(() => {
+        setIsDialogOpen(false);
+        setNewTestimonial({
+          name: "",
+          role: "",
+          company: "",
+          content: "",
+          rating: 0,
+          image: null
+        });
+        setPreview(null);
+        setIsSubmitting(false);
+        setSubmitSuccess(false);
+      }, 2000);
     } catch (error) {
-      console.error('Error saving testimonial:', error);
-      alert('An error occurred while saving your testimonial. Please try again.');
+      console.error('Error submitting testimonial:', error);
+      setIsSubmitting(false);
+      setSubmitSuccess(false);
     }
   }
 
@@ -165,58 +192,99 @@ export default function TestimonialsSection() {
                   <Plus className="w-4 h-4 text-white/60" />
                 </motion.button>
               </DialogTrigger>
-              <DialogContent className="bg-black/80 border-white/10 text-white backdrop-blur-xl">
-                <DialogTitle className="text-2xl font-bold mb-6">Share Your Experience</DialogTitle>
-                <div className="mb-6 p-4 bg-yellow-500/10 border border-yellow-500/20 rounded-lg">
+              <DialogContent className="bg-black/80 border-white/10 text-white backdrop-blur-xl max-w-2xl">
+                <DialogTitle className="text-2xl font-bold mb-4 flex items-center gap-2">
+                  <Quote className="w-6 h-6 text-yellow-400" />
+                  Share Your Experience
+                </DialogTitle>
+                <div className="mb-4 p-3 bg-yellow-500/10 border border-yellow-500/20 rounded-lg">
                   <p className="text-yellow-200/80 text-sm">
-                    <strong>Note:</strong> Currently, submitted testimonials are stored locally and will only be visible on your device. 
-                    To have your testimonial permanently featured on the website, please:
+                    <strong>Note:</strong> Your testimonial will be reviewed and shown only after approval.
                   </p>
-                  <ul className="list-disc list-inside mt-2 text-yellow-200/60 text-sm space-y-1">
-                    <li>Take a screenshot of your filled testimonial</li>
-                    <li>Send it to me via email or LinkedIn</li>
-                    <li>Once approved, it will be added to the website for everyone to see</li>
-                  </ul>
                 </div>
-                <form onSubmit={handleSubmit} className="space-y-6">
-                  <div className="space-y-2">
-                    <label className="text-sm text-white/80">Name</label>
-                    <Input
-                      value={newTestimonial.name}
-                      onChange={(e) => setNewTestimonial({ ...newTestimonial, name: e.target.value })}
-                      className="bg-white/5 border-white/10"
-                      required
-                    />
+                <form onSubmit={handleSubmit} className="space-y-4">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                      <label className="text-sm font-medium text-white/80">Name</label>
+                      <Input
+                        value={newTestimonial.name}
+                        onChange={(e) => setNewTestimonial({ ...newTestimonial, name: e.target.value })}
+                        className="bg-white/5 border-white/10 focus:border-yellow-500/50"
+                        placeholder="Your name"
+                        required
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <label className="text-sm font-medium text-white/80">Role</label>
+                      <Input
+                        value={newTestimonial.role}
+                        onChange={(e) => setNewTestimonial({ ...newTestimonial, role: e.target.value })}
+                        className="bg-white/5 border-white/10 focus:border-yellow-500/50"
+                        placeholder="Your role/position"
+                        required
+                      />
+                    </div>
                   </div>
                   <div className="space-y-2">
-                    <label className="text-sm text-white/80">Role</label>
-                    <Input
-                      value={newTestimonial.role}
-                      onChange={(e) => setNewTestimonial({ ...newTestimonial, role: e.target.value })}
-                      className="bg-white/5 border-white/10"
-                      required
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <label className="text-sm text-white/80">Company</label>
+                    <label className="text-sm font-medium text-white/80">Company</label>
                     <Input
                       value={newTestimonial.company}
                       onChange={(e) => setNewTestimonial({ ...newTestimonial, company: e.target.value })}
-                      className="bg-white/5 border-white/10"
+                      className="bg-white/5 border-white/10 focus:border-yellow-500/50"
+                      placeholder="Company name"
                       required
                     />
                   </div>
                   <div className="space-y-2">
-                    <label className="text-sm text-white/80">Testimonial</label>
+                    <label className="text-sm font-medium text-white/80">Testimonial</label>
                     <Textarea
                       value={newTestimonial.content}
                       onChange={(e) => setNewTestimonial({ ...newTestimonial, content: e.target.value })}
-                      className="bg-white/5 border-white/10 min-h-[100px]"
+                      className="bg-white/5 border-white/10 focus:border-yellow-500/50 min-h-[120px]"
+                      placeholder="Share your experience..."
                       required
                     />
                   </div>
                   <div className="space-y-2">
-                    <label className="text-sm text-white/80">Profile Image</label>
+                    <label className="text-sm font-medium text-white/80">Rating</label>
+                    <div 
+                      className="flex gap-2"
+                      onMouseLeave={() => setHoveredRating(0)}
+                    >
+                      {[1, 2, 3, 4, 5].map((rating) => (
+                        <motion.button
+                          key={rating}
+                          type="button"
+                          onClick={() => setNewTestimonial({ ...newTestimonial, rating })}
+                          onMouseEnter={() => setHoveredRating(rating)}
+                          className="p-2 rounded-full transition-colors"
+                          whileHover={{ scale: 1.2 }}
+                          whileTap={{ scale: 0.9 }}
+                          title={`${rating} star${rating > 1 ? 's' : ''}`}
+                        >
+                          <AnimatePresence mode="wait">
+                            <motion.div
+                              key={newTestimonial.rating >= rating || hoveredRating >= rating ? "filled" : "empty"}
+                              initial={{ scale: 0.5, opacity: 0 }}
+                              animate={{ scale: 1, opacity: 1 }}
+                              exit={{ scale: 0.5, opacity: 0 }}
+                              transition={{ type: "spring", stiffness: 500, damping: 30 }}
+                            >
+                              <Star
+                                className={`w-6 h-6 ${
+                                  newTestimonial.rating >= rating || hoveredRating >= rating
+                                    ? "text-yellow-400 fill-current"
+                                    : "text-white/40"
+                                }`}
+                              />
+                            </motion.div>
+                          </AnimatePresence>
+                        </motion.button>
+                      ))}
+                    </div>
+                  </div>
+                  <div className="space-y-2">
+                    <label className="text-sm font-medium text-white/80">Profile Image</label>
                     <div className="border-2 border-dashed rounded-lg p-6 text-center cursor-pointer transition-colors border-white/20 hover:border-white/40">
                       <input
                         type="file"
@@ -255,49 +323,28 @@ export default function TestimonialsSection() {
                       </label>
                     </div>
                   </div>
-                  <div className="space-y-2">
-                    <label className="text-sm text-white/80">Rating</label>
-                    <div 
-                      className="flex gap-2"
-                      onMouseLeave={() => setHoveredRating(0)}
-                    >
-                      {[1, 2, 3, 4, 5].map((rating) => (
-                        <motion.button
-                          key={rating}
-                          type="button"
-                          onClick={() => setNewTestimonial({ ...newTestimonial, rating })}
-                          onMouseEnter={() => setHoveredRating(rating)}
-                          className="p-2 rounded-full"
-                          whileHover={{ scale: 1.2 }}
-                          whileTap={{ scale: 0.9 }}
-                          title={`${rating} star${rating > 1 ? 's' : ''}`}
-                        >
-                          <AnimatePresence mode="wait">
-                            <motion.div
-                              key={newTestimonial.rating >= rating || hoveredRating >= rating ? "filled" : "empty"}
-                              initial={{ scale: 0.5, opacity: 0 }}
-                              animate={{ scale: 1, opacity: 1 }}
-                              exit={{ scale: 0.5, opacity: 0 }}
-                              transition={{ type: "spring", stiffness: 500, damping: 30 }}
-                            >
-                              <Star
-                                className={`w-6 h-6 ${
-                                  newTestimonial.rating >= rating || hoveredRating >= rating
-                                    ? "text-yellow-400 fill-current"
-                                    : "text-white/40"
-                                }`}
-                              />
-                            </motion.div>
-                          </AnimatePresence>
-                        </motion.button>
-                      ))}
-                    </div>
-                  </div>
                   <Button
                     type="submit"
-                    className="w-full bg-white/10 hover:bg-white/20 border border-white/10"
+                    className={`w-full transition-all duration-300 ${
+                      submitSuccess 
+                        ? 'bg-green-500/20 hover:bg-green-500/30 border-green-500/30 text-green-400'
+                        : 'bg-yellow-500/10 hover:bg-yellow-500/20 border-yellow-500/20 text-yellow-400'
+                    }`}
+                    disabled={isSubmitting}
                   >
-                    Add Testimonial
+                    {submitSuccess ? (
+                      <div className="flex items-center gap-2">
+                        <Check className="w-4 h-4" />
+                        Submitted Successfully
+                      </div>
+                    ) : isSubmitting ? (
+                      <div className="flex items-center gap-2">
+                        <Loader2 className="w-4 h-4 animate-spin" />
+                        Submitting...
+                      </div>
+                    ) : (
+                      'Submit Testimonial'
+                    )}
                   </Button>
                 </form>
               </DialogContent>
