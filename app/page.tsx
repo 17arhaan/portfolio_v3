@@ -14,6 +14,7 @@ import SectionDivider from "@/components/section-divider"
 import CertificationsSection from "@/components/certifications-section"
 import { motion } from "framer-motion"
 import AboutSection from "@/components/about-section"
+import TestimonialsSection from "@/components/testimonials-section"
 import ContactSection from "@/components/contact-section"
 import AnimatedFooter from "@/components/animated-footer"
 
@@ -69,6 +70,8 @@ export default function Home() {
       <LandingPage experienceRef={experienceRef} />
 
       <AboutSection />
+
+      <TestimonialsSection />
 
       {/* Section Divider */}
       <SectionDivider />

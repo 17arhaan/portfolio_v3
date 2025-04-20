@@ -59,18 +59,25 @@ const workExperience = [
       "Reduced average response time from 2.5s to 1s through system optimization",
       "Established comprehensive documentation and training protocols for team members",
     ],
-    skills: ["AI", "Team Leadership", "Project Management"],
+    skills: ["Artificial Intelligence", "Team Leadership", "Project Management"],
     logoUrl: "/Buildspaceso_logo.jpg",
   },
   {
     id: 0,
-    role: "Internship",
-    company: "Coming Soon",
-    location: "On-Site | DEL , IN",
-    period: "Summer 2025",
-    description: [],
-    skills: [],
-    logoUrl: null,
+    role: "AI & Ml Intern",
+    company: "Concur IP Consulting",
+    subtitle: "Questel Group Company",
+    location: "On-Site | Noida , IN",
+    period: "May 2025 - July 2025",
+    description: [
+      "Developing an AI-powered patent analysis model to process 10,000+ patent documents monthly",
+      "Implementing NLP techniques to improve patent classification accuracy by 40%",
+      "Reducing manual patent review time from 4 hours to 30 minutes per document",
+      "Training machine learning models on 500,000+ historical patent data points",
+      "Integrating AI model with company's existing IP management system serving 100+ clients"
+    ],
+    skills: ["AI Model Development", "Machine Learning Model Training", "Data Analysis"],
+    logoUrl: "/questel.jpg",
   },
 ]
 
@@ -405,7 +412,12 @@ export default function WorkTimeline() {
                     className="flex items-center text-white/80"
                   >
                     <Briefcase className="h-4 w-4 mr-2 text-white/40" />
-                    <span className="text-base font-medium">{workExperience[activeIndex].company}</span>
+                    <div className="flex flex-col">
+                      <span className="text-base font-medium">{workExperience[activeIndex].company}</span>
+                      {workExperience[activeIndex].subtitle && (
+                        <span className="text-sm text-white/60">{workExperience[activeIndex].subtitle}</span>
+                      )}
+                    </div>
                   </motion.div>
 
                   <motion.div
