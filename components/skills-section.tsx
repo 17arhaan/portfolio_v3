@@ -87,7 +87,7 @@ type SkillName = 'Python' | 'JavaScript' | 'TypeScript' | 'Java' | 'C++' | 'C' |
                  'GitHub Pages' | 'Vercel' | 'Google Cloud' | 'Heroku' | 'Netlify' |
                  'Data Structures and Algorithms' | 'Object Oriented Programming' | 'Artificial Intelligence' | 'Database Management' |
                  'Machine Learning' | 'Deep Learning' | 'Computer Vision' | 'Natural Language Processing' | 'Web Development' |
-                 'Data Science' | 'Cloud Computing' | 'DevOps' |
+                 'Data Science' | 'Cloud Computing' | 'DevOps' | 'Parallel Programming' |
                  'English' | 'Hindi' |
                  'PowerShell' | 'Bash' | 'Shell Scripting' | 'cmd' | 'Terminal Navigation' | 'Package Management';
 
@@ -234,13 +234,14 @@ const skillIcons: Record<SkillName, React.ReactElement> = {
   "Artificial Intelligence": <Brain className="w-4 h-4 mr-2 text-purple-500" />,
   "Database Management": <DatabaseBackup className="w-4 h-4 mr-2 text-orange-500" />,
   "Machine Learning": <Sigma className="w-4 h-4 mr-2 text-green-500" />,
-  "Deep Learning": <Network className="w-4 h-4 mr-2 text-indigo-500" />,
+  "Deep Learning": <Brain className="w-4 h-4 mr-2 text-indigo-500" />,
   "Computer Vision": <Scan className="w-4 h-4 mr-2 text-teal-500" />,
   "Natural Language Processing": <MessagesSquare className="w-4 h-4 mr-2 text-blue-400" />,
   "Web Development": <Globe className="w-4 h-4 mr-2 text-cyan-500" />,
   "Data Science": <BarChart4 className="w-4 h-4 mr-2 text-purple-500" />,
   "Cloud Computing": <CloudCog className="w-4 h-4 mr-2 text-blue-400" />,
   DevOps: <GitMerge className="w-4 h-4 mr-2 text-orange-400" />,
+  "Parallel Programming": <Network className="w-4 h-4 mr-2 text-blue-500" />,
 
   // Languages
   English: <MessageCircle className="w-4 h-4 mr-2 text-blue-500" />,
@@ -325,6 +326,7 @@ const skillsData: Record<SkillCategory, Skill[]> = {
     { name: "Data Science", level: 80 },
     { name: "Cloud Computing", level: 50 },
     { name: "DevOps", level: 40 },
+    { name: "Parallel Programming", level: 65 },
   ],
   languages: [
     { name: "English", level: 95 },
@@ -580,6 +582,10 @@ const skillDescriptions: SkillDescriptions = {
   DevOps: {
     description: "Set of practices combining software development and IT operations.",
     applications: ["Continuous Integration", "Deployment Automation", "Infrastructure Management"]
+  },
+  "Parallel Programming": {
+    description: "Development of programs that can execute multiple tasks simultaneously across multiple processors or cores.",
+    applications: ["High-Performance Computing", "Distributed Systems", "GPU Programming", "Multi-threading"]
   },
 
   // Languages
