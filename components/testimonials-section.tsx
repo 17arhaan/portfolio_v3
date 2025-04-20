@@ -47,7 +47,7 @@ export default function TestimonialsSection() {
   })
   const [preview, setPreview] = useState<string | null>(null)
   const [hoveredRating, setHoveredRating] = useState(0)
-  const [allTestimonials, setAllTestimonials] = useState([...testimonialsData.testimonials, ...getLocalTestimonials()])
+  const [allTestimonials, setAllTestimonials] = useState(testimonialsData.testimonials)
   const [displayedTestimonials, setDisplayedTestimonials] = useState(allTestimonials.slice(0, 3))
 
   // Shuffle testimonials every 10 seconds
@@ -74,34 +74,47 @@ export default function TestimonialsSection() {
     }
   }
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     const newTestimonialData = {
       ...newTestimonial,
       id: Date.now().toString(),
-      image: preview || "/public/user.png"
+      image: preview || "/user.png"
     }
     
-    // Add to localStorage
-    const localTestimonials = getLocalTestimonials()
-    localTestimonials.push(newTestimonialData)
-    saveLocalTestimonials(localTestimonials)
-    
-    // Update state
-    const updatedTestimonials = [...allTestimonials, newTestimonialData]
-    setAllTestimonials(updatedTestimonials)
-    setDisplayedTestimonials(updatedTestimonials.slice(0, 3))
-    
-    setIsDialogOpen(false)
-    setNewTestimonial({
-      name: "",
-      role: "",
-      company: "",
-      content: "",
-      rating: 0,
-      image: null
-    })
-    setPreview(null)
+    try {
+      // Send the testimonial to your API endpoint
+      const response = await fetch('/api/testimonials', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(newTestimonialData),
+      })
+
+      if (response.ok) {
+        // Update the local state with the new testimonial
+        const updatedTestimonials = [...allTestimonials, newTestimonialData]
+        setAllTestimonials(updatedTestimonials)
+        setDisplayedTestimonials(updatedTestimonials.slice(0, 3))
+        
+        setIsDialogOpen(false)
+        setNewTestimonial({
+          name: "",
+          role: "",
+          company: "",
+          content: "",
+          rating: 0,
+          image: null
+        })
+        setPreview(null)
+      } else {
+        alert('Failed to submit testimonial. Please try again.')
+      }
+    } catch (error) {
+      console.error('Error submitting testimonial:', error)
+      alert('An error occurred while submitting the testimonial.')
+    }
   }
 
   const handleDeleteTestimonial = (id: string) => {
@@ -292,15 +305,6 @@ export default function TestimonialsSection() {
                 transition={{ duration: 0.5, delay: index * 0.1 }}
                 className="bg-white/5 backdrop-blur-sm p-6 rounded-xl border border-white/10 relative overflow-hidden group"
               >
-                {/* Delete button */}
-                <button
-                  onClick={() => handleDeleteTestimonial(testimonial.id)}
-                  className="absolute top-4 left-4 p-2 rounded-full bg-black/50 hover:bg-black/80 transition-colors duration-200 opacity-0 group-hover:opacity-100"
-                  title="Delete testimonial"
-                >
-                  <Trash2 className="w-4 h-4 text-white/60 hover:text-white/80" />
-                </button>
-
                 {/* Animated background elements */}
                 <div className="absolute -bottom-20 -right-20 w-40 h-40 bg-white/5 rounded-full transition-transform duration-700 group-hover:scale-150 opacity-0 group-hover:opacity-20"></div>
                 <div className="absolute -top-20 -left-20 w-40 h-40 bg-white/5 rounded-full transition-transform duration-700 group-hover:scale-150 opacity-0 group-hover:opacity-20"></div>
