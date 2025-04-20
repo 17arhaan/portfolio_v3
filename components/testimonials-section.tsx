@@ -29,14 +29,16 @@ function shuffleArray<T>(array: T[]): T[] {
   return newArray
 }
 
-// Function to get testimonials from both sources
-const getAllTestimonials = () => {
-  if (typeof window === 'undefined') return testimonialsData.testimonials;
-  
-  const localTestimonials = localStorage.getItem('user-testimonials');
-  const parsedLocalTestimonials = localTestimonials ? JSON.parse(localTestimonials) : [];
-  
-  return [...testimonialsData.testimonials, ...parsedLocalTestimonials];
+// Function to safely get testimonials from localStorage
+const getSavedTestimonials = () => {
+  if (typeof window === 'undefined') return [];
+  try {
+    const saved = localStorage.getItem('user-testimonials');
+    return saved ? JSON.parse(saved) : [];
+  } catch (error) {
+    console.error('Error reading testimonials:', error);
+    return [];
+  }
 };
 
 // Function to save testimonial to localStorage
@@ -50,7 +52,8 @@ const saveTestimonial = (testimonial: Testimonial) => {
 };
 
 export default function TestimonialsSection() {
-  const [isDialogOpen, setIsDialogOpen] = useState(false)
+  const [isClient, setIsClient] = useState(false);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [newTestimonial, setNewTestimonial] = useState({
     name: "",
     role: "",
@@ -58,11 +61,22 @@ export default function TestimonialsSection() {
     content: "",
     rating: 0,
     image: null as File | null
-  })
-  const [preview, setPreview] = useState<string | null>(null)
-  const [hoveredRating, setHoveredRating] = useState(0)
-  const [allTestimonials, setAllTestimonials] = useState<Testimonial[]>(getAllTestimonials())
-  const [displayedTestimonials, setDisplayedTestimonials] = useState<Testimonial[]>(allTestimonials.slice(0, 3))
+  });
+  const [preview, setPreview] = useState<string | null>(null);
+  const [hoveredRating, setHoveredRating] = useState(0);
+  
+  // Initialize with empty arrays to prevent hydration mismatch
+  const [allTestimonials, setAllTestimonials] = useState<Testimonial[]>([]);
+  const [displayedTestimonials, setDisplayedTestimonials] = useState<Testimonial[]>([]);
+
+  // Load testimonials after component mounts
+  useEffect(() => {
+    setIsClient(true);
+    const savedTestimonials = getSavedTestimonials();
+    const allTestis = [...testimonialsData.testimonials, ...savedTestimonials];
+    setAllTestimonials(allTestis);
+    setDisplayedTestimonials(allTestis.slice(0, 3));
+  }, []);
 
   // Shuffle testimonials every 10 seconds
   useEffect(() => {
@@ -138,7 +152,146 @@ export default function TestimonialsSection() {
           viewport={{ once: true, margin: "-100px" }}
           className="text-center mb-12"
         >
-          <h2 className="text-3xl font-bold mb-4 text-white">Testimonials</h2>
+          <div className="flex items-center justify-center gap-4">
+            <h2 className="text-3xl font-bold text-white">Testimonials</h2>
+            <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+              <DialogTrigger asChild>
+                <motion.button
+                  whileHover={{ scale: 1.1, rotate: 90 }}
+                  whileTap={{ scale: 0.9 }}
+                  transition={{ type: "spring", stiffness: 400, damping: 17 }}
+                  className="flex items-center justify-center w-8 h-8 rounded-full bg-white/5 hover:bg-white/10 border border-white/10 transition-colors duration-300"
+                >
+                  <Plus className="w-4 h-4 text-white/60" />
+                </motion.button>
+              </DialogTrigger>
+              <DialogContent className="bg-black/80 border-white/10 text-white backdrop-blur-xl">
+                <DialogTitle className="text-2xl font-bold mb-6">Share Your Experience</DialogTitle>
+                <form onSubmit={handleSubmit} className="space-y-6">
+                  <div className="space-y-2">
+                    <label className="text-sm text-white/80">Name</label>
+                    <Input
+                      value={newTestimonial.name}
+                      onChange={(e) => setNewTestimonial({ ...newTestimonial, name: e.target.value })}
+                      className="bg-white/5 border-white/10"
+                      required
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <label className="text-sm text-white/80">Role</label>
+                    <Input
+                      value={newTestimonial.role}
+                      onChange={(e) => setNewTestimonial({ ...newTestimonial, role: e.target.value })}
+                      className="bg-white/5 border-white/10"
+                      required
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <label className="text-sm text-white/80">Company</label>
+                    <Input
+                      value={newTestimonial.company}
+                      onChange={(e) => setNewTestimonial({ ...newTestimonial, company: e.target.value })}
+                      className="bg-white/5 border-white/10"
+                      required
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <label className="text-sm text-white/80">Testimonial</label>
+                    <Textarea
+                      value={newTestimonial.content}
+                      onChange={(e) => setNewTestimonial({ ...newTestimonial, content: e.target.value })}
+                      className="bg-white/5 border-white/10 min-h-[100px]"
+                      required
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <label className="text-sm text-white/80">Profile Image</label>
+                    <div className="border-2 border-dashed rounded-lg p-6 text-center cursor-pointer transition-colors border-white/20 hover:border-white/40">
+                      <input
+                        type="file"
+                        accept="image/*"
+                        onChange={handleImageChange}
+                        className="hidden"
+                        id="image-upload"
+                      />
+                      <label htmlFor="image-upload" className="cursor-pointer">
+                        {preview ? (
+                          <div className="relative">
+                            <img
+                              src={preview}
+                              alt="Preview"
+                              className="w-32 h-32 rounded-full object-cover mx-auto"
+                            />
+                            <button
+                              type="button"
+                              onClick={() => {
+                                setPreview(null)
+                                setNewTestimonial({ ...newTestimonial, image: null })
+                              }}
+                              className="absolute -top-2 -right-2 p-1 rounded-full bg-black/80 border border-white/20 hover:bg-black"
+                              title="Remove image"
+                            >
+                              <X className="w-4 h-4" />
+                            </button>
+                          </div>
+                        ) : (
+                          <div className="space-y-2">
+                            <Upload className="w-8 h-8 mx-auto text-white/60" />
+                            <p className="text-white/60">Click to select an image</p>
+                            <p className="text-xs text-white/40">PNG, JPG, WEBP up to 5MB</p>
+                          </div>
+                        )}
+                      </label>
+                    </div>
+                  </div>
+                  <div className="space-y-2">
+                    <label className="text-sm text-white/80">Rating</label>
+                    <div 
+                      className="flex gap-2"
+                      onMouseLeave={() => setHoveredRating(0)}
+                    >
+                      {[1, 2, 3, 4, 5].map((rating) => (
+                        <motion.button
+                          key={rating}
+                          type="button"
+                          onClick={() => setNewTestimonial({ ...newTestimonial, rating })}
+                          onMouseEnter={() => setHoveredRating(rating)}
+                          className="p-2 rounded-full"
+                          whileHover={{ scale: 1.2 }}
+                          whileTap={{ scale: 0.9 }}
+                          title={`${rating} star${rating > 1 ? 's' : ''}`}
+                        >
+                          <AnimatePresence mode="wait">
+                            <motion.div
+                              key={newTestimonial.rating >= rating || hoveredRating >= rating ? "filled" : "empty"}
+                              initial={{ scale: 0.5, opacity: 0 }}
+                              animate={{ scale: 1, opacity: 1 }}
+                              exit={{ scale: 0.5, opacity: 0 }}
+                              transition={{ type: "spring", stiffness: 500, damping: 30 }}
+                            >
+                              <Star
+                                className={`w-6 h-6 ${
+                                  newTestimonial.rating >= rating || hoveredRating >= rating
+                                    ? "text-yellow-400 fill-current"
+                                    : "text-white/40"
+                                }`}
+                              />
+                            </motion.div>
+                          </AnimatePresence>
+                        </motion.button>
+                      ))}
+                    </div>
+                  </div>
+                  <Button
+                    type="submit"
+                    className="w-full bg-white/10 hover:bg-white/20 border border-white/10"
+                  >
+                    Add Testimonial
+                  </Button>
+                </form>
+              </DialogContent>
+            </Dialog>
+          </div>
           <motion.p
             initial={{ opacity: 0, y: 10 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -162,7 +315,7 @@ export default function TestimonialsSection() {
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           <AnimatePresence mode="wait">
-            {displayedTestimonials.map((testimonial, index) => (
+            {isClient && displayedTestimonials.map((testimonial, index) => (
               <motion.div
                 key={testimonial.id}
                 initial={{ opacity: 0, y: 20 }}
@@ -210,170 +363,6 @@ export default function TestimonialsSection() {
             ))}
           </AnimatePresence>
         </div>
-
-        {/* New Add Testimonial Button Section */}
-        <motion.div 
-          className="mt-12 text-center"
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5, delay: 0.4 }}
-        >
-          <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-            <DialogTrigger asChild>
-              <motion.button
-                className="group relative inline-flex items-center justify-center px-8 py-3 text-lg font-medium text-white transition-all duration-300 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-white/20 rounded-full overflow-hidden"
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                style={{
-                  background: "linear-gradient(45deg, rgba(255,255,255,0.1), rgba(255,255,255,0.2))",
-                  backdropFilter: "blur(10px)",
-                  border: "1px solid rgba(255,255,255,0.1)"
-                }}
-              >
-                <span className="absolute inset-0 w-full h-full bg-gradient-to-r from-blue-500/20 to-purple-500/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></span>
-                <Plus className="w-5 h-5 mr-2" />
-                Add Your Testimonial
-                <motion.div
-                  className="absolute -z-10 inset-0 bg-gradient-to-r from-blue-500/20 via-purple-500/20 to-pink-500/20"
-                  animate={{
-                    rotate: [0, 360],
-                  }}
-                  transition={{
-                    duration: 8,
-                    repeat: Infinity,
-                    ease: "linear"
-                  }}
-                />
-              </motion.button>
-            </DialogTrigger>
-            <DialogContent className="bg-black/80 border-white/10 text-white backdrop-blur-xl">
-              <DialogTitle className="text-2xl font-bold mb-6">Share Your Experience</DialogTitle>
-              <form onSubmit={handleSubmit} className="space-y-6">
-                <div className="space-y-2">
-                  <label className="text-sm text-white/80">Name</label>
-                  <Input
-                    value={newTestimonial.name}
-                    onChange={(e) => setNewTestimonial({ ...newTestimonial, name: e.target.value })}
-                    className="bg-white/5 border-white/10"
-                    required
-                  />
-                </div>
-                <div className="space-y-2">
-                  <label className="text-sm text-white/80">Role</label>
-                  <Input
-                    value={newTestimonial.role}
-                    onChange={(e) => setNewTestimonial({ ...newTestimonial, role: e.target.value })}
-                    className="bg-white/5 border-white/10"
-                    required
-                  />
-                </div>
-                <div className="space-y-2">
-                  <label className="text-sm text-white/80">Company</label>
-                  <Input
-                    value={newTestimonial.company}
-                    onChange={(e) => setNewTestimonial({ ...newTestimonial, company: e.target.value })}
-                    className="bg-white/5 border-white/10"
-                    required
-                  />
-                </div>
-                <div className="space-y-2">
-                  <label className="text-sm text-white/80">Testimonial</label>
-                  <Textarea
-                    value={newTestimonial.content}
-                    onChange={(e) => setNewTestimonial({ ...newTestimonial, content: e.target.value })}
-                    className="bg-white/5 border-white/10 min-h-[100px]"
-                    required
-                  />
-                </div>
-                <div className="space-y-2">
-                  <label className="text-sm text-white/80">Profile Image</label>
-                  <div className="border-2 border-dashed rounded-lg p-6 text-center cursor-pointer transition-colors border-white/20 hover:border-white/40">
-                    <input
-                      type="file"
-                      accept="image/*"
-                      onChange={handleImageChange}
-                      className="hidden"
-                      id="image-upload"
-                    />
-                    <label htmlFor="image-upload" className="cursor-pointer">
-                      {preview ? (
-                        <div className="relative">
-                          <img
-                            src={preview}
-                            alt="Preview"
-                            className="w-32 h-32 rounded-full object-cover mx-auto"
-                          />
-                          <button
-                            type="button"
-                            onClick={() => {
-                              setPreview(null)
-                              setNewTestimonial({ ...newTestimonial, image: null })
-                            }}
-                            className="absolute -top-2 -right-2 p-1 rounded-full bg-black/80 border border-white/20 hover:bg-black"
-                            title="Remove image"
-                          >
-                            <X className="w-4 h-4" />
-                          </button>
-                        </div>
-                      ) : (
-                        <div className="space-y-2">
-                          <Upload className="w-8 h-8 mx-auto text-white/60" />
-                          <p className="text-white/60">Click to select an image</p>
-                          <p className="text-xs text-white/40">PNG, JPG, WEBP up to 5MB</p>
-                        </div>
-                      )}
-                    </label>
-                  </div>
-                </div>
-                <div className="space-y-2">
-                  <label className="text-sm text-white/80">Rating</label>
-                  <div 
-                    className="flex gap-2"
-                    onMouseLeave={() => setHoveredRating(0)}
-                  >
-                    {[1, 2, 3, 4, 5].map((rating) => (
-                      <motion.button
-                        key={rating}
-                        type="button"
-                        onClick={() => setNewTestimonial({ ...newTestimonial, rating })}
-                        onMouseEnter={() => setHoveredRating(rating)}
-                        className="p-2 rounded-full"
-                        whileHover={{ scale: 1.2 }}
-                        whileTap={{ scale: 0.9 }}
-                        title={`${rating} star${rating > 1 ? 's' : ''}`}
-                      >
-                        <AnimatePresence mode="wait">
-                          <motion.div
-                            key={newTestimonial.rating >= rating || hoveredRating >= rating ? "filled" : "empty"}
-                            initial={{ scale: 0.5, opacity: 0 }}
-                            animate={{ scale: 1, opacity: 1 }}
-                            exit={{ scale: 0.5, opacity: 0 }}
-                            transition={{ type: "spring", stiffness: 500, damping: 30 }}
-                          >
-                            <Star
-                              className={`w-6 h-6 ${
-                                newTestimonial.rating >= rating || hoveredRating >= rating
-                                  ? "text-yellow-400 fill-current"
-                                  : "text-white/40"
-                              }`}
-                            />
-                          </motion.div>
-                        </AnimatePresence>
-                      </motion.button>
-                    ))}
-                  </div>
-                </div>
-                <Button
-                  type="submit"
-                  className="w-full bg-white/10 hover:bg-white/20 border border-white/10"
-                >
-                  Add Testimonial
-                </Button>
-              </form>
-            </DialogContent>
-          </Dialog>
-        </motion.div>
       </div>
     </section>
   )

@@ -64,7 +64,7 @@ const workExperience = [
   },
   {
     id: 0,
-    role: "AI & Ml Intern",
+    role: "AI & ML Intern",
     company: "Concur IP Consulting",
     subtitle: "Questel Group Company",
     location: "On-Site | Noida , IN",
