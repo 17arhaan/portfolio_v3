@@ -29,21 +29,25 @@ function shuffleArray<T>(array: T[]): T[] {
   return newArray
 }
 
-// Function to get testimonials from localStorage
-const getLocalTestimonials = () => {
-  if (typeof window !== 'undefined') {
-    const stored = localStorage.getItem('testimonials')
-    return stored ? JSON.parse(stored) : []
-  }
-  return []
-}
+// Function to get testimonials from both sources
+const getAllTestimonials = () => {
+  if (typeof window === 'undefined') return testimonialsData.testimonials;
+  
+  const localTestimonials = localStorage.getItem('user-testimonials');
+  const parsedLocalTestimonials = localTestimonials ? JSON.parse(localTestimonials) : [];
+  
+  return [...testimonialsData.testimonials, ...parsedLocalTestimonials];
+};
 
-// Function to save testimonials to localStorage
-const saveLocalTestimonials = (testimonials: any[]) => {
-  if (typeof window !== 'undefined') {
-    localStorage.setItem('testimonials', JSON.stringify(testimonials))
-  }
-}
+// Function to save testimonial to localStorage
+const saveTestimonial = (testimonial: Testimonial) => {
+  if (typeof window === 'undefined') return;
+  
+  const existingTestimonials = localStorage.getItem('user-testimonials');
+  const testimonials = existingTestimonials ? JSON.parse(existingTestimonials) : [];
+  testimonials.push(testimonial);
+  localStorage.setItem('user-testimonials', JSON.stringify(testimonials));
+};
 
 export default function TestimonialsSection() {
   const [isDialogOpen, setIsDialogOpen] = useState(false)
@@ -57,7 +61,7 @@ export default function TestimonialsSection() {
   })
   const [preview, setPreview] = useState<string | null>(null)
   const [hoveredRating, setHoveredRating] = useState(0)
-  const [allTestimonials, setAllTestimonials] = useState<Testimonial[]>(testimonialsData.testimonials)
+  const [allTestimonials, setAllTestimonials] = useState<Testimonial[]>(getAllTestimonials())
   const [displayedTestimonials, setDisplayedTestimonials] = useState<Testimonial[]>(allTestimonials.slice(0, 3))
 
   // Shuffle testimonials every 10 seconds
@@ -93,37 +97,27 @@ export default function TestimonialsSection() {
     }
     
     try {
-      // Send the testimonial to your API endpoint
-      const response = await fetch('/api/testimonials', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(newTestimonialData),
-      })
-
-      if (response.ok) {
-        // Update the local state with the new testimonial
-        const updatedTestimonials = [...allTestimonials, newTestimonialData]
-        setAllTestimonials(updatedTestimonials)
-        setDisplayedTestimonials(updatedTestimonials.slice(0, 3))
-        
-        setIsDialogOpen(false)
-        setNewTestimonial({
-          name: "",
-          role: "",
-          company: "",
-          content: "",
-          rating: 0,
-          image: null
-        })
-        setPreview(null)
-      } else {
-        alert('Failed to submit testimonial. Please try again.')
-      }
+      // Save to localStorage
+      saveTestimonial(newTestimonialData);
+      
+      // Update state
+      const updatedTestimonials = [...allTestimonials, newTestimonialData];
+      setAllTestimonials(updatedTestimonials);
+      setDisplayedTestimonials(updatedTestimonials.slice(0, 3));
+      
+      setIsDialogOpen(false);
+      setNewTestimonial({
+        name: "",
+        role: "",
+        company: "",
+        content: "",
+        rating: 0,
+        image: null
+      });
+      setPreview(null);
     } catch (error) {
-      console.error('Error submitting testimonial:', error)
-      alert('An error occurred while submitting the testimonial.')
+      console.error('Error saving testimonial:', error);
+      alert('An error occurred while saving your testimonial. Please try again.');
     }
   }
 
