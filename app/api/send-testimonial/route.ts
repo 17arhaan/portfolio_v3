@@ -1,5 +1,6 @@
 import { Resend } from 'resend';
 import { NextResponse } from 'next/server';
+import JSZip from 'jszip';
 
 // Check if environment variables are set
 if (!process.env.RESEND_API_KEY) {
@@ -11,6 +12,29 @@ if (!process.env.ADMIN_EMAIL) {
 }
 
 const resend = new Resend(process.env.RESEND_API_KEY);
+
+// Function to create a zip file with the image
+async function createImageZip(imageBase64: string, testimonialId: string) {
+  const zip = new JSZip();
+  
+  // Extract the base64 data and file extension
+  const matches = imageBase64.match(/^data:image\/([A-Za-z-+\/]+);base64,(.+)$/);
+  if (!matches || matches.length !== 3) {
+    throw new Error('Invalid image data');
+  }
+  
+  const fileExtension = matches[1];
+  const base64Data = matches[2];
+  
+  // Convert base64 to binary
+  const binaryData = Buffer.from(base64Data, 'base64');
+  
+  // Add the image to the zip file in its original format
+  zip.file(`profile_image.${fileExtension}`, binaryData);
+  
+  // Generate the zip file
+  return await zip.generateAsync({ type: 'base64' });
+}
 
 export async function POST(request: Request) {
   try {
@@ -42,8 +66,9 @@ export async function POST(request: Request) {
       - LeetCode: ${testimonial.socialMedia?.leetcode || 'Not provided'}
       - GitHub: ${testimonial.socialMedia?.github || 'Not provided'}
       - Instagram: ${testimonial.socialMedia?.instagram || 'Not provided'}
+      - LinkedIn: ${testimonial.socialMedia?.linkedin || 'Not provided'}
       
-      Profile Image: ${testimonial.image ? 'Attached below' : 'Not provided'}
+      Profile Image: ${testimonial.image ? 'Attached in zip file' : 'Not provided'}
       
       To add this testimonial to the website, add the following JSON to testimonials.json:
       
@@ -54,12 +79,13 @@ export async function POST(request: Request) {
         "company": "${testimonial.company}",
         "content": "${testimonial.content}",
         "rating": ${testimonial.rating},
-        "image": "${testimonial.image || '/user.png'}",
+        "image": "${testimonial.image ? 'profile_image.zip' : '/user.png'}",
         "website": "${testimonial.website || ''}",
         "socialMedia": {
           "leetcode": "${testimonial.socialMedia?.leetcode || ''}",
           "github": "${testimonial.socialMedia?.github || ''}",
-          "instagram": "${testimonial.socialMedia?.instagram || ''}"
+          "instagram": "${testimonial.socialMedia?.instagram || ''}",
+          "linkedin": "${testimonial.socialMedia?.linkedin || ''}"
         },
         "date": "${new Date().toISOString().split('T')[0]}"
       }
@@ -86,13 +112,14 @@ export async function POST(request: Request) {
             <li>LeetCode: ${testimonial.socialMedia?.leetcode || 'Not provided'}</li>
             <li>GitHub: ${testimonial.socialMedia?.github || 'Not provided'}</li>
             <li>Instagram: ${testimonial.socialMedia?.instagram || 'Not provided'}</li>
+            <li>LinkedIn: ${testimonial.socialMedia?.linkedin || 'Not provided'}</li>
           </ul>
         </div>
 
         ${testimonial.image ? `
           <div style="margin-bottom: 20px;">
             <h3 style="color: #333;">Profile Image:</h3>
-            <img src="${testimonial.image}" alt="Profile Image" style="max-width: 200px; border-radius: 50%;" />
+            <p>The profile image is attached in the zip file.</p>
           </div>
         ` : ''}
 
@@ -106,12 +133,13 @@ export async function POST(request: Request) {
   "company": "${testimonial.company}",
   "content": "${testimonial.content}",
   "rating": ${testimonial.rating},
-  "image": "${testimonial.image || '/user.png'}",
+  "image": "${testimonial.image ? 'profile_image.zip' : '/user.png'}",
   "website": "${testimonial.website || ''}",
   "socialMedia": {
     "leetcode": "${testimonial.socialMedia?.leetcode || ''}",
     "github": "${testimonial.socialMedia?.github || ''}",
-    "instagram": "${testimonial.socialMedia?.instagram || ''}"
+    "instagram": "${testimonial.socialMedia?.instagram || ''}",
+    "linkedin": "${testimonial.socialMedia?.linkedin || ''}"
   },
   "date": "${new Date().toISOString().split('T')[0]}"
 }
@@ -120,6 +148,22 @@ export async function POST(request: Request) {
       </div>
     `;
 
+    // Prepare email attachments
+    const attachments = [];
+    
+    if (testimonial.image) {
+      try {
+        const zipBase64 = await createImageZip(testimonial.image, testimonialId);
+        attachments.push({
+          filename: `profile_image_${testimonialId}.zip`,
+          content: zipBase64,
+          encoding: 'base64'
+        });
+      } catch (error) {
+        console.error('Error creating zip file:', error);
+      }
+    }
+
     // Send the email
     const { data, error } = await resend.emails.send({
       from: 'Portfolio <portfolio@resend.dev>',
@@ -127,6 +171,7 @@ export async function POST(request: Request) {
       subject: 'New Testimonial Submission',
       text: emailContent,
       html: htmlContent,
+      attachments: attachments
     });
 
     if (error) {

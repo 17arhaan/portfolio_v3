@@ -22,6 +22,7 @@ interface Testimonial {
     leetcode?: string
     github?: string
     instagram?: string
+    linkedin?: string
   }
   date?: string
 }
@@ -35,28 +36,6 @@ function shuffleArray<T>(array: T[]): T[] {
   }
   return newArray
 }
-
-// Function to safely get testimonials from localStorage
-const getSavedTestimonials = () => {
-  if (typeof window === 'undefined') return [];
-  try {
-    const saved = localStorage.getItem('user-testimonials');
-    return saved ? JSON.parse(saved) : [];
-  } catch (error) {
-    console.error('Error reading testimonials:', error);
-    return [];
-  }
-};
-
-// Function to save testimonial to localStorage
-const saveTestimonial = (testimonial: Testimonial) => {
-  if (typeof window === 'undefined') return;
-  
-  const existingTestimonials = localStorage.getItem('user-testimonials');
-  const testimonials = existingTestimonials ? JSON.parse(existingTestimonials) : [];
-  testimonials.push(testimonial);
-  localStorage.setItem('user-testimonials', JSON.stringify(testimonials));
-};
 
 export default function TestimonialsSection() {
   const [isClient, setIsClient] = useState(false);
@@ -75,7 +54,8 @@ export default function TestimonialsSection() {
     socialMedia: {
       leetcode: "",
       github: "",
-      instagram: ""
+      instagram: "",
+      linkedin: ""
     },
     date: new Date().toISOString().split('T')[0]
   });
@@ -86,13 +66,11 @@ export default function TestimonialsSection() {
   const [allTestimonials, setAllTestimonials] = useState<Testimonial[]>([]);
   const [displayedTestimonials, setDisplayedTestimonials] = useState<Testimonial[]>([]);
 
-  // Load testimonials after component mounts
+  // Modify the useEffect to only use testimonials from the JSON file
   useEffect(() => {
     setIsClient(true);
-    const savedTestimonials = getSavedTestimonials();
-    const allTestis = [...testimonialsData.testimonials, ...savedTestimonials];
-    setAllTestimonials(allTestis);
-    setDisplayedTestimonials(allTestis.slice(0, 3));
+    setAllTestimonials(testimonialsData.testimonials);
+    setDisplayedTestimonials(testimonialsData.testimonials.slice(0, 3));
   }, []);
 
   // Function to handle manual shuffle
@@ -153,7 +131,7 @@ export default function TestimonialsSection() {
       const testimonialData = {
         ...newTestimonial,
         image: imageBase64,
-        id: Date.now().toString() // Add a unique ID
+        id: Date.now().toString()
       };
 
       // Send testimonial to email
@@ -175,9 +153,6 @@ export default function TestimonialsSection() {
       if (data.error) {
         throw new Error(data.error);
       }
-
-      // Save to localStorage
-      saveTestimonial(testimonialData);
       
       setSubmitSuccess(true);
       
@@ -195,7 +170,8 @@ export default function TestimonialsSection() {
           socialMedia: {
             leetcode: "",
             github: "",
-            instagram: ""
+            instagram: "",
+            linkedin: ""
           },
           date: new Date().toISOString().split('T')[0]
         });
@@ -207,27 +183,7 @@ export default function TestimonialsSection() {
       console.error('Error submitting testimonial:', error);
       setIsSubmitting(false);
       setSubmitSuccess(false);
-      // Show error message to the user
       alert(error instanceof Error ? error.message : 'Failed to submit testimonial. Please try again later.');
-    }
-  }
-
-  const handleDeleteTestimonial = (id: string) => {
-    // Remove from storage
-    try {
-      const existingTestimonials = localStorage.getItem('user-testimonials');
-      if (existingTestimonials) {
-        const testimonials = JSON.parse(existingTestimonials);
-        const updatedTestimonials = testimonials.filter((t: Testimonial) => t.id !== id);
-        localStorage.setItem('user-testimonials', JSON.stringify(updatedTestimonials));
-        
-        // Update state
-        const allTestis = [...testimonialsData.testimonials, ...updatedTestimonials];
-        setAllTestimonials(allTestis);
-        setDisplayedTestimonials(allTestis.slice(0, 3));
-      }
-    } catch (error) {
-      console.error('Error deleting testimonial:', error);
     }
   }
 
@@ -359,6 +315,19 @@ export default function TestimonialsSection() {
                             type="url"
                           />
                           <p className="text-xs text-white/40">Instagram Profile</p>
+                        </div>
+                        <div className="space-y-0.5">
+                          <Input
+                            value={newTestimonial.socialMedia.linkedin}
+                            onChange={(e) => setNewTestimonial({
+                              ...newTestimonial,
+                              socialMedia: { ...newTestimonial.socialMedia, linkedin: e.target.value }
+                            })}
+                            className="bg-white/5 border-white/10 focus:border-yellow-500/50 h-9"
+                            placeholder="linkedin.com/in/username"
+                            type="url"
+                          />
+                          <p className="text-xs text-white/40">LinkedIn Profile</p>
                         </div>
                       </div>
                     </div>
@@ -609,40 +578,8 @@ export default function TestimonialsSection() {
                       ))}
                     </div>
 
-                    {/* Content */}
-                    <p className="text-white/80 mb-6 italic relative z-10 text-lg leading-relaxed">{testimonial.content}</p>
-
-                    {/* Author */}
-                    <div className="flex items-center gap-4 relative z-10">
-                      <div className="w-12 h-12 rounded-full overflow-hidden border-2 border-white/20 group-hover:border-white/30 transition-colors duration-300">
-                        <img
-                          src={testimonial.image}
-                          alt={testimonial.name}
-                          className="w-full h-full object-cover"
-                        />
-                      </div>
-                      <div className="flex-1">
-                        <h4 className="text-white font-semibold">
-                          {testimonial.name}
-                        </h4>
-                        <p className="text-white/60 text-sm">
-                          {testimonial.role} at {testimonial.company}
-                        </p>
-                        {testimonial.website && (
-                          <a 
-                            href={testimonial.website} 
-                            target="_blank" 
-                            rel="noopener noreferrer"
-                            className="text-xs text-white/40 hover:text-white/60 transition-colors duration-300"
-                          >
-                            {new URL(testimonial.website).hostname}
-                          </a>
-                        )}
-                      </div>
-                    </div>
-
                     {/* Social Media Links */}
-                    {(testimonial.socialMedia?.leetcode || testimonial.socialMedia?.github || testimonial.socialMedia?.instagram) && (
+                    {(testimonial.socialMedia?.leetcode || testimonial.socialMedia?.github || testimonial.socialMedia?.instagram || testimonial.socialMedia?.linkedin) && (
                       <div className="mt-4 flex gap-2 relative z-10">
                         {testimonial.socialMedia.leetcode && (
                           <a 
@@ -683,13 +620,19 @@ export default function TestimonialsSection() {
                             </svg>
                           </a>
                         )}
-                      </div>
-                    )}
-
-                    {/* Date */}
-                    {testimonial.date && (
-                      <div className="absolute bottom-4 right-4 text-white/30 text-xs">
-                        {new Date(testimonial.date).toLocaleDateString()}
+                        {testimonial.socialMedia.linkedin && (
+                          <a 
+                            href={testimonial.socialMedia.linkedin} 
+                            target="_blank" 
+                            rel="noopener noreferrer"
+                            className="text-white/40 hover:text-white/60 transition-colors duration-300"
+                            title="LinkedIn Profile"
+                          >
+                            <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                              <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/>
+                            </svg>
+                          </a>
+                        )}
                       </div>
                     )}
                   </motion.div>
@@ -701,4 +644,4 @@ export default function TestimonialsSection() {
       </div>
     </section>
   )
-} 
+}
