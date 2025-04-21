@@ -66,7 +66,6 @@ const workExperience = [
     id: 0,
     role: "AI & ML Intern",
     company: "Concur IP Consulting",
-    subtitle: "Questel Group Company",
     location: "On-Site | Noida , IN",
     period: "May 2025 - July 2025",
     description: [
@@ -82,7 +81,7 @@ const workExperience = [
 ]
 
 export default function WorkTimeline() {
-  const [activeIndex, setActiveIndex] = useState(0)
+  const [activeIndex, setActiveIndex] = useState(workExperience.length - 1)
   const [direction, setDirection] = useState(0)
   const [hoveredDot, setHoveredDot] = useState<number | null>(null)
   const [touchStart, setTouchStart] = useState<number | null>(null)
@@ -397,11 +396,6 @@ export default function WorkTimeline() {
                   className="text-xl md:text-2xl font-bold text-white"
                 >
                   {workExperience[activeIndex].role}
-                  {activeIndex === latestPositionIndex && (
-                    <span className="ml-2 inline-block px-2 py-0.5 text-xs rounded-full bg-black text-white/80 border border-white/10">
-                      Latest
-                    </span>
-                  )}
                 </motion.h2>
 
                 <div className="space-y-1.5">
@@ -414,9 +408,6 @@ export default function WorkTimeline() {
                     <Briefcase className="h-4 w-4 mr-2 text-white/40" />
                     <div className="flex flex-col">
                       <span className="text-base font-medium">{workExperience[activeIndex].company}</span>
-                      {workExperience[activeIndex].subtitle && (
-                        <span className="text-sm text-white/60">{workExperience[activeIndex].subtitle}</span>
-                      )}
                     </div>
                   </motion.div>
 

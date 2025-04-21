@@ -1,10 +1,26 @@
 import { Resend } from 'resend';
 import { NextResponse } from 'next/server';
 
+// Check if environment variables are set
+if (!process.env.RESEND_API_KEY) {
+  console.error('RESEND_API_KEY is not set in environment variables');
+}
+
+if (!process.env.ADMIN_EMAIL) {
+  console.error('ADMIN_EMAIL is not set in environment variables');
+}
+
 const resend = new Resend(process.env.RESEND_API_KEY);
 
 export async function POST(request: Request) {
   try {
+    // Check if required environment variables are set
+    if (!process.env.RESEND_API_KEY || !process.env.ADMIN_EMAIL) {
+      return NextResponse.json({ 
+        error: 'Email service is not properly configured. Please contact the site administrator.' 
+      }, { status: 500 });
+    }
+
     const testimonial = await request.json();
     
     // Generate a unique ID for the testimonial
@@ -107,14 +123,17 @@ export async function POST(request: Request) {
     // Send the email
     const { data, error } = await resend.emails.send({
       from: 'Portfolio <portfolio@resend.dev>',
-      to: process.env.ADMIN_EMAIL || '',
+      to: process.env.ADMIN_EMAIL,
       subject: 'New Testimonial Submission',
       text: emailContent,
       html: htmlContent,
     });
 
     if (error) {
-      return NextResponse.json({ error: error.message }, { status: 500 });
+      console.error('Resend API Error:', error);
+      return NextResponse.json({ 
+        error: 'Failed to send email. Please try again later.' 
+      }, { status: 500 });
     }
 
     return NextResponse.json({ 
@@ -123,6 +142,8 @@ export async function POST(request: Request) {
     });
   } catch (error) {
     console.error('Error sending testimonial:', error);
-    return NextResponse.json({ error: 'Failed to send testimonial' }, { status: 500 });
+    return NextResponse.json({ 
+      error: 'An unexpected error occurred. Please try again later.' 
+    }, { status: 500 });
   }
 } 

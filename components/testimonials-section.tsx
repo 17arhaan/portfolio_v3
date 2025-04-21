@@ -149,20 +149,25 @@ export default function TestimonialsSection() {
         });
       }
 
+      // Create a new testimonial object with the base64 image
+      const testimonialData = {
+        ...newTestimonial,
+        image: imageBase64,
+        id: Date.now().toString() // Add a unique ID
+      };
+
       // Send testimonial to email
       const response = await fetch('/api/send-testimonial', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({
-          ...newTestimonial,
-          image: imageBase64
-        }),
+        body: JSON.stringify(testimonialData),
       });
 
       if (!response.ok) {
-        throw new Error('Failed to submit testimonial');
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Failed to submit testimonial');
       }
 
       const data = await response.json();
@@ -171,6 +176,9 @@ export default function TestimonialsSection() {
         throw new Error(data.error);
       }
 
+      // Save to localStorage
+      saveTestimonial(testimonialData);
+      
       setSubmitSuccess(true);
       
       // Reset form and close dialog after a delay
@@ -199,7 +207,8 @@ export default function TestimonialsSection() {
       console.error('Error submitting testimonial:', error);
       setIsSubmitting(false);
       setSubmitSuccess(false);
-      // You might want to show an error message to the user here
+      // Show error message to the user
+      alert(error instanceof Error ? error.message : 'Failed to submit testimonial. Please try again later.');
     }
   }
 
@@ -450,6 +459,8 @@ export default function TestimonialsSection() {
                       className={`w-full transition-all duration-300 mt-2 ${
                         submitSuccess 
                           ? 'bg-green-500/20 hover:bg-green-500/30 border-green-500/30 text-green-400'
+                          : isSubmitting
+                          ? 'bg-yellow-500/20 hover:bg-yellow-500/30 border-yellow-500/30 text-yellow-400'
                           : 'bg-yellow-500/10 hover:bg-yellow-500/20 border-yellow-500/20 text-yellow-400'
                       }`}
                       disabled={isSubmitting}
