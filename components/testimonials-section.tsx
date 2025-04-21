@@ -161,10 +161,14 @@ export default function TestimonialsSection() {
         }),
       });
 
-      const data = await response.json();
-
       if (!response.ok) {
-        throw new Error(data.error || 'Failed to submit testimonial');
+        throw new Error('Failed to submit testimonial');
+      }
+
+      const data = await response.json();
+      
+      if (data.error) {
+        throw new Error(data.error);
       }
 
       setSubmitSuccess(true);
@@ -195,6 +199,7 @@ export default function TestimonialsSection() {
       console.error('Error submitting testimonial:', error);
       setIsSubmitting(false);
       setSubmitSuccess(false);
+      // You might want to show an error message to the user here
     }
   }
 
