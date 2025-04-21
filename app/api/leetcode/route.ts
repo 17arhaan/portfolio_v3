@@ -55,6 +55,11 @@ export async function GET() {
                 startTime
               }
             }
+            matchedUser(username: $username) {
+              profile {
+                ranking
+              }
+            }
           }
         `,
         variables: {
@@ -146,6 +151,7 @@ export async function GET() {
     // Process contest data
     const contestRanking = contestData.data?.userContestRanking || {};
     const contestHistory = contestData.data?.userContestRankingHistory || [];
+    const globalRank = contestData.data?.matchedUser?.profile?.ranking || 0;
     
     // Get recent contests (last 5)
     const recentContests = contestHistory
@@ -175,7 +181,7 @@ export async function GET() {
       totalDays: totalActiveDays,
       lastSolved: new Date().toISOString(),
       contestRating: contestRanking.rating || 0,
-      globalRank: contestRanking.globalRanking || 0,
+      globalRank: globalRank,
       topPercentage: contestRanking.topPercentage || 0,
       attendedContests: contestRanking.attendedContestsCount || 0,
       contestBadge: contestRanking.badge?.name || null,
