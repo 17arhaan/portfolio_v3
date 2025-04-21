@@ -1,6 +1,23 @@
 {
   "testimonials": [
     {
+      "id": "1745253910753",
+      "name": "Mihir Singh",
+      "role": "CTO",
+      "company": "Invisible Mechanics Pvt Ltd.",
+      "content": "Arhaan Girdhar was a valuable Frontend Engineer during his tenure at IM. His expertise in Next.js was evident in the quality of his contributions to our platform. Significantly, Arhaan's frontend development work played a direct role in boosting user engagement, reflected in a clear increase in our Daily Active Users (DAUs). He's a results-oriented developer, and I confidently recommend him.",
+      "rating": 5,
+      "image": "/t2.png",
+      "website": "",
+      "socialMedia": {
+        "leetcode": "",
+        "github": "https://github.com/heyletscode",
+        "instagram": "",
+        "linkedin": ""
+      },
+      "date": "2025-04-21"
+    },
+    {
       "id": "1745249837459",
       "name": "Anbar Althaf",
       "role": "Student",
