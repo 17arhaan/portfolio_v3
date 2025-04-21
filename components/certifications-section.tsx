@@ -97,6 +97,17 @@ const certificationsData = [
     image: "/google.png",
   },
   {
+    id: 9,
+    title: "Mastering Big Data Analytics with PySpark",
+    issuer: "Infosys",
+    date: "October 2024",
+    expiryDate: null,
+    description: "Comprehensive training in big data analytics using PySpark, covering data processing, machine learning, and distributed computing for large-scale data analysis.",
+    credentialURL: "https://drive.google.com/drive/u/0/folders/1S55QbJu8Pv5a8wAxj5SMgOviAwjTbmKl",
+    skills: ["Big Data", "PySpark", "Data Processing", "Machine Learning", "Distributed Computing", "Data Analysis", "Python", "Data Engineering", "ETL", "Data Visualization"],
+    image: "/infosys.webp",
+  },
+  {
     id: 2,
     title: "Neural Networks and Deep Learning",
     issuer: "DeepLearning.AI",
@@ -120,7 +131,11 @@ const certificationsData = [
     skills: ["Machine Learning", "Data Preprocessing", "Feature Engineering", "Data Cleaning", "SQL", "NoSQL", "APIs", "Outlier Detection", "Feature Scaling", "Hypothesis Testing"],
     image: "/ibm.png",
   }
-]
+].sort((a, b) => {
+  const dateA = new Date(a.date);
+  const dateB = new Date(b.date);
+  return dateB.getTime() - dateA.getTime();
+});
 
 export default function CertificationsSection() {
   const [expandedId, setExpandedId] = useState<number | null>(null)
