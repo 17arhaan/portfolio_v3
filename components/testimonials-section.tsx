@@ -559,6 +559,21 @@ export default function TestimonialsSection() {
                     <div className="absolute -bottom-20 -right-20 w-40 h-40 bg-white/5 rounded-full transition-transform duration-700 group-hover:scale-150 opacity-0 group-hover:opacity-20"></div>
                     <div className="absolute -top-20 -left-20 w-40 h-40 bg-white/5 rounded-full transition-transform duration-700 group-hover:scale-150 opacity-0 group-hover:opacity-20"></div>
 
+                    {/* Profile section */}
+                    <div className="flex items-center gap-4 mb-4 relative z-10">
+                      {testimonial.image && (
+                        <img
+                          src={testimonial.image}
+                          alt={`${testimonial.name}'s profile`}
+                          className="w-16 h-16 rounded-full object-cover border-2 border-white/10"
+                        />
+                      )}
+                      <div>
+                        <h3 className="text-lg font-semibold text-white">{testimonial.name}</h3>
+                        <p className="text-sm text-white/60">{testimonial.role} at {testimonial.company}</p>
+                      </div>
+                    </div>
+
                     {/* Quote icon */}
                     <div className="absolute top-4 right-4 text-white/20 group-hover:text-white/30 transition-colors duration-300">
                       <Quote className="w-8 h-8" />
@@ -577,6 +592,11 @@ export default function TestimonialsSection() {
                         />
                       ))}
                     </div>
+
+                    {/* Content */}
+                    <blockquote className="text-white/80 mb-4 relative z-10">
+                      {testimonial.content}
+                    </blockquote>
 
                     {/* Social Media Links */}
                     {(testimonial.socialMedia?.leetcode || testimonial.socialMedia?.github || testimonial.socialMedia?.instagram || testimonial.socialMedia?.linkedin) && (
