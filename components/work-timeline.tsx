@@ -64,19 +64,19 @@ const workExperience = [
   },
   {
     id: 0,
-    role: "AI & ML Intern",
-    company: "Concur IP Consulting",
-    location: "On-Site | Noida , IN",
-    period: "May 2025 - July 2025",
+    role: "Coming Soon",
+    company: "Coming Soon",
+    location: "Coming Soon",
+    period: "Coming Soon",
     description: [
-      "Developing an AI-powered patent analysis model to process 10,000+ patent documents monthly",
-      "Implementing NLP techniques to improve patent classification accuracy by 40%",
-      "Reducing manual patent review time from 4 hours to 30 minutes per document",
-      "Training machine learning models on 500,000+ historical patent data points",
-      "Integrating AI model with company's existing IP management system serving 100+ clients"
+      "Coming Soon",
+      "Coming Soon",
+      "Coming Soon",
+      "Coming Soon",
+      "Coming Soon"
     ],
-    skills: ["AI Model Development", "Machine Learning Model Training", "Data Analysis"],
-    logoUrl: "/questel.jpg",
+    skills: ["Coming Soon"],
+    logoUrl: "/placeholder.svg",
   },
 ]
 
