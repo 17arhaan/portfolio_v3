@@ -77,41 +77,25 @@ export default function ContactSection() {
   return (
     <section id="contact" className="py-24 relative w-full">
       <div className="max-w-7xl mx-auto px-4 sm:px-6">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-          viewport={{ once: true, margin: "-100px" }}
+        <div
           className="text-center mb-16"
         >
           <h2 className="section-title">Get in Touch</h2>
-          <motion.p
-            initial={{ opacity: 0, y: 10 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-100px" }}
-            transition={{ duration: 0.6, delay: 0.2 }}
+          <p
             className="mt-3 text-sm md:text-base text-white/80 max-w-2xl mx-auto italic"
             style={{ textShadow: "0 0 5px rgba(255,255,255,0.3)" }}
           >
             Let's collaborate and create something amazing together.
-          </motion.p>
+          </p>
 
-          <motion.div
-            initial={{ scaleX: 0, opacity: 0 }}
-            whileInView={{ scaleX: 1, opacity: 1 }}
-            viewport={{ once: true, margin: "-100px" }}
-            transition={{ duration: 0.8, delay: 0.3 }}
+          <div
             className="section-title-line"
           />
-        </motion.div>
+        </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-5 gap-12 items-start">
           {/* Contact Details - Left Column */}
-          <motion.div
-            initial={{ opacity: 0, x: -20 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true, margin: "-100px" }}
-            transition={{ duration: 0.6, delay: 0.4 }}
+          <div
             className="lg:col-span-2 space-y-8"
           >
             <div className="bg-white/5 backdrop-blur-sm p-6 rounded-lg border border-white/10 relative overflow-hidden group">
@@ -120,20 +104,10 @@ export default function ContactSection() {
               <div className="absolute -top-20 -left-20 w-40 h-40 bg-white/5 rounded-full transition-transform duration-700 group-hover:scale-150 opacity-0 group-hover:opacity-20"></div>
               
               <h3 className="text-xl font-semibold text-white mb-6 relative">
-                <motion.span
-                  initial={{ opacity: 0, x: -20 }}
-                  whileInView={{ opacity: 1, x: 0 }}
-                  transition={{ duration: 0.5 }}
-                  className="block"
-                >
+                <span className="block">
                   Let's Connect
-                </motion.span>
-                <motion.div
-                  className="absolute bottom-0 left-0 w-16 h-0.5 bg-white/30"
-                  initial={{ scaleX: 0 }}
-                  whileInView={{ scaleX: 1 }}
-                  transition={{ duration: 0.5, delay: 0.2 }}
-                />
+                </span>
+                <div className="absolute bottom-0 left-0 w-16 h-0.5 bg-white/30" />
               </h3>
               
               <div className="space-y-6">
@@ -189,14 +163,11 @@ export default function ContactSection() {
               </div>
               
               <div className="mt-8">
-                <motion.h4 
+                <h4 
                   className="text-white/80 text-sm mb-4"
-                  initial={{ opacity: 0, y: 10 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.5, delay: 0.3 }}
                 >
                   Follow Me:
-                </motion.h4>
+                </h4>
                 <div className="flex gap-3">
                   <motion.a
                     href="https://github.com/17arhaan"
@@ -283,7 +254,7 @@ export default function ContactSection() {
                 />
               </div>
             </motion.div>
-          </motion.div>
+          </div>
 
           {/* Contact Form - Right Column */}
           <motion.div
@@ -358,7 +329,7 @@ export default function ContactSection() {
                 {/* Phone Field */}
                 <div className="form-group">
                   <label htmlFor="phone" className="block text-sm font-medium text-white/80 mb-1">
-                    Phone (optional)
+                    Phone
                   </label>
                   <div className="flex gap-2">
                     <div className="relative w-24">
@@ -449,7 +420,7 @@ export default function ContactSection() {
                 {/* Company Field */}
                 <div className="form-group">
                   <label htmlFor="company" className="block text-sm font-medium text-white/80 mb-1">
-                    Company (optional)
+                    Company
                   </label>
                   <div className="relative">
                     <Briefcase className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-white/40" />
@@ -504,7 +475,7 @@ export default function ContactSection() {
                 {/* Website Field */}
                 <div className="form-group">
                   <label htmlFor="website" className="block text-sm font-medium text-white/80 mb-1">
-                    Website (optional)
+                    Website
                   </label>
                   <div className="relative">
                     <Globe className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-white/40" />
@@ -524,7 +495,7 @@ export default function ContactSection() {
               {/* Availability Field */}
               <div className="form-group">
                 <label htmlFor="availability" className="block text-sm font-medium text-white/80 mb-1">
-                  Your Availability (optional)
+                  Your Availability
                 </label>
                 <div className="relative">
                   <Calendar className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-white/40" />

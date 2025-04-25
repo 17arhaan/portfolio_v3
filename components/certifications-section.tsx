@@ -208,7 +208,7 @@ export default function CertificationsSection() {
                 <div className="p-4 sm:p-5">
                   {/* Logo and Title Section */}
                   <div className="flex items-start gap-4 mb-3">
-                    <div className="relative w-20 h-20 sm:w-24 sm:h-24 rounded-lg overflow-hidden flex-shrink-0 bg-white/5">
+                    <div className="relative w-24 h-24 sm:w-28 sm:h-28 rounded-lg overflow-hidden flex-shrink-0 bg-white/5">
                       <Image
                         src={cert.image}
                         alt={cert.issuer}
@@ -217,7 +217,7 @@ export default function CertificationsSection() {
                       />
                     </div>
                     <div className="flex-1 min-w-0">
-                      <h3 className="text-sm font-medium text-white line-clamp-2 mb-1">{cert.title}</h3>
+                      <h3 className="text-base sm:text-lg font-semibold text-white line-clamp-2 mb-1">{cert.title}</h3>
                       <p className="text-xs text-white/60">{cert.issuer}</p>
                     </div>
                   </div>

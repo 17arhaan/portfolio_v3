@@ -143,13 +143,13 @@ export default function WorkTimeline() {
 
   return (
     <div 
-      className="w-full min-h-screen py-24 px-6 md:px-10 flex flex-col items-center justify-center relative"
+      className="w-full py-8 px-6 md:px-10 flex flex-col items-center justify-center relative"
       onTouchStart={onTouchStart}
       onTouchMove={onTouchMove}
       onTouchEnd={onTouchEnd}
     >
       {/* Add scroll-triggered animations to the section title */}
-      <div className="text-center mb-12 relative z-10">
+      <div className="text-center mb-6 relative z-10">
         <motion.h1
           initial={{ opacity: 0, y: -10 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -184,7 +184,7 @@ export default function WorkTimeline() {
       </div>
 
       {/* Timeline navigation */}
-      <div className="flex items-center justify-between w-full max-w-5xl mb-8 relative z-10">
+      <div className="flex items-center justify-between w-full max-w-5xl mb-4 relative z-10">
         <motion.div 
           whileHover={{ scale: 1.2 }}
           transition={{ type: "spring", stiffness: 300, damping: 20 }}
@@ -260,7 +260,7 @@ export default function WorkTimeline() {
       </div>
 
       {/* Timeline with dots */}
-      <div className="relative w-full max-w-5xl mb-10 z-10">
+      <div className="relative w-full max-w-5xl mb-4 z-10">
         {/* Add scroll-triggered animation to the timeline */}
         <motion.div
           initial={{ opacity: 0, y: -5 }}
