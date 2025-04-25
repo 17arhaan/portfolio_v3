@@ -170,8 +170,8 @@ export default function Navbar({
     <motion.nav
       initial={{ y: -100, opacity: 0 }}
       animate={{ 
-        y: isLoading ? -100 : 0, 
-        opacity: isLoading ? 0 : 1 
+        y: isLoading ? -100 : 0,
+        opacity: isLoading ? 0 : 1
       }}
       transition={{ 
         duration: 0.8,
@@ -185,8 +185,8 @@ export default function Navbar({
         <motion.div
           initial={{ scale: 0.8, opacity: 0 }}
           animate={{ 
-            scale: isLoading ? 0.8 : 1, 
-            opacity: isLoading ? 0 : 1 
+            scale: isLoading ? 0.8 : 1,
+            opacity: isLoading ? 0 : 1
           }}
           transition={{ 
             duration: 0.6,
@@ -214,14 +214,27 @@ export default function Navbar({
 
         {/* Desktop Navigation Links */}
         <div className="hidden md:flex items-center gap-2" ref={navRef}>
-          {navItems.map((item) => (
-            <NavItem
+          {navItems.map((item, index) => (
+            <motion.div
               key={item.id}
-              label={item.name}
-              isActive={activeSection === item.id}
-              onClick={() => scrollToSection(item)}
-              id={item.id}
-            />
+              initial={{ y: -20, opacity: 0 }}
+              animate={{ 
+                y: isLoading ? -20 : 0,
+                opacity: isLoading ? 0 : 1
+              }}
+              transition={{
+                duration: 0.4,
+                ease: [0.19, 1, 0.22, 1],
+                delay: 0.3 + (index * 0.1)
+              }}
+            >
+              <NavItem
+                label={item.name}
+                isActive={activeSection === item.id}
+                onClick={() => scrollToSection(item)}
+                id={item.id}
+              />
+            </motion.div>
           ))}
         </div>
       </div>

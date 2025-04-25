@@ -14,10 +14,12 @@ export default function LoadingWrapper({ children }: { children: React.ReactNode
     <>
       <LoadingAnimation onLoadingComplete={() => setIsLoading(false)} />
       <div className="min-h-screen w-full bg-black overflow-x-hidden">
-        {!isLoading && <Navbar />}
-        <ScrollAnimation>
-          {children}
-        </ScrollAnimation>
+        <Navbar isLoading={isLoading} />
+        {!isLoading && (
+          <ScrollAnimation>
+            {children}
+          </ScrollAnimation>
+        )}
         <Analytics />
         <SpeedInsights />
       </div>
