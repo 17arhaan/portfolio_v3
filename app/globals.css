@@ -67,6 +67,25 @@ html {
 }
 
 @layer base {
+  * {
+    @apply border-border;
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  body {
+    @apply bg-background text-foreground;
+    background-color: black;
+    min-height: 100vh;
+    width: 100vw;
+    max-width: 100%;
+    overflow-x: hidden;
+  }
+
   :root {
     --background: 0 0% 100%;
     --foreground: 222.2 84% 4.9%;
@@ -147,7 +166,12 @@ html {
 body::before {
   content: '';
   position: fixed;
-  inset: 0;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100vw;
+  height: 100vh;
   background: linear-gradient(
     125deg,
     rgba(60, 7, 83, 0.1) 0%,
@@ -163,7 +187,12 @@ body::before {
 body::after {
   content: '';
   position: fixed;
-  inset: 0;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100vw;
+  height: 100vh;
   background: 
     /* Main bubbles */
     radial-gradient(
@@ -658,5 +687,47 @@ body::after {
     -webkit-background-clip: text;
     background-clip: text;
     -webkit-text-fill-color: transparent;
+  }
+}
+
+/* Section Title Glow Effect */
+.section-title {
+  @apply text-2xl sm:text-3xl font-bold text-white;
+  text-shadow: 0 0 8px rgba(255, 255, 255, 0.3),
+              0 0 15px rgba(255, 255, 255, 0.2),
+              0 0 20px rgba(145, 10, 103, 0.2);
+  animation: titleGlow 3s ease-in-out infinite;
+}
+
+@keyframes titleGlow {
+  0%, 100% {
+    text-shadow: 0 0 8px rgba(255, 255, 255, 0.3),
+                0 0 15px rgba(255, 255, 255, 0.2),
+                0 0 20px rgba(145, 10, 103, 0.2);
+  }
+  50% {
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.4),
+                0 0 20px rgba(255, 255, 255, 0.3),
+                0 0 25px rgba(145, 10, 103, 0.3);
+  }
+}
+
+.section-title-line {
+  @apply w-48 h-px bg-gradient-to-r from-transparent via-white to-transparent mx-auto mt-6;
+  box-shadow: 0 0 8px rgba(255, 255, 255, 0.3),
+              0 0 15px rgba(145, 10, 103, 0.2);
+  animation: lineGlow 3s ease-in-out infinite;
+}
+
+@keyframes lineGlow {
+  0%, 100% {
+    opacity: 0.6;
+    box-shadow: 0 0 8px rgba(255, 255, 255, 0.3),
+                0 0 15px rgba(145, 10, 103, 0.2);
+  }
+  50% {
+    opacity: 0.8;
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.4),
+                0 0 20px rgba(145, 10, 103, 0.3);
   }
 }

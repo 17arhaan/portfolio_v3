@@ -1,13 +1,14 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useRef } from "react"
 import { motion, useMotionValue, useTransform } from "framer-motion"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
-import { Calendar, Award, ExternalLink, CheckCircle, Clock, Github } from "lucide-react"
+import { Calendar, Award, ExternalLink, CheckCircle, Clock, Github, X, Tag } from "lucide-react"
 import Image from "next/image"
 import { GlowEffect } from "./ui/glow-effect"
+import { AnimatePresence } from "framer-motion"
 
 // Sample certifications data
 const certificationsData = [
@@ -138,344 +139,339 @@ const certificationsData = [
 });
 
 export default function CertificationsSection() {
-  const [expandedId, setExpandedId] = useState<number | null>(null)
+  const [selectedCert, setSelectedCert] = useState<typeof certificationsData[0] | null>(null)
+  const modalRef = useRef<HTMLDivElement | null>(null)
 
-  const toggleExpand = (id: number) => {
-    setExpandedId(expandedId === id ? null : id)
+  // Handle modal open/close
+  const openCertModal = (cert: typeof certificationsData[0]) => {
+    setSelectedCert(cert)
+    document.body.style.overflow = "hidden"
+  }
+
+  const closeCertModal = () => {
+    setSelectedCert(null)
+    document.body.style.overflow = "auto"
+  }
+
+  const handleModalBackdropClick = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (modalRef.current && modalRef.current.contains(e.target as Node)) {
+      closeCertModal()
+    }
   }
 
   return (
-    <section id="certifications" className="py-20 relative w-full">
-      <div className="max-w-[90vw] mx-auto">
+    <section id="certifications" className="py-12 sm:py-20 relative w-full overflow-hidden">
+      <div className="max-w-[95vw] sm:max-w-[90vw] mx-auto">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
           viewport={{ once: true, margin: "-100px" }}
-          className="text-center mb-12"
+          className="text-center mb-6 sm:mb-12"
         >
-          <h2 className="text-3xl font-bold mb-4 text-white">Professional Certifications</h2>
+          <h2 className="section-title">Certifications</h2>
           <motion.p
             initial={{ opacity: 0, y: 10 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-100px" }}
             transition={{ duration: 0.6, delay: 0.2 }}
-            className="mt-3 text-sm md:text-base text-white/80 max-w-2xl mx-auto italic"
-            style={{ textShadow: "0 0 5px rgba(255,255,255,0.3)" }}
+            className="text-xs sm:text-sm md:text-base text-white/80 max-w-2xl mx-auto italic"
           >
-            A showcase of my professional certifications and achievements.
+            Professional certifications and achievements.
           </motion.p>
-
           <motion.div
             initial={{ scaleX: 0, opacity: 0 }}
             whileInView={{ scaleX: 1, opacity: 1 }}
             viewport={{ once: true, margin: "-100px" }}
             transition={{ duration: 0.8, delay: 0.3 }}
-            className="w-48 h-px bg-gradient-to-r from-transparent via-white to-transparent mx-auto mt-6"
-            style={{ boxShadow: "0 0 10px rgba(255, 255, 255, 0.5)" }}
+            className="section-title-line"
           />
         </motion.div>
 
-        <div className="grid grid-cols-3 gap-8 place-items-center max-w-[1400px] mx-auto">
-          {certificationsData.map((cert, index) => {
-            const x = useMotionValue(0)
-            const y = useMotionValue(0)
-
-            const rotateX = useTransform(y, [-100, 100], [10, -10])
-            const rotateY = useTransform(x, [-100, 100], [-10, 10])
-
-            const handleMouseMove = (event: React.MouseEvent<HTMLDivElement>) => {
-              const rect = event.currentTarget.getBoundingClientRect()
-              const width = rect.width
-              const height = rect.height
-              const mouseX = event.clientX - rect.left
-              const mouseY = event.clientY - rect.top
-              const centerX = mouseX - width / 2
-              const centerY = mouseY - height / 2
-              x.set(centerX)
-              y.set(centerY)
-            }
-
-            const handleMouseLeave = () => {
-              x.set(0)
-              y.set(0)
-            }
-
-            return (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+          {certificationsData.map((cert, index) => (
+            <motion.div
+              key={cert.title}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-100px" }}
+              transition={{ duration: 0.5, delay: index * 0.1 }}
+              className="group relative"
+            >
               <motion.div
-                key={cert.id}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
-                viewport={{ once: true, margin: "-100px" }}
-                whileHover={{ y: -5 }}
-                className="h-full perspective-1000 w-[450px]"
-                style={{
-                  maxWidth: "100%"
-                }}
-                onMouseMove={handleMouseMove}
-                onMouseLeave={handleMouseLeave}
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                onClick={() => openCertModal(cert)}
+                className="relative bg-black/20 backdrop-blur-sm rounded-lg border border-white/10 overflow-hidden transition-all duration-300 hover:border-white/20 hover:bg-white/5 cursor-pointer h-full"
               >
-                <motion.div
-                  style={{
-                    rotateX,
-                    rotateY,
-                    transformStyle: "preserve-3d",
-                  }}
-                  className="h-full"
-                >
-                  <Card className="h-full overflow-hidden border border-white/10 bg-transparent w-[450px] p-3.5">
-                    <CardHeader className="pb-1 px-7">
-                      <div className="flex justify-between items-start gap-4">
-                        <div className="flex-1 min-w-0">
-                          <CardTitle className="text-lg text-white group-hover:text-primary transition-colors duration-300 line-clamp-3">
-                            {cert.title}
-                          </CardTitle>
-                          <CardDescription className="flex items-center mt-1 text-white/70 text-xs">
-                            <Award className="h-3.5 w-3.5 mr-1.5 flex-shrink-0" />
-                            <span className="truncate">{cert.issuer}</span>
-                            <span className="mx-1.5">•</span>
-                            <Calendar className="h-3.5 w-3.5 mr-1.5 flex-shrink-0" />
-                            <span>{cert.date}</span>
-                            {cert.expiryDate && <span> - {cert.expiryDate}</span>}
-                          </CardDescription>
-                        </div>
-                        <div className="flex-shrink-0">
-                          <div className="relative h-24 w-24 rounded-md overflow-hidden border border-white/10">
-                            <Image 
-                              src={cert.image} 
-                              alt={cert.title} 
-                              fill 
-                              className="object-contain p-2" 
-                            />
-                          </div>
-                        </div>
-                      </div>
-                    </CardHeader>
-                    <CardContent className="flex flex-col px-7">
-                      <div
-                        className={`transition-all duration-300 ${
-                          expandedId === cert.id ? "max-h-[400px]" : "max-h-20"
-                        } overflow-hidden`}
+                {/* Certificate Content */}
+                <div className="p-4 sm:p-5">
+                  {/* Logo and Title Section */}
+                  <div className="flex items-start gap-4 mb-3">
+                    <div className="relative w-16 h-16 sm:w-20 sm:h-20 rounded-lg overflow-hidden flex-shrink-0 bg-white/5">
+                      <Image
+                        src={cert.image}
+                        alt={cert.issuer}
+                        fill
+                        className="object-contain p-2"
+                      />
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <h3 className="text-sm font-medium text-white line-clamp-2 mb-1">{cert.title}</h3>
+                      <p className="text-xs text-white/60">{cert.issuer}</p>
+                    </div>
+                  </div>
+
+                  {/* Skills */}
+                  <div className="flex flex-wrap gap-1.5 mb-3">
+                    {cert.skills.slice(0, 3).map((skill, skillIndex) => (
+                      <span
+                        key={skillIndex}
+                        className="px-2 py-0.5 text-[10px] rounded-full bg-white/5 border border-white/10 text-white/70"
                       >
-                        <p className="text-xs text-white/70 mb-3">{cert.description}</p>
+                        {skill}
+                      </span>
+                    ))}
+                    {cert.skills.length > 3 && (
+                      <span className="px-2 py-0.5 text-[10px] rounded-full bg-white/5 border border-white/10 text-white/50">
+                        +{cert.skills.length - 3}
+                      </span>
+                    )}
+                  </div>
 
-                        {expandedId === cert.id && (
-                          <motion.div 
-                            initial={{ opacity: 0 }} 
-                            animate={{ opacity: 1 }} 
-                            transition={{ duration: 0.3 }}
-                            className="space-y-3 mt-3"
-                          >
-                            <div className="mb-3">
-                              <p className="text-xs font-medium mb-1 text-white">Credential ID</p>
-                              <p className="text-xs text-white/70">{cert.credentialId}</p>
-                            </div>
+                  {/* Description */}
+                  <p className="text-xs text-white/70 line-clamp-2 mb-3">
+                    {cert.description}
+                  </p>
 
-                            <div className="mb-3">
-                              <p className="text-xs font-medium mb-1.5 text-white">Skills</p>
-                              <div className="flex flex-wrap gap-1.5">
-                                {cert.skills.map((skill) => (
-                                  <Badge
-                                    key={skill}
-                                    variant="secondary"
-                                    className="text-[10px] font-medium bg-white/10 text-white/90 hover:bg-white/20 transition-colors"
-                                  >
-                                    {skill}
-                                  </Badge>
-                                ))}
-                              </div>
-                            </div>
-                          </motion.div>
-                        )}
+                  {/* Date and Status */}
+                  <div className="flex items-center justify-between mt-auto">
+                    <div className="flex items-center gap-1.5 text-[10px] text-white/60">
+                      <Calendar className="w-3 h-3" />
+                      {cert.date}
+                    </div>
+                    {new Date(cert.date) > new Date() ? (
+                      <div className="flex items-center gap-1.5 px-2 py-1 rounded-full bg-white/5 border border-white/10">
+                        <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                        <span className="text-[10px] text-white/70">Ongoing</span>
                       </div>
+                    ) : (
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        className="h-7 px-2.5 text-[10px] text-white/70 hover:text-white hover:bg-white/10"
+                      >
+                        <ExternalLink className="w-3 h-3 mr-1.5" />
+                        View Details
+                      </Button>
+                    )}
+                  </div>
+                </div>
 
-                      <div className="mt-6">
-                        <motion.div
-                          whileHover={{ 
-                            scale: 1.03, 
-                            transition: { type: "spring", stiffness: 400, damping: 10 } 
-                          }}
-                        >
-                          <Button
-                            variant="outline"
-                            size="sm"
-                            className="w-full bg-black/30 text-white border border-white/20 transition-all duration-300 backdrop-blur-sm hover:border-white/40 hover:bg-white/5 overflow-hidden relative group"
-                            onClick={() => toggleExpand(cert.id)}
-                          >
-                            <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent opacity-0 group-hover:opacity-100 translate-x-[-100%] group-hover:translate-x-[100%] transition-all duration-1000 ease-in-out"></span>
-                            <span
-                              className="relative z-2 group-hover:text-white transition-colors duration-300 flex items-center gap-1.5"
-                              style={{
-                                textShadow: `0 0 4px rgba(255, 255, 255, 0.3)`,
-                                transition: "text-shadow 0.3s ease-out, color 0.3s ease-out",
-                              }}
-                            >
-                              {expandedId === cert.id ? "Show Less" : "Show More"}
-                            </span>
-                          </Button>
-                        </motion.div>
-                      </div>
-                    </CardContent>
-                    <CardFooter className="pt-0">
-                      <div className="w-full space-y-2">
-                        {new Date(cert.date) > new Date() ? (
-                          <motion.div
-                            whileHover={{ 
-                              scale: 1.03, 
-                              transition: { type: "spring", stiffness: 400, damping: 10 } 
-                            }}
-                          >
-                            <Button 
-                              variant="outline" 
-                              size="sm" 
-                              className="w-full gap-2 bg-black/30 text-white border border-white/20 transition-all duration-300 backdrop-blur-sm hover:border-white/40 hover:bg-white/5 overflow-hidden relative group"
-                            >
-                              <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent opacity-0 group-hover:opacity-100 translate-x-[-100%] group-hover:translate-x-[100%] transition-all duration-1000 ease-in-out"></span>
-                              <Clock className="h-4 w-4 transition-transform group-hover:scale-110" />
-                              <span
-                                className="relative z-2 group-hover:text-white transition-colors duration-300"
-                                style={{
-                                  textShadow: `0 0 4px rgba(255, 255, 255, 0.3)`,
-                                  transition: "text-shadow 0.3s ease-out, color 0.3s ease-out",
-                                }}
-                              >
-                                Ongoing
-                              </span>
-                            </Button>
-                          </motion.div>
-                        ) : Array.isArray(cert.credentialURL) ? (
-                          <div className="flex flex-col gap-2">
-                            {cert.credentialURL.map((credential, index) => (
-                              <motion.div
-                                key={index}
-                                whileHover={{ 
-                                  scale: 1.03, 
-                                  transition: { type: "spring", stiffness: 400, damping: 10 } 
-                                }}
-                              >
-                                <Button 
-                                  variant="outline" 
-                                  size="sm" 
-                                  className="w-full gap-2 bg-black/30 text-white border border-white/20 transition-all duration-300 backdrop-blur-sm hover:border-white/40 hover:bg-white/5 overflow-hidden relative group" 
-                                  asChild
-                                >
-                                  <a href={credential.url} target="_blank" rel="noopener noreferrer">
-                                    <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent opacity-0 group-hover:opacity-100 translate-x-[-100%] group-hover:translate-x-[100%] transition-all duration-1000 ease-in-out"></span>
-                                    <CheckCircle className="h-4 w-4 transition-transform group-hover:scale-110" />
-                                    <span
-                                      className="relative z-2 group-hover:text-white transition-colors duration-300 truncate"
-                                      style={{
-                                        textShadow: `0 0 4px rgba(255, 255, 255, 0.3)`,
-                                        transition: "text-shadow 0.3s ease-out, color 0.3s ease-out",
-                                      }}
-                                    >
-                                      {credential.title}
-                                    </span>
-                                    <ExternalLink className="h-3 w-3 ml-1 flex-shrink-0 transition-transform group-hover:scale-110" />
-                                  </a>
-                                </Button>
-                              </motion.div>
-                            ))}
-                          </div>
-                        ) : cert.credentialURL ? (
-                          <motion.div
-                            whileHover={{ 
-                              scale: 1.03, 
-                              transition: { type: "spring", stiffness: 400, damping: 10 } 
-                            }}
-                          >
-                            <Button 
-                              variant="outline" 
-                              size="sm" 
-                              className="w-full gap-2 bg-black/30 text-white border border-white/20 transition-all duration-300 backdrop-blur-sm hover:border-white/40 hover:bg-white/5 overflow-hidden relative group" 
-                              asChild
-                            >
-                              <a href={cert.credentialURL} target="_blank" rel="noopener noreferrer">
-                                <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent opacity-0 group-hover:opacity-100 translate-x-[-100%] group-hover:translate-x-[100%] transition-all duration-1000 ease-in-out"></span>
-                                <CheckCircle className="h-4 w-4 transition-transform group-hover:scale-110" />
-                                <span
-                                  className="relative z-2 group-hover:text-white transition-colors duration-300"
-                                  style={{
-                                    textShadow: `0 0 4px rgba(255, 255, 255, 0.3)`,
-                                    transition: "text-shadow 0.3s ease-out, color 0.3s ease-out",
-                                  }}
-                                >
-                                  View Credential
-                                </span>
-                                <ExternalLink className="h-3 w-3 ml-1 transition-transform group-hover:scale-110" />
-                              </a>
-                            </Button>
-                          </motion.div>
-                        ) : (
-                          <div className="flex gap-2">
-                            <motion.div
-                              whileHover={{ 
-                                scale: 1.03, 
-                                transition: { type: "spring", stiffness: 400, damping: 10 } 
-                              }}
-                              className="w-full"
-                            >
-                              <Button 
-                                variant="outline" 
-                                size="sm" 
-                                className="w-full gap-2 bg-black/30 text-white border border-white/20 transition-all duration-300 backdrop-blur-sm hover:border-white/40 hover:bg-white/5 overflow-hidden relative group" 
-                                asChild
-                              >
-                                <a href="https://github.com/17arhaan" target="_blank" rel="noopener noreferrer">
-                                  <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent opacity-0 group-hover:opacity-100 translate-x-[-100%] group-hover:translate-x-[100%] transition-all duration-1000 ease-in-out"></span>
-                                  <Github className="h-4 w-4 transition-transform group-hover:scale-110" />
-                                  <span
-                                    className="relative z-2 group-hover:text-white transition-colors duration-300"
-                                    style={{
-                                      textShadow: `0 0 4px rgba(255, 255, 255, 0.3)`,
-                                      transition: "text-shadow 0.3s ease-out, color 0.3s ease-out",
-                                    }}
-                                  >
-                                    View Code
-                                  </span>
-                                  <ExternalLink className="h-3 w-3 ml-1 transition-transform group-hover:scale-110" />
-                                </a>
-                              </Button>
-                            </motion.div>
-                            <motion.div
-                              whileHover={{ 
-                                scale: 1.03, 
-                                transition: { type: "spring", stiffness: 400, damping: 10 } 
-                              }}
-                              className="w-full"
-                            >
-                              <Button 
-                                variant="outline" 
-                                size="sm" 
-                                className="w-full gap-2 bg-black/30 text-white border border-white/20 transition-all duration-300 backdrop-blur-sm hover:border-white/40 hover:bg-white/5 overflow-hidden relative group" 
-                                asChild
-                              >
-                                <a href="https://arhaangirdhar.com" target="_blank" rel="noopener noreferrer">
-                                  <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent opacity-0 group-hover:opacity-100 translate-x-[-100%] group-hover:translate-x-[100%] transition-all duration-1000 ease-in-out"></span>
-                                  <ExternalLink className="h-4 w-4 transition-transform group-hover:scale-110" />
-                                  <span
-                                    className="relative z-2 group-hover:text-white transition-colors duration-300"
-                                    style={{
-                                      textShadow: `0 0 4px rgba(255, 255, 255, 0.3)`,
-                                      transition: "text-shadow 0.3s ease-out, color 0.3s ease-out",
-                                    }}
-                                  >
-                                    View Demo
-                                  </span>
-                                </a>
-                              </Button>
-                            </motion.div>
-                          </div>
-                        )}
-                      </div>
-                    </CardFooter>
-                  </Card>
-                </motion.div>
+                {/* Hover Effect */}
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  whileHover={{ opacity: 1 }}
+                  className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent pointer-events-none"
+                />
               </motion.div>
-            )
-          })}
+            </motion.div>
+          ))}
         </div>
+
+        {/* Certification Modal */}
+        <AnimatePresence>
+          {selectedCert && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.4, ease: "easeInOut" }}
+              className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 md:p-6"
+              onClick={handleModalBackdropClick}
+            >
+              <motion.div
+                ref={modalRef}
+                initial={{ opacity: 0, scale: 0.8, y: 30 }}
+                animate={{ opacity: 1, scale: 1, y: 0 }}
+                exit={{ opacity: 0, scale: 0.9, y: 10 }}
+                transition={{
+                  type: "spring",
+                  damping: 30,
+                  stiffness: 250,
+                  mass: 1,
+                  duration: 0.5,
+                }}
+                className="bg-black/90 border border-white/10 rounded-lg w-full max-w-4xl max-h-[90vh] overflow-y-auto relative modal-glow-border"
+                style={{
+                  boxShadow: "0 0 30px rgba(220, 38, 38, 0.3), 0 0 15px rgba(255, 255, 255, 0.15)",
+                  perspective: "1000px",
+                }}
+                onClick={(e) => e.stopPropagation()}
+              >
+                {/* Moving glow border effect */}
+                <div className="absolute inset-0 rounded-lg overflow-hidden pointer-events-none">
+                  <div className="glow-line glow-line-top"></div>
+                  <div className="glow-line glow-line-right"></div>
+                  <div className="glow-line glow-line-bottom"></div>
+                  <div className="glow-line glow-line-left"></div>
+                </div>
+
+                {/* Modal header */}
+                <div className="sticky top-0 bg-black/90 backdrop-blur-md z-10 flex justify-between items-center p-4 border-b border-white/10">
+                  <motion.h2
+                    initial={{ x: -10, opacity: 0 }}
+                    animate={{ x: 0, opacity: 1 }}
+                    className="text-xl font-bold text-white italic"
+                    style={{ textShadow: "0 0 10px rgba(255,255,255,0.4)" }}
+                  >
+                    {selectedCert.title}
+                  </motion.h2>
+                  <motion.button
+                    whileHover={{ rotate: 90, scale: 1.1 }}
+                    whileTap={{ scale: 0.9 }}
+                    onClick={closeCertModal}
+                    className="p-1 rounded-full hover:bg-white/10 transition-colors"
+                  >
+                    <X className="h-5 w-5 text-white/70 hover:text-white" />
+                  </motion.button>
+                </div>
+
+                {/* Modal content */}
+                <div className="p-4 md:p-6 grid gap-6 md:grid-cols-[1fr_1.5fr]">
+                  {/* Left column - Image and details */}
+                  <div className="space-y-4">
+                    <motion.div
+                      initial={{ opacity: 0, scale: 0.95, y: 10 }}
+                      animate={{ opacity: 1, scale: 1, y: 0 }}
+                      transition={{ duration: 0.4 }}
+                      className="relative w-full aspect-square rounded-lg overflow-hidden bg-white/5 border border-white/10"
+                    >
+                      <Image
+                        src={selectedCert.image}
+                        alt={selectedCert.title}
+                        fill
+                        className="object-contain p-6"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-tr from-red-600/10 to-white/5 mix-blend-overlay" />
+                    </motion.div>
+
+                    {/* Certificate details */}
+                    <motion.div
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: 0.2 }}
+                      className="space-y-4"
+                    >
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-2">
+                          <Award className="h-4 w-4 text-[#e31266]" />
+                          <span className="text-sm text-white/80">Issuer</span>
+                        </div>
+                        <span className="text-sm text-white">{selectedCert.issuer}</span>
+                      </div>
+
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-2">
+                          <Calendar className="h-4 w-4 text-[#e31266]" />
+                          <span className="text-sm text-white/80">Date</span>
+                        </div>
+                        <span className="text-sm text-white">{selectedCert.date}</span>
+                      </div>
+
+                      {selectedCert.credentialId && (
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center gap-2">
+                            <CheckCircle className="h-4 w-4 text-[#e31266]" />
+                            <span className="text-sm text-white/80">Credential ID</span>
+                          </div>
+                          <span className="text-sm text-white">{selectedCert.credentialId}</span>
+                        </div>
+                      )}
+                    </motion.div>
+
+                    {/* Verify button */}
+                    {new Date(selectedCert.date) <= new Date() && selectedCert.credentialURL && (
+                      <motion.a
+                        href={Array.isArray(selectedCert.credentialURL) ? selectedCert.credentialURL[0].url : selectedCert.credentialURL}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.3 }}
+                        whileHover={{
+                          scale: 1.02,
+                          backgroundColor: "rgba(227, 18, 102, 0.15)",
+                          boxShadow: "0 0 15px rgba(227, 18, 102, 0.3), 0 0 10px rgba(255, 255, 255, 0.1)",
+                        }}
+                        whileTap={{ scale: 0.98 }}
+                        className="w-full flex items-center justify-center gap-2 px-4 py-2 rounded-md bg-[#e31266]/5 text-white/90 border border-[#e31266]/20 transition-all duration-300"
+                      >
+                        <ExternalLink className="h-4 w-4" />
+                        <span>Verify Credential</span>
+                      </motion.a>
+                    )}
+                  </div>
+
+                  {/* Right column - Description and skills */}
+                  <div className="space-y-6">
+                    {/* Description */}
+                    <div className="space-y-4">
+                      <motion.h3
+                        initial={{ opacity: 0, y: 5 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.3 }}
+                        className="text-lg font-semibold text-white italic"
+                        style={{ textShadow: "0 0 8px rgba(255,255,255,0.3)" }}
+                      >
+                        Description
+                      </motion.h3>
+                      <motion.p
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.4, delay: 0.4 }}
+                        className="text-sm md:text-base text-white/80 leading-relaxed"
+                      >
+                        {selectedCert.description}
+                      </motion.p>
+                    </div>
+
+                    {/* Skills */}
+                    <motion.div
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: 0.5 }}
+                      className="space-y-4"
+                    >
+                      <div className="flex items-center gap-2">
+                        <Tag className="h-4 w-4 text-[#e31266]" />
+                        <span className="text-sm text-white/80 italic">Skills & Technologies</span>
+                      </div>
+                      <div className="flex flex-wrap gap-2">
+                        {selectedCert.skills.map((skill, index) => (
+                          <motion.span
+                            key={index}
+                            initial={{ opacity: 0, scale: 0.8 }}
+                            animate={{ opacity: 1, scale: 1 }}
+                            transition={{ delay: 0.6 + index * 0.05 }}
+                            whileHover={{
+                              scale: 1.1,
+                              backgroundColor: "rgba(227, 18, 102, 0.15)",
+                              boxShadow: "0 0 10px rgba(227, 18, 102, 0.2), 0 0 5px rgba(255, 255, 255, 0.1)",
+                            }}
+                            className="px-2.5 py-1 text-sm rounded-full bg-[#e31266]/5 text-white/90 border border-[#e31266]/20 transition-all duration-300"
+                          >
+                            {skill}
+                          </motion.span>
+                        ))}
+                      </div>
+                    </motion.div>
+                  </div>
+                </div>
+              </motion.div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
     </section>
   )

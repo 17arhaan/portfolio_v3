@@ -95,7 +95,7 @@ export default function RootLayout({
   return (
     <html lang="en" className="scroll-smooth">
       <head>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
         <meta name="theme-color" content="#000000" />
         <meta name="msapplication-TileColor" content="#000000" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -107,6 +107,22 @@ export default function RootLayout({
         <meta name="apple-mobile-web-app-title" content="Arhaan Girdhar Portfolio" />
         <link rel="canonical" href="https://arhaangirdhar.com" />
         <style>{`
+          * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+          }
+          html, body {
+            overflow-x: hidden;
+            width: 100%;
+            min-height: 100vh;
+            position: relative;
+            background-color: black;
+          }
+          #__next {
+            min-height: 100vh;
+            background-color: black;
+          }
           link[rel="icon"] {
             border-radius: 50%;
             overflow: hidden;
@@ -117,12 +133,14 @@ export default function RootLayout({
           }
         `}</style>
       </head>
-      <body className={inter.className}>
-        <ScrollAnimation>
-          {children}
-        </ScrollAnimation>
-        <Analytics />
-        <SpeedInsights />
+      <body className={`${inter.className} min-h-screen w-full bg-black`}>
+        <div className="min-h-screen w-full bg-black overflow-x-hidden">
+          <ScrollAnimation>
+            {children}
+          </ScrollAnimation>
+          <Analytics />
+          <SpeedInsights />
+        </div>
       </body>
     </html>
   )

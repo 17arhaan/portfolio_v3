@@ -169,23 +169,23 @@ export default function Navbar({
       initial={{ y: -100, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 0.5, ease: "easeOut" }}
-      className="fixed top-0 left-0 right-0 z-50 transition-all duration-500 bg-black/50 backdrop-blur-md py-3"
+      className="fixed top-0 left-0 right-0 z-50 transition-all duration-500 bg-black/50 backdrop-blur-md py-2 sm:py-3"
     >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between">
+      <div className="max-w-[95vw] sm:max-w-[90vw] mx-auto flex flex-col md:flex-row items-center justify-between">
         {/* Signature Logo */}
         <motion.div
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
           onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
           style={{ cursor: "pointer" }}
-          className="relative mt-[21px]"
+          className="relative mx-auto md:mx-0"
         >
-          <div className="w-56 h-20 relative">
+          <div className="w-40 h-14 sm:w-64 sm:h-24 relative">
             <Image
               src="/sign.png"
               alt="Signature"
-              width={224}
-              height={80}
+              width={256}
+              height={96}
               className="signature-image"
               style={{ objectFit: "contain" }}
               priority
@@ -194,7 +194,7 @@ export default function Navbar({
         </motion.div>
 
         {/* Desktop Navigation Links */}
-        <div className="hidden md:flex relative items-center h-16 gap-1" ref={navRef}>
+        <div className="hidden md:flex items-center gap-2" ref={navRef}>
           {navItems.map((item) => (
             <NavItem
               key={item.id}
@@ -205,48 +205,6 @@ export default function Navbar({
             />
           ))}
         </div>
-
-        {/* Mobile Menu Button */}
-        <button
-          className="md:hidden p-2 text-white/60 hover:text-white transition-colors"
-          onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-        >
-          {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
-        </button>
-
-        {/* Mobile Menu */}
-        <AnimatePresence>
-          {isMobileMenuOpen && (
-            <motion.div
-              initial={{ opacity: 0, y: -20 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -20 }}
-              transition={{ duration: 0.2 }}
-              className="fixed inset-0 top-[72px] bg-black/95 backdrop-blur-md md:hidden"
-            >
-              <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex flex-col gap-2 h-[calc(100vh-72px)] overflow-y-auto">
-                {navItems.map((item) => (
-                  <motion.button
-                    key={item.id}
-                    whileHover={{ scale: 1.02 }}
-                    whileTap={{ scale: 0.98 }}
-                    onClick={() => {
-                      scrollToSection(item)
-                      setIsMobileMenuOpen(false)
-                    }}
-                    className={`text-left px-4 py-3 rounded-md transition-colors ${
-                      activeSection === item.id
-                        ? "text-white bg-white/10"
-                        : "text-white/60 hover:text-white hover:bg-white/5"
-                    }`}
-                  >
-                    {item.name}
-                  </motion.button>
-                ))}
-              </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
       </div>
     </motion.nav>
   )
@@ -266,7 +224,7 @@ function NavItem({ label, isActive, onClick, id }: NavItemProps) {
       whileHover={{ scale: 1.05 }}
       whileTap={{ scale: 0.95 }}
       onClick={onClick}
-      className={`text-sm transition-all duration-200 px-3 py-2 relative ${
+      className={`text-sm sm:text-base transition-all duration-200 px-3 py-2 relative ${
         isActive ? "text-white font-medium" : "text-white/60 hover:text-white"
       }`}
     >

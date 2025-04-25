@@ -126,19 +126,19 @@ export default function AnimatedFooter() {
   ]
 
   return (
-    <footer className="relative w-full py-10 overflow-hidden border-t border-white/10">
+    <footer className="relative w-full py-8 sm:py-10 overflow-visible border-t border-white/10">
       {/* Animated background */}
-      <div className="absolute inset-0 bg-black/50 backdrop-blur-sm">
+      <div className="absolute inset-0 bg-black/50 backdrop-blur-sm overflow-visible">
         {/* Particles container */}
-        <div ref={particlesRef} className="absolute inset-0 overflow-hidden" />
+        <div ref={particlesRef} className="absolute inset-0 overflow-visible" />
 
         {/* Gradient overlay */}
         <div className="absolute inset-0 bg-gradient-to-t from-[#3C0753]/30 to-transparent" />
 
         {/* Animated wave */}
-        <div className="absolute bottom-0 left-0 right-0 h-20 overflow-hidden">
+        <div className="absolute bottom-0 left-0 right-0 h-16 sm:h-20 overflow-visible">
           <motion.div
-            className="absolute bottom-0 left-0 right-0 h-40 bg-gradient-to-r from-[#3C0753]/10 via-[#720455]/10 to-[#910A67]/10"
+            className="absolute bottom-0 left-0 right-0 h-32 sm:h-40 bg-gradient-to-r from-[#3C0753]/10 via-[#720455]/10 to-[#910A67]/10"
             animate={{
               y: [0, -10, 0],
               opacity: [0.3, 0.5, 0.3],
@@ -157,7 +157,7 @@ export default function AnimatedFooter() {
       </div>
 
       <div className="container mx-auto px-4 relative z-10">
-        <div className="grid grid-cols-1 md:grid-cols-[2fr_1fr_1fr] gap-6 mb-8">
+        <div className="grid grid-cols-1 md:grid-cols-[2fr_1fr_1fr] gap-6 mb-6 sm:mb-8">
           {/* Logo, tagline and description */}
           <div className="flex flex-col items-center md:items-start">
             <motion.div
@@ -171,12 +171,12 @@ export default function AnimatedFooter() {
               }}
               className="mb-2 signature-container cursor-pointer"
             >
-              <div className="w-72 h-24 relative">
+              <div className="w-48 sm:w-72 h-16 sm:h-24 relative">
                 <motion.div
                   initial={{ opacity: 0, x: 10 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: 0.5 }}
-                  className="absolute -left-16 top-1/2 transform -translate-y-1/2 flex items-center space-x-1 text-white/40 text-xs"
+                  className="absolute -left-12 sm:-left-16 top-1/2 transform -translate-y-1/2 flex items-center space-x-1 text-white/40 text-[10px] sm:text-xs"
                 >
                   {!isClicked ? (
                     <>
@@ -185,7 +185,7 @@ export default function AnimatedFooter() {
                         animate={{ x: [0, 3, 0] }}
                         transition={{ duration: 1, repeat: Infinity }}
                       >
-                        <ArrowUpRight className="h-3 w-3" />
+                        <ArrowUpRight className="h-2.5 w-2.5 sm:h-3 sm:w-3" />
                       </motion.div>
                     </>
                   ) : (
@@ -193,7 +193,7 @@ export default function AnimatedFooter() {
                       initial={{ scale: 0 }}
                       animate={{ scale: 1 }}
                       transition={{ type: "spring", stiffness: 500 }}
-                      className="text-[#e31266]/70 text-xs"
+                      className="text-[#e31266]/70 text-[10px] sm:text-xs"
                     >
                       Yay !!
                     </motion.span>
@@ -251,13 +251,13 @@ export default function AnimatedFooter() {
               )}
             </AnimatePresence>
 
-            <div className="space-y-3">
-              <p className="text-white/80 text-sm max-w-md">
+            <div className="space-y-2 sm:space-y-3">
+              <p className="text-white/80 text-xs sm:text-sm max-w-md">
                 <span className="font-medium text-white">Arhaan Girdhar</span> — Computer Science student specializing
                 in AI & ML at MIT Manipal. Passionate about building innovative solutions at the intersection of
                 technology and creativity.
               </p>
-              <p className="text-white/60 text-sm italic">
+              <p className="text-white/60 text-[10px] sm:text-sm italic">
                 Turning vision into reality through code, creativity, and continuous learning.
               </p>
             </div>
@@ -265,17 +265,17 @@ export default function AnimatedFooter() {
 
           {/* Quick links */}
           <div className="flex flex-col items-center md:items-start">
-            <h3 className="text-white font-semibold mb-4 text-lg flex items-center">
+            <h3 className="text-white font-semibold mb-3 sm:mb-4 text-base sm:text-lg flex items-center">
               <motion.div
                 animate={{ rotate: [0, 10, 0] }}
                 transition={{ duration: 2, repeat: Number.POSITIVE_INFINITY, repeatType: "reverse" }}
                 className="mr-2"
               >
-                <ExternalLink className="h-4 w-4 text-white/70" />
+                <ExternalLink className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-white/70" />
               </motion.div>
               Quick Links
             </h3>
-            <ul className="space-y-3 text-center md:text-left">
+            <ul className="space-y-2 sm:space-y-3 text-center md:text-left">
               {[
                 { name: "Home", icon: Home },
                 { name: "Experience", icon: Briefcase },
@@ -288,13 +288,13 @@ export default function AnimatedFooter() {
                 <li key={item.name}>
                   <motion.a
                     href={`#${item.name.toLowerCase()}`}
-                    className="text-white/60 hover:text-white transition-colors duration-300 text-sm flex items-center group"
+                    className="text-white/60 hover:text-white transition-colors duration-300 text-[10px] sm:text-sm flex items-center group"
                     whileHover={{
                       x: 2,
                       textShadow: "0 0 8px rgba(255, 255, 255, 0.3)",
                     }}
                   >
-                    <item.icon className="h-3.5 w-3.5 mr-2 text-white/40 group-hover:text-white/90 transition-colors duration-300" />
+                    <item.icon className="h-3 w-3 sm:h-3.5 sm:w-3.5 mr-2 text-white/40 group-hover:text-white/90 transition-colors duration-300" />
                     {item.name}
                     <motion.div
                       className="h-[1px] w-0 bg-white/40 ml-2 group-hover:w-8 transition-all duration-300"
@@ -308,22 +308,22 @@ export default function AnimatedFooter() {
 
           {/* Social links */}
           <div className="flex flex-col items-center md:items-start">
-            <h3 className="text-white font-semibold mb-4 text-lg">Connect</h3>
-            <div className="flex flex-wrap justify-center md:justify-start gap-4">
+            <h3 className="text-white font-semibold mb-3 sm:mb-4 text-base sm:text-lg">Connect</h3>
+            <div className="flex flex-wrap justify-center md:justify-start gap-3 sm:gap-4">
               {socialLinks.map((link) => (
                 <motion.a
                   key={link.label}
                   href={link.href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="social-button p-2 transition-colors duration-300"
+                  className="social-button p-1.5 sm:p-2 transition-colors duration-300"
                   whileHover={{
                     scale: 1.2,
                   }}
                   whileTap={{ scale: 0.9 }}
                   aria-label={link.label}
                 >
-                  <link.icon className="w-5 h-5 text-white/80" />
+                  <link.icon className="w-4 h-4 sm:w-5 sm:h-5 text-white/80" />
                 </motion.a>
               ))}
             </div>
@@ -331,9 +331,9 @@ export default function AnimatedFooter() {
         </div>
 
         {/* Copyright */}
-        <div className="border-t border-white/10 pt-4 flex justify-center">
+        <div className="border-t border-white/10 pt-3 sm:pt-4 flex justify-center">
           <motion.p
-            className="text-white/40 text-sm"
+            className="text-white/40 text-[10px] sm:text-sm"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 1 }}

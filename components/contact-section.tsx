@@ -84,7 +84,7 @@ export default function ContactSection() {
           viewport={{ once: true, margin: "-100px" }}
           className="text-center mb-16"
         >
-          <h2 className="text-3xl font-bold mb-4 text-white">Get in Touch</h2>
+          <h2 className="section-title">Get in Touch</h2>
           <motion.p
             initial={{ opacity: 0, y: 10 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -101,8 +101,7 @@ export default function ContactSection() {
             whileInView={{ scaleX: 1, opacity: 1 }}
             viewport={{ once: true, margin: "-100px" }}
             transition={{ duration: 0.8, delay: 0.3 }}
-            className="w-48 h-px bg-gradient-to-r from-transparent via-white to-transparent mx-auto mt-6"
-            style={{ boxShadow: "0 0 10px rgba(255, 255, 255, 0.5)" }}
+            className="section-title-line"
           />
         </motion.div>
 

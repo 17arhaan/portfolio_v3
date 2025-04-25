@@ -63,11 +63,24 @@ import {
   Folder,
   Package,
   Box,
+  Filter,
+  ChevronDown,
 } from "lucide-react"
 import React from 'react'
 
-// Define the skill categories type
-type SkillCategory = 'programming' | 'frameworks' | 'libraries' | 'tools' | 'platforms' | 'domains' | 'languages' | 'commands';
+const skillCategories = [
+  "programming",
+  "frameworks",
+  "libraries",
+  "tools",
+  "platforms",
+  "domains",
+  "languages",
+  "commands"
+] as const
+
+type SkillCategory = typeof skillCategories[number]
+type SkillCategoryOrNull = SkillCategory | null
 
 type CategoryColor = {
   from: string;
@@ -109,57 +122,17 @@ type SkillIcon = Record<SkillName, React.ReactElement>;
 
 // Color schemes for different categories
 const categoryColors: Record<SkillCategory, CategoryColor> = {
-  programming: {
-    from: "#3B82F6", // blue-500
-    via: "#2563EB", // blue-600
-    to: "#1D4ED8", // blue-700
-    bg: "rgba(59, 130, 246, 0.1)", // blue-500 with low opacity
-  },
-  frameworks: {
-    from: "#10B981", // emerald-500
-    via: "#059669", // emerald-600
-    to: "#047857", // emerald-700
-    bg: "rgba(16, 185, 129, 0.1)", // emerald-500 with low opacity
-  },
-  libraries: {
-    from: "#8B5CF6", // violet-500
-    via: "#7C3AED", // violet-600
-    to: "#6D28D9", // violet-700
-    bg: "rgba(139, 92, 246, 0.1)", // violet-500 with low opacity
-  },
-  tools: {
-    from: "#F59E0B", // amber-500
-    via: "#D97706", // amber-600
-    to: "#B45309", // amber-700
-    bg: "rgba(245, 158, 11, 0.1)", // amber-500 with low opacity
-  },
-  platforms: {
-    from: "#EC4899", // pink-500
-    via: "#DB2777", // pink-600
-    to: "#BE185D", // pink-700
-    bg: "rgba(236, 72, 153, 0.1)", // pink-500 with low opacity
-  },
-  domains: {
-    from: "#6366F1", // indigo-500
-    via: "#4F46E5", // indigo-600
-    to: "#4338CA", // indigo-700
-    bg: "rgba(99, 102, 241, 0.1)", // indigo-500 with low opacity
-  },
-  languages: {
-    from: "#EF4444", // red-500
-    via: "#DC2626", // red-600
-    to: "#B91C1C", // red-700
-    bg: "rgba(239, 68, 68, 0.1)", // red-500 with low opacity
-  },
-  commands: {
-    from: "#06B6D4", // cyan-500
-    via: "#0891B2", // cyan-600
-    to: "#0E7490", // cyan-700
-    bg: "rgba(6, 182, 212, 0.1)", // cyan-500 with low opacity
-  },
+  programming: { from: "#3B82F6", via: "#2563EB", to: "#1D4ED8", bg: "rgba(59, 130, 246, 0.1)" },
+  frameworks: { from: "#10B981", via: "#059669", to: "#047857", bg: "rgba(16, 185, 129, 0.1)" },
+  libraries: { from: "#8B5CF6", via: "#7C3AED", to: "#6D28D9", bg: "rgba(139, 92, 246, 0.1)" },
+  tools: { from: "#F59E0B", via: "#D97706", to: "#B45309", bg: "rgba(245, 158, 11, 0.1)" },
+  platforms: { from: "#EC4899", via: "#DB2777", to: "#BE185D", bg: "rgba(236, 72, 153, 0.1)" },
+  domains: { from: "#6366F1", via: "#4F46E5", to: "#4338CA", bg: "rgba(99, 102, 241, 0.1)" },
+  languages: { from: "#EF4444", via: "#DC2626", to: "#B91C1C", bg: "rgba(239, 68, 68, 0.1)" },
+  commands: { from: "#06B6D4", via: "#0891B2", to: "#0E7490", bg: "rgba(6, 182, 212, 0.1)" },
 }
 
-// Category icons
+// Category icons with null handling
 const categoryIcons: Record<SkillCategory, React.ReactElement> = {
   programming: <Code2 className="w-5 h-5 mr-2 text-blue-400" />,
   frameworks: <LayoutGrid className="w-5 h-5 mr-2 text-emerald-400" />,
@@ -341,6 +314,11 @@ const skillsData: Record<SkillCategory, Skill[]> = {
     { name: "Package Management", level: 85 },
   ],
 }
+
+// Populate the 'all' category
+// skillsData.all = Object.entries(skillsData)
+//   .filter(([category]) => category !== 'all')
+//   .flatMap(([_, skills]) => skills)
 
 // Add skill descriptions
 const skillDescriptions: SkillDescriptions = {
@@ -626,259 +604,262 @@ const skillDescriptions: SkillDescriptions = {
 }
 
 export default function SkillsSection() {
-  const [activeTab, setActiveTab] = useState<SkillCategory>("programming")
-  const [selectedSkill, setSelectedSkill] = useState<SkillName | null>(null)
+  const [selectedSkill, setSelectedSkill] = useState<SkillCategoryOrNull>(null)
+  const [selectedSkillDetails, setSelectedSkillDetails] = useState<SkillName | null>(null)
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
 
-  const handleTabChange = (value: SkillCategory) => {
-    setActiveTab(value)
-  }
+  // Get the current skills to display
+  const currentSkills = selectedSkill ? skillsData[selectedSkill] : []
 
   return (
-    <section
-      id="skills"
-      className="w-full min-h-screen py-24 px-6 md:px-10 flex flex-col items-center justify-start relative"
-    >
-      <div className="text-center mb-8 relative z-10 max-w-3xl">
-        <motion.h1
-          initial={{ opacity: 0, y: -10 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-100px" }}
-          className="text-2xl md:text-3xl font-bold text-white"
-          style={{ textShadow: "0 0 10px rgba(255,255,255,0.5)" }}
-        >
-          Skills & Expertise
-        </motion.h1>
-
-        <motion.p
-          initial={{ opacity: 0, y: 10 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-100px" }}
-          transition={{ duration: 0.6, delay: 0.2 }}
-          className="mt-3 text-sm md:text-base text-white/80 max-w-2xl mx-auto italic"
-          style={{ textShadow: "0 0 5px rgba(255,255,255,0.3)" }}
-        >
-          A comprehensive overview of my technical abilities, domain knowledge, and languages.
-        </motion.p>
-
+    <section id="skills" className="py-12 sm:py-20 relative w-full overflow-hidden">
+      <div className="max-w-[95vw] sm:max-w-[90vw] mx-auto">
+        {/* Section Header */}
         <motion.div
-          initial={{ scaleX: 0, opacity: 0 }}
-          whileInView={{ scaleX: 1, opacity: 1 }}
-          viewport={{ once: true, margin: "-100px" }}
-          transition={{ duration: 0.8, delay: 0.3 }}
-          className="w-48 h-px bg-gradient-to-r from-transparent via-white to-transparent mx-auto mt-6"
-          style={{ boxShadow: "0 0 10px rgba(255, 255, 255, 0.5)" }}
-        />
-      </div>
-
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, margin: "-100px" }}
-        transition={{ duration: 0.5, delay: 0.2, ease: "easeOut" }}
-        className="max-w-4xl mx-auto w-full"
-      >
-         <Tabs defaultValue="programming" className="w-full" onValueChange={(value) => setActiveTab(value as SkillCategory)}>          
-          <div className="relative">            
-            <TabsList className="flex justify-center w-full gap-2 mb-4 sm:mb-8 bg-transparent relative">              
-              {(Object.keys(skillsData) as SkillCategory[]).map((category) => (                
-                <TabsTrigger                  
-                key={category}                  
-                value={category}                  
-                className="text-[10px] sm:text-xs md:text-sm font-medium relative z-10 transition-all duration-300 px-4 py-2 data-[state=active]:text-white data-[state=inactive]:text-white/70 flex items-center justify-center rounded-md hover:bg-white/5"                  
-                style={{                    
-                  textShadow: activeTab === category ? 
-                    `0 1px 0 ${categoryColors[category as SkillCategory].from},
-                     0 2px 0 ${categoryColors[category as SkillCategory].via},
-                     0 3px 0 ${categoryColors[category as SkillCategory].to},
-                     0 4px 0 rgba(0,0,0,0.1),
-                     0 0 5px ${categoryColors[category as SkillCategory].from},
-                     0 0 10px ${categoryColors[category as SkillCategory].via}` 
-                    : "none",
-                  transform: activeTab === category ? "translateY(-1px)" : "none",
-                  transition: "all 0.3s ease",
-                  background: activeTab === category ? 
-                    `linear-gradient(135deg, ${categoryColors[category as SkillCategory].bg}, ${categoryColors[category as SkillCategory].from}40)` :
-                    'transparent',
-                  border: `1px solid ${activeTab === category ? categoryColors[category as SkillCategory].from + '40' : 'rgba(255,255,255,0.1)'}`,
-                  boxShadow: activeTab === category ? 
-                    `0 0 10px ${categoryColors[category as SkillCategory].bg}, inset 0 0 20px ${categoryColors[category as SkillCategory].bg}` : 
-                    'none'
-                }}                
-                >                  
-                {categoryIcons[category as SkillCategory]}                  
-                {category.charAt(0).toUpperCase() + category.slice(1)}                
-                </TabsTrigger>              
-                ))}            
-                </TabsList>          
-                </div>          
-                <AnimatePresence mode="wait">            
-                  {Object.entries(skillsData).map(([category, skills]) => (              
-                    <TabsContent key={category} value={category}>                
-                    <motion.div                  
-                      initial={{ opacity: 0, x: 50, scale: 0.95 }}
-                      animate={{ opacity: 1, x: 0, scale: 1 }}
-                      exit={{ opacity: 0, x: -50, scale: 0.95 }}
-                      transition={{
-                        duration: 0.5,
-                        ease: [0.4, 0, 0.2, 1],
-                        scale: {
-                          duration: 0.4,
-                          ease: "easeOut"
-                        }
-                      }}
-                    >
-                      <Card
-                        className="border border-white/10 shadow-sm backdrop-blur-sm"
-                        style={{
-                          background: `linear-gradient(135deg, ${categoryColors[category as SkillCategory].bg}, rgba(0,0,0,0.5))`,
-                          boxShadow: `0 0 20px ${categoryColors[category as SkillCategory].bg}`,
-                        }}
-                      >
-                        <CardContent className="pt-4 sm:pt-6">
-                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
-                            {skills.map((skill, index) => (
-                              <motion.div
-                                key={skill.name}
-                                initial={{ opacity: 0, y: 20, scale: 0.95 }}
-                                animate={{ opacity: 1, y: 0, scale: 1 }}
-                                exit={{ opacity: 0, y: -20, scale: 0.95 }}
-                                transition={{
-                                  duration: 0.4,
-                                  delay: index * 0.05,
-                                  ease: "easeOut"
-                                }}
-                                className="group cursor-pointer"
-                                onClick={() => skillDescriptions[skill.name] && setSelectedSkill(skill.name)}
-                                style={{
-                                  cursor: skillDescriptions[skill.name] ? 'pointer' : 'default'
-                                }}
-                              >
-                                <div className="mb-2 sm:mb-3 flex justify-between items-center">
-                                  <span className="font-medium group-hover:text-white text-white/90 transition-colors duration-300 text-sm sm:text-base flex items-center">
-                                    {skillIcons[skill.name] || <GraduationCap className="w-4 h-4 mr-2" />}
-                                    {skill.name}
-                                    {skillDescriptions[skill.name] && (
-                                      <Sparkles className="w-3 h-3 ml-2 text-yellow-400 opacity-0 group-hover:opacity-100 transition-opacity" />
-                                    )}
-                                  </span>
-                                  <motion.span
-                                    initial={{ scale: 0.9 }}
-                                    animate={{ scale: 1 }}
-                                    transition={{ duration: 0.3, delay: index * 0.05 }}
-                                    className="text-white/60 text-xs sm:text-sm px-2 py-0.5 rounded-full"
-                                    style={{
-                                      background: categoryColors[category as SkillCategory].bg,
-                                      color: categoryColors[category as SkillCategory].from,
-                                    }}
-                                  >
-                                    {skill.level}%
-                                  </motion.span>
-                                </div>
-                                <div className="h-2 sm:h-3 bg-white/10 rounded-full overflow-hidden">
-                                  <motion.div
-                                    initial={{ width: 0, scale: 0.95 }}
-                                    whileInView={{ width: `${skill.level}%`, scale: 1 }}
-                                    viewport={{ once: true }}
-                                    transition={{ 
-                                      duration: 0.8, 
-                                      delay: index * 0.05 + 0.2, 
-                                      ease: [0.34, 1.56, 0.64, 1]
-                                    }}
-                                    className="h-full transition-all duration-300"
-                                    style={{
-                                      background: `linear-gradient(90deg, ${categoryColors[category as SkillCategory].from}, ${categoryColors[category as SkillCategory].via}, ${categoryColors[category as SkillCategory].to})`,
-                                      boxShadow: `0 0 10px ${categoryColors[category as SkillCategory].from}`,
-                                    }}
-                                  />
-                                </div>
-                              </motion.div>
-                            ))}
-                          </div>
-                        </CardContent>
-                      </Card>
-                    </motion.div>
-                  </TabsContent>
-                ))}
-              </AnimatePresence>
-            </Tabs>
-          </motion.div>
-
-      {/* Add Skill Spotlight section */}
-      <AnimatePresence mode="wait">
-        {selectedSkill && skillDescriptions[selectedSkill] && (
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+          viewport={{ once: true, margin: "-50px" }}
+          className="text-center mb-8 sm:mb-12"
+        >
+          <h2 className="section-title">Skills</h2>
+          <p className="mt-2 text-white/60 text-sm sm:text-base max-w-2xl mx-auto">
+            A comprehensive overview of my technical expertise and capabilities
+          </p>
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            transition={{ duration: 0.3 }}
-            className="mt-8 w-full max-w-4xl"
-          >
-            <Card 
-              className="border backdrop-blur-lg shadow-xl relative overflow-hidden group"
-              style={{
-                background: `linear-gradient(135deg, ${categoryColors[activeTab as SkillCategory].bg}, rgba(0,0,0,0.6))`,
-                borderColor: `${categoryColors[activeTab as SkillCategory].from}20`,
-                boxShadow: `0 0 20px ${categoryColors[activeTab as SkillCategory].bg}, inset 0 0 30px ${categoryColors[activeTab as SkillCategory].bg}`,
-              }}
-            >
-              {/* Animated background elements */}
-              <div 
-                className="absolute -bottom-20 -right-20 w-40 h-40 rounded-full transition-transform duration-700 group-hover:scale-150 opacity-0 group-hover:opacity-20"
-                style={{
-                  background: `linear-gradient(135deg, ${categoryColors[activeTab as SkillCategory].from}, ${categoryColors[activeTab as SkillCategory].to})`
-                }}
-              />
-              <div 
-                className="absolute -top-20 -left-20 w-40 h-40 rounded-full transition-transform duration-700 group-hover:scale-150 opacity-0 group-hover:opacity-20"
-                style={{
-                  background: `linear-gradient(315deg, ${categoryColors[activeTab as SkillCategory].from}, ${categoryColors[activeTab as SkillCategory].to})`
-                }}
-              />
-              
-              <CardContent className="p-6 relative z-10">
-                <div className="flex items-start justify-between">
-                  <div>
-                    <h3 className="text-xl font-semibold text-white flex items-center gap-2">
-                      <Sparkles className="w-5 h-5" style={{ color: categoryColors[activeTab as SkillCategory].from }} />
-                      {selectedSkill}
-                    </h3>
-                    <p className="mt-2 text-white/80">
-                      {skillDescriptions[selectedSkill].description}
-                    </p>
-                  </div>
-                  <button
-                    onClick={() => setSelectedSkill(null)}
-                    className="text-white/60 hover:text-white transition-colors"
-                  >
-                    ×
-                  </button>
-                </div>
+            initial={{ scaleX: 0, opacity: 0 }}
+            whileInView={{ scaleX: 1, opacity: 1 }}
+            viewport={{ once: true, margin: "-100px" }}
+            transition={{ duration: 0.8, delay: 0.3 }}
+            className="section-title-line"
+          />
+        </motion.div>
 
-                <div className="mt-4">
-                  <h4 className="text-sm font-medium text-white/70 mb-2">Applications</h4>
-                  <ul className="grid grid-cols-2 gap-2">
-                    {skillDescriptions[selectedSkill].applications.map((app: string, index: number) => (
-                      <motion.li
-                        key={app}
-                        initial={{ opacity: 0, x: -10 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        transition={{ delay: index * 0.1 }}
-                        className="text-white/90 text-sm flex items-center gap-2"
-                      >
-                        <div 
-                          className="w-1.5 h-1.5 rounded-full" 
-                          style={{ background: categoryColors[activeTab as SkillCategory].from }}
-                        />
-                        {app}
-                      </motion.li>
-                    ))}
-                  </ul>
-                </div>
-              </CardContent>
-            </Card>
+        {/* Mobile Skill Selector */}
+        <div className="block md:hidden mb-6">
+          <motion.button
+            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            className={`w-full flex items-center justify-between px-4 py-2 rounded-lg text-white transform-gpu transition-all duration-300 ${
+              selectedSkill 
+                ? `bg-gradient-to-br from-${categoryColors[selectedSkill].from}20 via-${categoryColors[selectedSkill].via}30 to-${categoryColors[selectedSkill].to}20 border-white/20`
+                : 'bg-white/5 border-white/10'
+            }`}
+            style={{
+              boxShadow: selectedSkill 
+                ? `0 0 20px ${categoryColors[selectedSkill].from}40,
+                   0 0 40px ${categoryColors[selectedSkill].from}20,
+                   inset 0 0 15px ${categoryColors[selectedSkill].from}10`
+                : 'none',
+              borderWidth: '1px',
+              borderStyle: 'solid'
+            }}
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
+          >
+            <div className="flex items-center gap-2">
+              {selectedSkill ? categoryIcons[selectedSkill] : <Filter className="h-4 w-4" />}
+              <span className="text-sm">{selectedSkill ? selectedSkill.toUpperCase() : "CHOOSE A CATEGORY"}</span>
+            </div>
+            <ChevronDown 
+              className={`h-4 w-4 text-white/70 transition-transform duration-200 ${
+                isMobileMenuOpen ? 'rotate-180' : ''
+              }`}
+            />
+          </motion.button>
+
+          <AnimatePresence>
+            {isMobileMenuOpen && (
+              <motion.div
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+                transition={{ duration: 0.2 }}
+                className="mt-2 bg-black/90 border border-white/10 rounded-lg overflow-hidden"
+              >
+                {skillCategories.map((category) => (
+                  <motion.button
+                    key={category}
+                    onClick={() => {
+                      setSelectedSkill(category)
+                      setSelectedSkillDetails(null)
+                      setIsMobileMenuOpen(false)
+                    }}
+                    className={`w-full text-left px-4 py-3 text-sm transition-all duration-300 ${
+                      selectedSkill === category
+                        ? `bg-gradient-to-br from-${categoryColors[category].from}20 via-${categoryColors[category].via}30 to-${categoryColors[category].to}20 text-white`
+                        : 'text-white/70 hover:bg-white/5 hover:text-white'
+                    }`}
+                    whileHover={{ x: 4, backgroundColor: "rgba(255, 255, 255, 0.1)" }}
+                    whileTap={{ scale: 0.98 }}
+                    style={{
+                      boxShadow: selectedSkill === category 
+                        ? `0 0 20px ${categoryColors[category].from}40,
+                           inset 0 0 15px ${categoryColors[category].from}10`
+                        : 'none',
+                      transform: selectedSkill === category ? 'translateZ(5px)' : 'none'
+                    }}
+                  >
+                    <div className="flex items-center gap-2">
+                      {categoryIcons[category]}
+                      <span>{category.toUpperCase()}</span>
+                    </div>
+                  </motion.button>
+                ))}
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
+
+        {/* Desktop Skill Selector */}
+        <div className="hidden md:flex justify-center mb-8">
+          <div className="flex flex-wrap justify-center gap-2">
+            {skillCategories.map((category) => (
+              <motion.button
+                key={category}
+                onClick={() => {
+                  setSelectedSkill(category)
+                  setSelectedSkillDetails(null)
+                }}
+                whileHover={{ 
+                  scale: 1.05,
+                  backgroundColor: "rgba(255, 255, 255, 0.15)",
+                  boxShadow: `0 0 20px ${categoryColors[category].from}40, 0 0 10px rgba(255, 255, 255, 0.2)`,
+                  y: -2
+                }}
+                whileTap={{ scale: 0.95 }}
+                className={`px-4 py-2 rounded-full text-sm transition-all duration-300 flex items-center gap-2 transform-gpu ${
+                  selectedSkill === category
+                    ? `bg-gradient-to-br from-${categoryColors[category].from}20 via-${categoryColors[category].via}30 to-${categoryColors[category].to}20 text-white font-medium border border-white/20`
+                    : "bg-white/5 text-white/70 border border-white/5 hover:text-white/90"
+                }`}
+                style={{
+                  textShadow: selectedSkill === category ? `0 0 10px ${categoryColors[category].from}80` : 'none',
+                  transform: selectedSkill === category ? 'translateY(-2px)' : 'none',
+                  boxShadow: selectedSkill === category 
+                    ? `0 0 20px ${categoryColors[category].from}40,
+                       0 0 40px ${categoryColors[category].from}20,
+                       inset 0 0 15px ${categoryColors[category].from}10`
+                    : 'none',
+                  transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)'
+                }}
+              >
+                {categoryIcons[category]}
+                <span>{category.toUpperCase()}</span>
+              </motion.button>
+            ))}
+          </div>
+        </div>
+
+        {/* Skills Grid */}
+        {selectedSkill ? (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.5 }}
+            className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6"
+          >
+            {skillsData[selectedSkill].map((skill, index) => (
+              <motion.div
+                key={skill.name}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: index * 0.1 }}
+                viewport={{ once: true, margin: "-50px" }}
+                onClick={() => setSelectedSkillDetails(skill.name)}
+                whileHover={{ 
+                  scale: 1.02,
+                  y: -5,
+                  boxShadow: `0 0 30px ${categoryColors[selectedSkill].from}30, 0 0 15px rgba(255, 255, 255, 0.1)`,
+                  transition: { duration: 0.2 }
+                }}
+                whileTap={{ scale: 0.98 }}
+              >
+                <Card 
+                  className={`group relative overflow-hidden border-white/5 hover:bg-white/10 transition-all duration-300 cursor-pointer transform-gpu ${
+                    selectedSkillDetails === skill.name ? 'bg-white/20 border-white/20' : 'bg-white/5 hover:border-white/20'
+                  }`}
+                  style={{
+                    transform: 'perspective(1000px)',
+                    transformStyle: 'preserve-3d'
+                  }}
+                >
+                  <CardContent className="p-4">
+                    <div className="flex items-center gap-2 mb-3">
+                      {skillIcons[skill.name]}
+                      <span className="text-sm font-medium text-white group-hover:text-white/90 transition-colors duration-300">
+                        {skill.name}
+                      </span>
+                    </div>
+                    <div className="relative h-1.5 bg-white/10 rounded-full overflow-hidden">
+                      <motion.div
+                        initial={{ width: 0 }}
+                        whileInView={{ width: `${skill.level}%` }}
+                        transition={{ duration: 1, delay: 0.5 + index * 0.1 }}
+                        viewport={{ once: true }}
+                        className="absolute inset-y-0 left-0 rounded-full"
+                        style={{
+                          background: `linear-gradient(to right, ${categoryColors[selectedSkill].from}, ${categoryColors[selectedSkill].via}, ${categoryColors[selectedSkill].to})`,
+                          boxShadow: `0 0 20px ${categoryColors[selectedSkill].from}40`
+                        }}
+                      />
+                    </div>
+                    <div className="mt-2 text-xs text-white/60 group-hover:text-white/80 transition-colors duration-300">
+                      {skill.level}% Proficiency
+                    </div>
+                  </CardContent>
+                </Card>
+              </motion.div>
+            ))}
+          </motion.div>
+        ) : (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            className="text-center py-20"
+          >
+            <p className="text-white/60 text-lg">Please select a category to view skills</p>
           </motion.div>
         )}
-      </AnimatePresence>
+
+        {/* Skill Description Section */}
+        <AnimatePresence mode="wait">
+          {selectedSkillDetails && (
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              transition={{ duration: 0.3 }}
+              className="mt-8 p-6 bg-white/5 rounded-lg border border-white/10"
+            >
+              <div className="flex items-start gap-4">
+                <div className="p-3 rounded-lg bg-white/5">
+                  {skillIcons[selectedSkillDetails]}
+                </div>
+                <div className="flex-1">
+                  <h3 className="text-lg font-medium text-white mb-2">{selectedSkillDetails}</h3>
+                  <p className="text-white/80 text-sm mb-4">
+                    {skillDescriptions[selectedSkillDetails].description}
+                  </p>
+                  <div className="space-y-2">
+                    <h4 className="text-sm font-medium text-white/90">Applications:</h4>
+                    <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
+                      {skillDescriptions[selectedSkillDetails].applications.map((app, i) => (
+                        <li 
+                          key={i}
+                          className="flex items-center gap-2 text-sm text-white/60"
+                        >
+                          <div className="w-1 h-1 rounded-full bg-white/40" />
+                          {app}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
     </section>
   )
 }

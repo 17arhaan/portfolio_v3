@@ -31,65 +31,52 @@ export default function ResumeSection() {
   return (
     <section
       id="resume"
-      className="w-full py-12 px-6 md:px-10 flex flex-col items-center justify-start relative"
+      className="w-full py-8 sm:py-12 px-4 sm:px-6 md:px-10 flex flex-col items-center justify-start relative"
     >
-      <div className="text-center mb-8 relative z-10">
-        <motion.h1
-          initial={{ opacity: 0, y: -10 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-100px" }}
-          transition={{ duration: 0.6 }}
-          className="text-2xl md:text-3xl font-bold text-white"
-          style={{ textShadow: "0 0 10px rgba(255,255,255,0.5)" }}
-        >
-          Resume
-        </motion.h1>
-
-        <motion.p
-          initial={{ opacity: 0, y: 10 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-100px" }}
-          transition={{ duration: 0.6, delay: 0.2 }}
-          className="mt-3 text-sm md:text-base text-white/80 max-w-2xl mx-auto italic"
-          style={{ textShadow: "0 0 5px rgba(255,255,255,0.3)" }}
-        >
-          A comprehensive overview of my professional journey, skills, and achievements.
-        </motion.p>
-
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+        viewport={{ once: true, margin: "-100px" }}
+        className="text-center mb-8 sm:mb-12"
+      >
+        <h2 className="section-title">Resume</h2>
+        <p className="mt-2 text-white/60 text-sm sm:text-base max-w-2xl mx-auto">
+          My professional journey and key achievements
+        </p>
         <motion.div
           initial={{ scaleX: 0, opacity: 0 }}
           whileInView={{ scaleX: 1, opacity: 1 }}
           viewport={{ once: true, margin: "-100px" }}
           transition={{ duration: 0.8, delay: 0.3 }}
-          className="w-48 h-px bg-gradient-to-r from-transparent via-white to-transparent mx-auto mt-6"
-          style={{ boxShadow: "0 0 10px rgba(255, 255, 255, 0.5)" }}
+          className="section-title-line"
         />
-      </div>
+      </motion.div>
 
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, delay: 0.2 }}
-        viewport={{ once: true, margin: "-100px" }}
-        className="max-w-4xl mx-auto w-full"
+        viewport={{ once: true, margin: "-50px" }}
+        className="max-w-[95vw] sm:max-w-4xl mx-auto w-full"
       >
         <Card className="overflow-hidden border border-white/10 bg-white/5 backdrop-blur-sm text-white shadow-sm">
           <CardContent className="p-0">
             <div className="grid grid-cols-1 md:grid-cols-2">
-              <div className="bg-black/30 p-8 flex flex-col justify-center">
+              <div className="bg-black/30 p-4 sm:p-6 md:p-8 flex flex-col justify-center">
                 <motion.div
                   initial={{ scale: 0.8, opacity: 0 }}
                   whileInView={{ scale: 1, opacity: 1 }}
                   transition={{ duration: 0.5, delay: 0.3 }}
                   viewport={{ once: true }}
-                  className="relative w-24 h-24 mx-auto mb-8"
+                  className="relative w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 mx-auto mb-4 sm:mb-6 md:mb-8"
                 >
                   <div className="absolute inset-0 bg-white/10 rounded-full animate-pulse" />
                   <FileText className="w-full h-full text-white/80" />
                 </motion.div>
 
                 <motion.h3
-                  className="text-2xl font-bold text-center mb-4 text-white"
+                  className="text-lg sm:text-xl md:text-2xl font-bold text-center mb-2 sm:mb-3 md:mb-4 text-white"
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.5, delay: 0.4 }}
@@ -100,7 +87,7 @@ export default function ResumeSection() {
                 </motion.h3>
 
                 <motion.p
-                  className="text-white/70 text-center mb-8"
+                  className="text-white/70 text-center mb-4 sm:mb-6 md:mb-8 text-xs sm:text-sm"
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.5, delay: 0.5 }}
@@ -109,7 +96,7 @@ export default function ResumeSection() {
                   Download or view my complete resume to learn more about my qualifications and experience.
                 </motion.p>
 
-                <div className="flex flex-wrap justify-center gap-4">
+                <div className="flex flex-wrap justify-center gap-2 sm:gap-3 md:gap-4">
                   <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
                     <DialogTrigger asChild>
                       <motion.div
@@ -118,11 +105,11 @@ export default function ResumeSection() {
                           transition: { type: "spring", stiffness: 400, damping: 10 } 
                         }}
                       >
-                        <Button className="gap-2 group min-w-[140px] bg-black/30 text-white border border-white/20 transition-all duration-300 backdrop-blur-sm hover:border-white/40 hover:bg-white/5 overflow-hidden relative">
+                        <Button className="gap-2 group min-w-[120px] sm:min-w-[140px] bg-black/30 text-white border border-white/20 transition-all duration-300 backdrop-blur-sm hover:border-white/40 hover:bg-white/5 overflow-hidden relative">
                           <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent opacity-0 group-hover:opacity-100 translate-x-[-100%] group-hover:translate-x-[100%] transition-all duration-1000 ease-in-out"></span>
-                          <Eye className="h-4 w-4" />
+                          <Eye className="h-3 w-3 sm:h-4 sm:w-4" />
                           <span
-                            className="relative z-2 group-hover:text-white transition-colors duration-300"
+                            className="relative z-2 group-hover:text-white transition-colors duration-300 text-xs sm:text-sm"
                             style={{
                               textShadow: `0 0 4px rgba(255, 255, 255, 0.3)`,
                               transition: "text-shadow 0.3s ease-out, color 0.3s ease-out",
@@ -133,7 +120,7 @@ export default function ResumeSection() {
                         </Button>
                       </motion.div>
                     </DialogTrigger>
-                    <DialogContent className="max-w-4xl h-[80vh] bg-black/90 border border-white/10">
+                    <DialogContent className="max-w-[95vw] sm:max-w-4xl h-[80vh] bg-black/90 border border-white/10">
                       <DialogTitle className="sr-only">Resume Preview</DialogTitle>
                       <iframe src="/Arhaan_Resume.pdf" className="w-full h-full" title="Resume" />
                     </DialogContent>
@@ -147,13 +134,13 @@ export default function ResumeSection() {
                   >
                     <Button
                       variant="outline"
-                      className="gap-2 group min-w-[140px] bg-black/30 text-white border border-white/20 transition-all duration-300 backdrop-blur-sm hover:border-white/40 hover:bg-white/5 overflow-hidden relative"
+                      className="gap-2 group min-w-[120px] sm:min-w-[140px] bg-black/30 text-white border border-white/20 transition-all duration-300 backdrop-blur-sm hover:border-white/40 hover:bg-white/5 overflow-hidden relative"
                     >
                       <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent opacity-0 group-hover:opacity-100 translate-x-[-100%] group-hover:translate-x-[100%] transition-all duration-1000 ease-in-out"></span>
                       <a href="/Arhaan_Resume.pdf" download className="flex items-center gap-2">
-                        <Download className="h-4 w-4" />
+                        <Download className="h-3 w-3 sm:h-4 sm:w-4" />
                         <span
-                          className="relative z-2 group-hover:text-white transition-colors duration-300"
+                          className="relative z-2 group-hover:text-white transition-colors duration-300 text-xs sm:text-sm"
                           style={{
                             textShadow: `0 0 4px rgba(255, 255, 255, 0.3)`,
                             transition: "text-shadow 0.3s ease-out, color 0.3s ease-out",
@@ -164,42 +151,11 @@ export default function ResumeSection() {
                       </a>
                     </Button>
                   </motion.div>
-                  
-                  <motion.div
-                    whileHover={{ 
-                      scale: 1.03, 
-                      transition: { type: "spring", stiffness: 400, damping: 10 } 
-                    }}
-                  >
-                    <Button
-                      variant="outline"
-                      className="gap-2 group min-w-[140px] bg-black/30 text-white border border-white/20 transition-all duration-300 backdrop-blur-sm hover:border-white/40 hover:bg-white/5 overflow-hidden relative"
-                    >
-                      <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent opacity-0 group-hover:opacity-100 translate-x-[-100%] group-hover:translate-x-[100%] transition-all duration-1000 ease-in-out"></span>
-                      <a
-                        href="https://drive.google.com/drive/folders/1S55QbJu8Pv5a8wAxj5SMgOviAwjTbmKl?usp=sharing"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="flex items-center gap-2"
-                      >
-                        <Users className="h-4 w-4" />
-                        <span
-                          className="relative z-2 group-hover:text-white transition-colors duration-300"
-                          style={{
-                            textShadow: `0 0 4px rgba(255, 255, 255, 0.3)`,
-                            transition: "text-shadow 0.3s ease-out, color 0.3s ease-out",
-                          }}
-                        >
-                          References
-                        </span>
-                      </a>
-                    </Button>
-                  </motion.div>
                 </div>
               </div>
 
-              <div className="p-8 bg-black/20 backdrop-blur-sm">
-                <div className="space-y-8">
+              <div className="p-4 sm:p-6 md:p-8 bg-black/20 backdrop-blur-sm">
+                <div className="space-y-4 sm:space-y-6 md:space-y-8">
                   {highlights.map((highlight, index) => (
                     <motion.div
                       key={highlight.title}
@@ -207,24 +163,24 @@ export default function ResumeSection() {
                       whileInView={{ opacity: 1, x: 0 }}
                       transition={{ duration: 0.5, delay: 0.6 + index * 0.1 }}
                       viewport={{ once: true }}
-                      className="flex items-start gap-4 group"
+                      className="flex items-start gap-3 sm:gap-4 group"
                     >
                       <motion.div
-                        className="p-2.5 rounded-lg bg-white/10"
+                        className="p-2 rounded-lg bg-white/10"
                         whileHover={{ scale: 1.1, rotate: 5 }}
                         transition={{ type: "spring", stiffness: 300, damping: 20 }}
                       >
-                        <highlight.icon className="h-5 w-5 text-white/80" />
+                        <highlight.icon className="h-4 w-4 sm:h-5 sm:w-5 text-white/80" />
                       </motion.div>
                       <div>
                         <h4
-                          className="font-semibold text-lg mb-1 text-white"
+                          className="font-semibold text-base sm:text-lg mb-1 text-white"
                           style={{ textShadow: "0 0 5px rgba(255,255,255,0.3)" }}
                         >
                           {highlight.title}
                         </h4>
-                        <p className="text-white/80">{highlight.details}</p>
-                        <p className="text-sm text-white/60 whitespace-pre-line">{highlight.subtext}</p>
+                        <p className="text-white/80 text-xs sm:text-sm">{highlight.details}</p>
+                        <p className="text-xs text-white/60 whitespace-pre-line">{highlight.subtext}</p>
                       </div>
                     </motion.div>
                   ))}
