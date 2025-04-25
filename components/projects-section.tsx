@@ -8,9 +8,10 @@ import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/com
 import Image from "next/image"
 import { Badge } from "@/components/ui/badge"
 import dynamic from 'next/dynamic'
+import type { Project } from "@/components/project-modal"
 
 // Dynamically import heavy components
-const ProjectModal = dynamic(() => import('./project-modal'), {
+const ProjectModal = dynamic(() => import("@/components/project-modal"), {
   loading: () => (
     <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center">
       <div className="animate-pulse bg-white/5 rounded-lg w-full max-w-4xl h-[80vh] mx-4"></div>
@@ -258,8 +259,8 @@ const allCategories = [
 
 export default function ProjectsSection() {
   const [activeCategory, setActiveCategory] = useState("all")
-  const [filteredProjects, setFilteredProjects] = useState(projects)
-  const [selectedProject, setSelectedProject] = useState<typeof projects[0] | null>(null)
+  const [filteredProjects, setFilteredProjects] = useState<Project[]>(projects)
+  const [selectedProject, setSelectedProject] = useState<Project | null>(null)
   const modalRef = useRef<HTMLDivElement | null>(null)
   const [showAllActivities, setShowAllActivities] = useState(false)
   const [selectedSkill, setSelectedSkill] = useState<string | null>(null)

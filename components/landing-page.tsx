@@ -3,7 +3,7 @@
 import type React from "react"
 import { useRef, useEffect, useState } from "react"
 import { motion } from "framer-motion"
-import { ChevronDown, Linkedin, Github, Code, FileText, Mail } from "lucide-react"
+import { ChevronDown, Linkedin, Github, Code, FileText, Mail, Terminal } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import StarField from "./star-field"
 
@@ -93,39 +93,53 @@ export default function LandingPage({ experienceRef, videoRef }: LandingPageProp
         <StarField />
       </div>
 
+      {/* Terminal-like border */}
+      <div className="absolute inset-0 border-2 border-white/10 rounded-lg m-4 pointer-events-none z-0">
+        <div className="absolute top-0 left-0 w-3 h-3 border-t-2 border-l-2 border-white/20"></div>
+        <div className="absolute top-0 right-0 w-3 h-3 border-t-2 border-r-2 border-white/20"></div>
+        <div className="absolute bottom-0 left-0 w-3 h-3 border-b-2 border-l-2 border-white/20"></div>
+        <div className="absolute bottom-0 right-0 w-3 h-3 border-b-2 border-r-2 border-white/20"></div>
+      </div>
+
       {/* Content */}
       <div className="z-10 text-center px-4 max-w-3xl">
-        <motion.h1
+        <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, ease: "easeOut" }}
-          className="text-4xl md:text-6xl lg:text-7xl font-bold mb-4"
-          style={titleGradientStyle}
+          className="flex items-center justify-center mb-4"
         >
-          <>
-            Hi, I'm <br /> Arhaan Girdhar
-          </>
-        </motion.h1>
+          <Terminal className="w-8 h-8 mr-2 text-white/70" />
+          <motion.h1
+            className="text-4xl md:text-6xl lg:text-7xl font-bold"
+            style={titleGradientStyle}
+          >
+            <>
+              Hi, I'm <br /> Arhaan Girdhar
+            </>
+          </motion.h1>
+        </motion.div>
 
         <motion.p
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
-          className="text-lg md:text-xl mb-4"
+          className="text-lg md:text-xl mb-4 font-mono"
           style={taglineStyle}
         >
-          Turning Vision into Reality
+          $ Full Stack Developer
         </motion.p>
 
         <motion.p
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.3, ease: "easeOut" }}
-          className="text-base mb-10 max-w-2xl mx-auto italic"
+          className="text-base mb-10 max-w-2xl mx-auto italic font-mono"
           style={descriptionStyle}
         >
-          Aspiring Software Engineer currently in 3rd year, pursuing Computer Science with a Minor Specialization in AI
-          & ML at MIT, Manipal.
+          // Aspiring Software Engineer @ MIT, Manipal
+          <br />
+          // Specializing in AI & ML
         </motion.p>
 
         <motion.div
@@ -142,7 +156,7 @@ export default function LandingPage({ experienceRef, videoRef }: LandingPageProp
           >
             <Button
               variant="outline"
-              className="px-6 py-5 bg-black/30 text-white rounded-full border border-white/30 transition-all duration-300 backdrop-blur-sm group hover:border-white/50 hover:bg-white/5 overflow-hidden relative"
+              className="px-6 py-5 bg-black/30 text-white rounded-full border border-white/30 transition-all duration-300 backdrop-blur-sm group hover:border-white/50 hover:bg-white/5 overflow-hidden relative font-mono"
               onClick={scrollToExperience}
             >
               <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent opacity-0 group-hover:opacity-100 translate-x-[-100%] group-hover:translate-x-[100%] transition-all duration-1000 ease-in-out"></span>
@@ -153,7 +167,7 @@ export default function LandingPage({ experienceRef, videoRef }: LandingPageProp
                   transition: "text-shadow 0.3s ease-out, color 0.3s ease-out",
                 }}
               >
-                View My Work
+                $ view_projects
               </span>
             </Button>
           </motion.div>
@@ -166,7 +180,7 @@ export default function LandingPage({ experienceRef, videoRef }: LandingPageProp
           >
             <Button
               variant="outline"
-              className="px-6 py-5 bg-black/30 text-white rounded-full border border-white/30 transition-all duration-300 backdrop-blur-sm group hover:border-white/50 hover:bg-white/5 overflow-hidden relative"
+              className="px-6 py-5 bg-black/30 text-white rounded-full border border-white/30 transition-all duration-300 backdrop-blur-sm group hover:border-white/50 hover:bg-white/5 overflow-hidden relative font-mono"
               onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}
             >
               <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent opacity-0 group-hover:opacity-100 translate-x-[-100%] group-hover:translate-x-[100%] transition-all duration-1000 ease-in-out"></span>
@@ -177,7 +191,7 @@ export default function LandingPage({ experienceRef, videoRef }: LandingPageProp
                   transition: "text-shadow 0.3s ease-out, color 0.3s ease-out",
                 }}
               >
-                Contact Me
+                $ contact_me
               </span>
             </Button>
           </motion.div>
@@ -257,39 +271,20 @@ export default function LandingPage({ experienceRef, videoRef }: LandingPageProp
             <Mail className="w-5 h-5" />
           </motion.a>
         </motion.div>
-      </div>
 
-      {/* Scroll indicator */}
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 0.6 }}
-        transition={{ delay: 1, duration: 1 }}
-        className="absolute bottom-10 left-1/2 transform -translate-x-1/2"
-      >
+        {/* Scroll indicator */}
         <motion.div
-          animate={{ y: [0, 10, 0] }}
-          transition={{ duration: 2, repeat: Number.POSITIVE_INFINITY, repeatType: "loop", ease: "easeInOut" }}
-          className="flex flex-col items-center"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 1, duration: 0.5 }}
+          className="absolute bottom-8 left-1/2 transform -translate-x-1/2"
         >
-          <span
-            className="text-sm mb-2 text-white/50"
-            style={{
-              textShadow: `0 0 ${1 + glowIntensity}px rgba(255, 255, 255, ${0.1 + glowIntensity * 0.05})`,
-              transition: "text-shadow 0.5s ease-out",
-            }}
-          >
-            Scroll Down
-          </span>
           <ChevronDown
-            className="w-5 h-5"
-            style={{
-              color: `rgba(255, 255, 255, ${0.4 + glowIntensity * 0.1})`,
-              filter: `drop-shadow(0 0 ${1 + glowIntensity}px rgba(255, 255, 255, ${0.1 + glowIntensity * 0.05}))`,
-              transition: "color 0.5s ease, filter 0.5s ease",
-            }}
+            className="w-6 h-6 text-white/50 animate-bounce cursor-pointer"
+            onClick={scrollToExperience}
           />
         </motion.div>
-      </motion.div>
+      </div>
     </section>
   )
 }

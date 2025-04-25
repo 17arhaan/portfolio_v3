@@ -4,6 +4,8 @@ import { motion } from "framer-motion"
 import { X } from "lucide-react"
 import Image from "next/image"
 import { LucideIcon } from "lucide-react"
+import { ForwardRefExoticComponent, RefAttributes } from "react"
+import { LucideProps } from "lucide-react"
 
 export interface Project {
   id: number
@@ -13,7 +15,7 @@ export interface Project {
   tags: string[]
   links: {
     url: string
-    icon: LucideIcon
+    icon: ForwardRefExoticComponent<Omit<LucideProps, "ref"> & RefAttributes<SVGSVGElement>>
   }[]
   categories: string[]
 }
@@ -23,7 +25,7 @@ interface ProjectModalProps {
   onClose: () => void
 }
 
-export default function ProjectModal({ project, onClose }: ProjectModalProps) {
+const ProjectModal: React.FC<ProjectModalProps> = ({ project, onClose }) => {
   return (
     <motion.div
       initial={{ opacity: 0 }}
@@ -125,4 +127,6 @@ export default function ProjectModal({ project, onClose }: ProjectModalProps) {
       </motion.div>
     </motion.div>
   )
-} 
+}
+
+export default ProjectModal 
