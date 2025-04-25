@@ -161,7 +161,7 @@ const ProjectModal: React.FC<ProjectModalProps> = ({ project, onClose }) => {
                   />
                   <p className="text-white/80 group-hover:text-white transition-colors duration-200">
                     {paragraph.startsWith("• ") ? paragraph.substring(2) : paragraph}
-                  </p>
+                </p>
                 </motion.div>
               ))}
             </div>

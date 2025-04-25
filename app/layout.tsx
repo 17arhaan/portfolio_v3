@@ -1,91 +1,11 @@
-import type { Metadata } from 'next'
-import { Inter } from 'next/font/google'
+import { Rubik } from 'next/font/google'
 import './globals.css'
-import { ScrollAnimation } from '@/components/scroll-animation'
-import { Analytics } from "@vercel/analytics/react"
-import { SpeedInsights } from "@vercel/speed-insights/next"
-const inter = Inter({ subsets: ['latin'] })
+import LoadingWrapper from '@/components/loading-wrapper'
+import { metadata } from './metadata'
 
-export const metadata: Metadata = {
-  metadataBase: new URL('https://arhaanportfolio.in'),
-  title: 'Arhaan Girdhar | Portfolio',
-  description: 'Personal portfolio website showcasing projects in web development, artificial intelligence, and computer vision.',
-  keywords: [
-    'Arhaan Girdhar',
-    'Portfolio',
-    'Web Development',
-    'AI',
-    'Machine Learning',
-    'Computer Vision',
-    'Full Stack Developer',
-    'React',
-    'Next.js',
-    'Python',
-    'Deep Learning',
-    'Projects',
-    'Software Engineer'
-  ],
-  authors: [{ name: 'Arhaan Girdhar' }],
-  creator: 'Arhaan Girdhar',
-  publisher: 'Arhaan Girdhar',
-  icons: {
-    icon: [
-      {
-        url: '/favcionn.png',
-        sizes: '32x32',
-        type: 'image/png',
-      },
-      {
-        url: '/favcionn.png',
-        sizes: '192x192',
-        type: 'image/png',
-      },
-    ],
-    apple: [
-      {
-        url: '/favcionn.png',
-        sizes: '180x180',
-        type: 'image/png',
-      },
-    ],
-  },
-  openGraph: {
-    title: 'Arhaan Girdhar | Portfolio',
-    description: 'Personal portfolio website showcasing projects in web development, artificial intelligence, and computer vision.',
-    url: 'https://arhaangirdhar.com',
-    siteName: 'Arhaan Girdhar Portfolio',
-    images: [
-      {
-        url: '/meta.png',
-        width: 1200,
-        height: 630,
-        alt: 'Arhaan Girdhar Portfolio Preview',
-      },
-    ],
-    locale: 'en_US',
-    type: 'website',
-  },
-  twitter: {
-    card: 'summary_large_image',
-    title: 'Arhaan Girdhar | Portfolio',
-    description: 'Personal portfolio website showcasing projects in web development, artificial intelligence, and computer vision.',
-    images: ['/meta.png'],
-  },
-  robots: {
-    index: true,
-    follow: true,
-    googleBot: {
-      index: true,
-      follow: true,
-      'max-video-preview': -1,
-      'max-image-preview': 'large',
-      'max-snippet': -1,
-    },
-  },
-  verification: {
-    google: 'your-google-site-verification-code',
-  },
-}
+const rubik = Rubik({ subsets: ['latin'] })
+
+export { metadata }
 
 export default function RootLayout({
   children,
@@ -133,14 +53,10 @@ export default function RootLayout({
           }
         `}</style>
       </head>
-      <body className={`${inter.className} min-h-screen w-full bg-black`}>
-        <div className="min-h-screen w-full bg-black overflow-x-hidden">
-          <ScrollAnimation>
-            {children}
-          </ScrollAnimation>
-          <Analytics />
-          <SpeedInsights />
-        </div>
+      <body className={`${rubik.className} min-h-screen w-full bg-black`}>
+        <LoadingWrapper>
+          {children}
+        </LoadingWrapper>
       </body>
     </html>
   )

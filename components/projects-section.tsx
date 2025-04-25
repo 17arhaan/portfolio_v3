@@ -300,60 +300,60 @@ export default function ProjectsSection() {
   return (
     <section id="projects" className="py-12 sm:py-20 relative w-full overflow-hidden">
       <div className="max-w-[95vw] sm:max-w-[90vw] mx-auto">
-        <div className="text-center mb-12 relative z-10">
-          <motion.h1
-            initial={{ opacity: 0, y: -10 }}
+      <div className="text-center mb-12 relative z-10">
+        <motion.h1
+          initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
+          transition={{ duration: 0.6 }}
             className="section-title"
-          >
-            Projects
-          </motion.h1>
+        >
+          Projects
+        </motion.h1>
 
-          <motion.p
-            initial={{ opacity: 0, y: 10 }}
+        <motion.p
+          initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.2 }}
+          transition={{ duration: 0.6, delay: 0.2 }}
             className="mt-3 text-sm md:text-base text-white/80 max-w-2xl mx-auto"
-          >
-            A showcase of my technical projects spanning web development, artificial intelligence, and computer vision.
-          </motion.p>
-          <motion.div
-            initial={{ scaleX: 0, opacity: 0 }}
-            whileInView={{ scaleX: 1, opacity: 1 }}
-            viewport={{ once: true, margin: "-100px" }}
-            transition={{ duration: 0.8, delay: 0.3 }}
+        >
+          A showcase of my technical projects spanning web development, artificial intelligence, and computer vision.
+        </motion.p>
+        <motion.div
+          initial={{ scaleX: 0, opacity: 0 }}
+          whileInView={{ scaleX: 1, opacity: 1 }}
+          viewport={{ once: true, margin: "-100px" }}
+          transition={{ duration: 0.8, delay: 0.3 }}
             className="section-title-line"
-          />
-        </div>
+        />
+      </div>
 
-        {/* Category filters */}
+      {/* Category filters */}
         <div className="w-full max-w-[800px] mx-auto mb-8 flex items-center justify-center relative z-10">
-          <div className="flex flex-wrap justify-center gap-2">
-            <div className="flex items-center mr-2">
-              <Filter className="h-4 w-4 text-white/70 mr-2" />
-              <span className="text-sm text-white/70 italic">Filter:</span>
-            </div>
-            {allCategories.map((category) => (
-              <motion.button
-                key={category}
-                onClick={() => handleCategoryChange(category)}
-                whileHover={{ scale: 1.05, backgroundColor: "rgba(255, 255, 255, 0.1)" }}
-                whileTap={{ scale: 0.95 }}
-                className={`px-3 py-1 rounded-full text-xs transition-all duration-200 ${
-                  activeCategory === category
-                    ? "bg-white/20 text-white font-medium border border-white/20"
-                    : "bg-white/5 text-white/70 border border-white/5 hover:bg-white/10 hover:text-white/90"
-                }`}
-                style={{
-                  boxShadow: activeCategory === category ? "0 0 10px rgba(255, 255, 255, 0.1)" : "none",
-                }}
-              >
-                {category.toUpperCase()}
-              </motion.button>
-            ))}
+        <div className="flex flex-wrap justify-center gap-2">
+          <div className="flex items-center mr-2">
+            <Filter className="h-4 w-4 text-white/70 mr-2" />
+            <span className="text-sm text-white/70 italic">Filter:</span>
           </div>
+          {allCategories.map((category) => (
+            <motion.button
+              key={category}
+              onClick={() => handleCategoryChange(category)}
+              whileHover={{ scale: 1.05, backgroundColor: "rgba(255, 255, 255, 0.1)" }}
+              whileTap={{ scale: 0.95 }}
+              className={`px-3 py-1 rounded-full text-xs transition-all duration-200 ${
+                activeCategory === category
+                  ? "bg-white/20 text-white font-medium border border-white/20"
+                  : "bg-white/5 text-white/70 border border-white/5 hover:bg-white/10 hover:text-white/90"
+              }`}
+              style={{
+                boxShadow: activeCategory === category ? "0 0 10px rgba(255, 255, 255, 0.1)" : "none",
+              }}
+            >
+              {category.toUpperCase()}
+            </motion.button>
+          ))}
         </div>
+      </div>
 
         {/* Projects Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 px-4 sm:px-6 lg:px-8">
@@ -371,7 +371,7 @@ export default function ProjectsSection() {
                 whileTap={{ scale: 0.98 }}
                 onClick={() => setSelectedProject(project)}
                 className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-lg overflow-hidden cursor-pointer h-full flex flex-col transition-all duration-300"
-              >
+            >
                 {/* Image Container */}
                 <div className="aspect-video relative overflow-hidden">
                   <Suspense fallback={<ImagePlaceholder />}>
@@ -411,7 +411,7 @@ export default function ProjectsSection() {
             />
           </Suspense>
         )}
-      </div>
+    </div>
     </section>
   )
 }

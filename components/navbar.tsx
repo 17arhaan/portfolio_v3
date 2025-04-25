@@ -15,6 +15,7 @@ interface NavbarProps {
   resumeRef: React.RefObject<HTMLElement>
   progressRef: React.RefObject<HTMLElement>
   videoRef?: React.RefObject<HTMLVideoElement>
+  isLoading?: boolean
 }
 
 interface NavItem {
@@ -30,7 +31,8 @@ export default function Navbar({
   certificationsRef,
   resumeRef,
   progressRef,
-  videoRef
+  videoRef,
+  isLoading = false
 }: NavbarProps) {
   const [activeSection, setActiveSection] = useState("home")
   const [scrolled, setScrolled] = useState(false)
@@ -167,25 +169,42 @@ export default function Navbar({
   return (
     <motion.nav
       initial={{ y: -100, opacity: 0 }}
-      animate={{ y: 0, opacity: 1 }}
-      transition={{ duration: 0.5, ease: "easeOut" }}
-      className="fixed top-0 left-0 right-0 z-50 transition-all duration-500 bg-black/50 backdrop-blur-md py-2 sm:py-3"
+      animate={{ 
+        y: isLoading ? -100 : 0, 
+        opacity: isLoading ? 0 : 1 
+      }}
+      transition={{ 
+        duration: 0.8,
+        ease: [0.19, 1, 0.22, 1],
+        delay: 0.2
+      }}
+      className="fixed top-0 left-0 right-0 z-50 transition-all duration-500 bg-black/50 backdrop-blur-md py-1 sm:py-2"
     >
       <div className="max-w-[95vw] sm:max-w-[90vw] mx-auto flex flex-col md:flex-row items-center justify-between">
         {/* Signature Logo */}
         <motion.div
+          initial={{ scale: 0.8, opacity: 0 }}
+          animate={{ 
+            scale: isLoading ? 0.8 : 1, 
+            opacity: isLoading ? 0 : 1 
+          }}
+          transition={{ 
+            duration: 0.6,
+            ease: [0.19, 1, 0.22, 1],
+            delay: 0.3
+          }}
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
           onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
           style={{ cursor: "pointer" }}
           className="relative mx-auto md:mx-0"
         >
-          <div className="w-40 h-14 sm:w-64 sm:h-24 relative">
+          <div className="w-36 h-14 sm:w-56 sm:h-20 relative">
             <Image
               src="/sign.png"
               alt="Signature"
-              width={256}
-              height={96}
+              width={224}
+              height={80}
               className="signature-image"
               style={{ objectFit: "contain" }}
               priority
