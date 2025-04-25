@@ -21,9 +21,8 @@ import {
   Globe,
   Paintbrush,
   Layers,
-  Git,
   AlertCircle,
-  GitPullRequest
+  GitPullRequest,
 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { GradientBackground } from "@/components/ui/gradient-background"
@@ -444,7 +443,7 @@ export default function ProgressSection() {
                                   <div className="flex items-center gap-2">
                                     <div className="p-1.5 sm:p-2 rounded-lg bg-black/30">
                                       {activity.type === 'commit' ? (
-                                        <Git className="w-3 h-3 sm:w-4 sm:h-4 text-white/80" />
+                                        <GitCommit className="w-3 h-3 sm:w-4 sm:h-4 text-white/80" />
                                       ) : activity.type === 'issue' ? (
                                         <AlertCircle className="w-3 h-3 sm:w-4 sm:h-4 text-white/80" />
                                       ) : (
