@@ -1,40 +1,97 @@
 "use client"
 
-import { useState, useRef, useEffect } from "react"
+import { useState, useRef, useEffect, Suspense } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { Tag, ExternalLink, Github, X, CheckCircle2, ArrowUpRight, Filter, Award, Calendar, AlertCircle, GitPullRequest, ChevronDown } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card"
 import Image from "next/image"
 import { Badge } from "@/components/ui/badge"
+import dynamic from 'next/dynamic'
+
+// Dynamically import heavy components
+const ProjectModal = dynamic(() => import('./project-modal'), {
+  loading: () => (
+    <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center">
+      <div className="animate-pulse bg-white/5 rounded-lg w-full max-w-4xl h-[80vh] mx-4"></div>
+    </div>
+  ),
+  ssr: false
+})
+
+// Loading placeholder for images
+const ImagePlaceholder = () => (
+  <div className="w-full h-full bg-white/5 animate-pulse" />
+)
 
 // Projects data
 const projects = [
   {
     id: 1,
     title: "Humanoid Simulation",
-    description:
-      "• Built a MuJoCo-based project for simulating, tracking, and visualizing humanoid movement using Python and React\n\n• Implemented motion tracking with joint angles and velocities capture using MuJoCo physics engine\n\n• Developed LSTM model for motion forecasting and classification with 95% accuracy\n\n• Created an interactive React-based GUI for simulation control and visualization\n\n• Engineered a modular architecture supporting custom models, sensors, and algorithms\n\n• Integrated real-time visualization of MuJoCo scenes with Matplotlib plotting\n\n• Built a comprehensive backend with Python handling simulation, tracking, and ML processing",
-    image: "/mujoco.png",
-    tags: [
-      "Python",
-      "MuJoCo",
-      "React",
-      "TensorFlow",
-      "Flask",
-      "LSTM",
-      "Node.js",
-      "Matplotlib",
-      "TypeScript",
-      "FastAPI",
-    ],
+    description: "• Developed a sophisticated humanoid simulation using Unity and C#, implementing advanced physics-based character movement and interaction systems.\n\n• Integrated inverse kinematics (IK) for realistic limb movements and procedural animation, enhancing the natural feel of character interactions.\n\n• Created an intuitive control system that allows users to manipulate the humanoid character with precision, demonstrating complex motor skills and balance mechanics.\n\n• Implemented real-time environment interaction capabilities, allowing the humanoid to adapt to different surfaces and obstacles dynamically.",
+    image: "/projects/humanoid.png",
+    tags: ["Unity", "C#", "Physics Simulation", "IK Systems", "Procedural Animation"],
     links: [
-      { url: "https://github.com/17arhaan/Movement_Tracking_Mujoco", icon: Github },
+      {
+        url: "https://github.com/yourusername/humanoid-simulation",
+        icon: Github
+      }
     ],
-    categories: ["web development", "deep learning"],
+    categories: ["Game Development", "Simulation"]
   },
   {
     id: 2,
+    title: "AI Chat Application",
+    description: "• Built a real-time chat application powered by advanced AI models, enabling natural language conversations and intelligent responses.\n\n• Implemented WebSocket connections for instant message delivery and seamless user experience.\n\n• Developed a responsive UI with React and Tailwind CSS, featuring smooth animations and modern design principles.\n\n• Integrated multiple AI models with custom prompt engineering for enhanced conversation quality.",
+    image: "/projects/chat.png",
+    tags: ["React", "Node.js", "WebSocket", "AI/ML", "Tailwind CSS"],
+    links: [
+      {
+        url: "https://demo-chat-ai.example.com",
+        icon: ExternalLink
+      },
+      {
+        url: "https://github.com/yourusername/ai-chat-app",
+        icon: Github
+      }
+    ],
+    categories: ["Web Development", "AI/ML"]
+  },
+  {
+    id: 3,
+    title: "Portfolio Website",
+    description: "• Designed and developed a modern portfolio website using Next.js 13 and Tailwind CSS, showcasing professional work and achievements.\n\n• Implemented smooth animations and transitions using Framer Motion for an engaging user experience.\n\n• Created a responsive design that adapts seamlessly to different screen sizes and devices.\n\n• Optimized performance through lazy loading, image optimization, and efficient code splitting.",
+    image: "/projects/portfolio.png",
+    tags: ["Next.js", "React", "Tailwind CSS", "Framer Motion", "TypeScript"],
+    links: [
+      {
+        url: "https://your-portfolio.com",
+        icon: ExternalLink
+      },
+      {
+        url: "https://github.com/yourusername/portfolio",
+        icon: Github
+      }
+    ],
+    categories: ["Web Development", "UI/UX"]
+  },
+  {
+    id: 4,
+    title: "3D Game Engine",
+    description: "• Developed a custom 3D game engine from scratch using C++ and OpenGL, implementing core rendering systems and physics simulations.\n\n• Created a flexible entity component system (ECS) architecture for efficient game object management.\n\n• Implemented advanced graphics features including PBR materials, dynamic lighting, and post-processing effects.\n\n• Built a custom scene editor with real-time preview capabilities for rapid prototyping.",
+    image: "/projects/engine.png",
+    tags: ["C++", "OpenGL", "Graphics Programming", "Physics", "Game Engine"],
+    links: [
+      {
+        url: "https://github.com/yourusername/3d-game-engine",
+        icon: Github
+      }
+    ],
+    categories: ["Game Development", "Graphics Programming"]
+  },
+  {
+    id: 5,
     title: "J.A.R.V.I.S",
     description:
       "• Built a sophisticated AI assistant with multi-modal capabilities using Python, TensorFlow, and advanced NLP models\n\n• Implemented real-time object detection with YOLOv8 achieving 91% mAP, and speech recognition with 95% accuracy\n\n• Developed a CNN-based face authentication system with 98% accuracy, supporting multi-user profiles and dynamic learning\n\n• Created a modular architecture with 20+ custom plugins for task automation, system control, and API integrations\n\n• Integrated OpenAI's GPT models for context-aware conversations and task understanding\n\n• Engineered a custom wake word detection system with 99% accuracy using MFCC features and Deep Learning",
@@ -58,7 +115,7 @@ const projects = [
     categories: ["artificial intelligence", "deep learning"],
   },
   {
-    id: 3,
+    id: 6,
     title: "W.E.A.L.T.H",
     description:
       "• Engineered a full-stack finance tracking application with Next.js 13, TypeScript, and PostgreSQL\n\n• Implemented real-time transaction tracking with WebSocket integration for live updates\n\n• Built a RESTful API with Express.js featuring JWT authentication and role-based access control\n\n• Designed a responsive UI with Tailwind CSS and Framer Motion for smooth animations\n\n• Integrated Plaid API for secure bank account linking and automated transaction imports\n\n• Developed custom analytics dashboard with Chart.js for visualizing spending patterns\n\n• Implemented automated bill detection and recurring payment tracking using ML algorithms",
@@ -82,7 +139,7 @@ const projects = [
     categories: ["web development"],
   },
   {
-    id: 4,
+    id: 7,
     title: "Twitter Sentiment Analysis",
     description:
       "• Built a real-time Twitter sentiment analysis platform using Next.js and Python\n\n• Implemented custom NLP models with 92% accuracy for sentiment classification\n\n• Created an interactive dashboard with real-time sentiment visualization using Chart.js\n\n• Developed a secure authentication system with JWT and password hashing\n\n• Built a responsive UI with shadcn/ui components and Tailwind CSS\n\n• Integrated Twitter API for real-time tweet fetching and analysis\n\n• Added user profiles with analysis history and saved searches",
@@ -95,7 +152,7 @@ const projects = [
     categories: ["data science", "artificial intelligence", "machine learning"],
   },
   {
-    id: 5,
+    id: 8,
     title: "SnakeCV",
     description:
       "• Developed a multi-mode Snake Game with computer vision controls using Python, OpenCV, and React\n\n• Implemented real-time hand gesture recognition with 98% accuracy using MediaPipe and custom CV models\n\n• Created an AI agent using Q-learning achieving average scores of 50+ points\n\n• Built a responsive web version with React and TypeScript featuring custom animations\n\n• Designed a replay system storing game states in IndexedDB for offline access\n\n• Integrated WebRTC for real-time multiplayer functionality with <100ms latency\n\n• Added leaderboard system with Firebase real-time database integration",
@@ -118,7 +175,7 @@ const projects = [
     categories: ["computer vision", "machine learning", "web development"],
   },
   {
-    id: 6,
+    id: 9,
     title: "TherapAI",
     description:
       "• Built an AI-powered mental health platform using Python, FastAPI, and React\n\n• Integrated GPT-4 with custom fine-tuning for therapeutic conversations achieving 90% user satisfaction\n\n• Implemented real-time emotion detection from text and voice with 94% accuracy\n\n• Developed secure user authentication and HIPAA-compliant data storage\n\n• Created a progressive web app with offline support and push notifications\n\n• Built an emergency response system with automated escalation protocols\n\n• Integrated with external mental health resources and crisis hotlines",
@@ -141,7 +198,7 @@ const projects = [
     categories: ["artificial intelligence", "machine learning"],
   },
   {
-    id: 7,
+    id: 10,
     title: "Speedy",
     description:
       "• Built an interactive reaction time test with Next.js and Framer Motion\n\n• Implemented random delay system to prevent anticipation\n\n• Created performance metrics and feedback system\n\n• Added dark mode support and responsive design\n\n• Integrated beautiful animations and transitions\n\n• Developed tracking system for best times\n\n• Deployed on Vercel with automatic CI/CD pipeline",
@@ -164,7 +221,7 @@ const projects = [
     categories: ["web development"],
   },
   {
-    id: 8,
+    id: 11,
     title: "Mind Mapper",
     description:
       "• Built an AI-powered mind map generator using Next.js and React Flow\n\n• Integrated Google Gemini API for intelligent content generation with robust error handling\n\n• Implemented interactive node-based visualization with drag-and-drop functionality\n\n• Created custom node and edge components for enhanced visual appeal\n\n• Added export functionality for saving mind maps as high-quality PNG images\n\n• Developed a responsive design with dark mode support\n\n• Implemented real-time node expansion and connection management\n\n• Added comprehensive error handling and user feedback system",
@@ -283,63 +340,63 @@ export default function ProjectsSection() {
   return (
     <section id="projects" className="py-12 sm:py-20 relative w-full overflow-hidden">
       <div className="max-w-[95vw] sm:max-w-[90vw] mx-auto">
-        <div className="text-center mb-12 relative z-10">
-          <motion.h1
-            initial={{ opacity: 0, y: -10 }}
+      <div className="text-center mb-12 relative z-10">
+        <motion.h1
+          initial={{ opacity: 0, y: -10 }}
             animate={{
               opacity: 1,
               y: 0,
             }}
-            transition={{ duration: 0.6 }}
+          transition={{ duration: 0.6 }}
             className="section-title"
-          >
-            Projects
-          </motion.h1>
+        >
+          Projects
+        </motion.h1>
 
-          <motion.p
-            initial={{ opacity: 0, y: 10 }}
+        <motion.p
+          initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.2 }}
+          transition={{ duration: 0.6, delay: 0.2 }}
             className="mt-3 text-sm md:text-base text-white/80 max-w-2xl mx-auto"
-          >
-            A showcase of my technical projects spanning web development, artificial intelligence, and computer vision.
-          </motion.p>
-          <motion.div
-            initial={{ scaleX: 0, opacity: 0 }}
-            whileInView={{ scaleX: 1, opacity: 1 }}
-            viewport={{ once: true, margin: "-100px" }}
-            transition={{ duration: 0.8, delay: 0.3 }}
+        >
+          A showcase of my technical projects spanning web development, artificial intelligence, and computer vision.
+        </motion.p>
+        <motion.div
+          initial={{ scaleX: 0, opacity: 0 }}
+          whileInView={{ scaleX: 1, opacity: 1 }}
+          viewport={{ once: true, margin: "-100px" }}
+          transition={{ duration: 0.8, delay: 0.3 }}
             className="section-title-line"
-          />
-        </div>
+        />
+      </div>
 
-        {/* Category filters */}
+      {/* Category filters */}
         <div className="w-full max-w-[800px] mx-auto mb-8 flex items-center justify-center relative z-10">
-          <div className="flex flex-wrap justify-center gap-2">
-            <div className="flex items-center mr-2">
-              <Filter className="h-4 w-4 text-white/70 mr-2" />
-              <span className="text-sm text-white/70 italic">Filter:</span>
-            </div>
-            {allCategories.map((category) => (
-              <motion.button
-                key={category}
-                onClick={() => handleCategoryChange(category)}
-                whileHover={{ scale: 1.05, backgroundColor: "rgba(255, 255, 255, 0.1)" }}
-                whileTap={{ scale: 0.95 }}
-                className={`px-3 py-1 rounded-full text-xs transition-all duration-200 ${
-                  activeCategory === category
-                    ? "bg-white/20 text-white font-medium border border-white/20"
-                    : "bg-white/5 text-white/70 border border-white/5 hover:bg-white/10 hover:text-white/90"
-                }`}
-                style={{
-                  boxShadow: activeCategory === category ? "0 0 10px rgba(255, 255, 255, 0.1)" : "none",
-                }}
-              >
-                {category.toUpperCase()}
-              </motion.button>
-            ))}
+        <div className="flex flex-wrap justify-center gap-2">
+          <div className="flex items-center mr-2">
+            <Filter className="h-4 w-4 text-white/70 mr-2" />
+            <span className="text-sm text-white/70 italic">Filter:</span>
           </div>
+          {allCategories.map((category) => (
+            <motion.button
+              key={category}
+              onClick={() => handleCategoryChange(category)}
+              whileHover={{ scale: 1.05, backgroundColor: "rgba(255, 255, 255, 0.1)" }}
+              whileTap={{ scale: 0.95 }}
+              className={`px-3 py-1 rounded-full text-xs transition-all duration-200 ${
+                activeCategory === category
+                  ? "bg-white/20 text-white font-medium border border-white/20"
+                  : "bg-white/5 text-white/70 border border-white/5 hover:bg-white/10 hover:text-white/90"
+              }`}
+              style={{
+                boxShadow: activeCategory === category ? "0 0 10px rgba(255, 255, 255, 0.1)" : "none",
+              }}
+            >
+              {category.toUpperCase()}
+            </motion.button>
+          ))}
         </div>
+      </div>
 
         {/* Projects Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
@@ -353,50 +410,57 @@ export default function ProjectsSection() {
               className="group"
             >
               <motion.div
-                whileHover={{ 
-                  scale: 1.02,
+              whileHover={{
+                scale: 1.02,
                   y: -5,
                   boxShadow: "0 20px 30px -10px rgba(0, 0, 0, 0.3), 0 0 30px rgba(220, 38, 38, 0.2), 0 0 15px rgba(255, 255, 255, 0.1)"
-                }}
+              }}
                 whileTap={{ scale: 0.98 }}
                 className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-lg overflow-hidden cursor-pointer h-full flex flex-col transition-all duration-300 hover:border-white/20 hover:bg-white/10"
-              >
+            >
                 {/* Image Container */}
                 <div className="aspect-video relative overflow-hidden">
-                  <Image
-                    src={project.image}
-                    alt={project.title}
-                    fill
-                    className="object-cover transition-transform duration-700 group-hover:scale-110"
-                  />
+                  <Suspense fallback={<ImagePlaceholder />}>
+                    <Image
+                      src={project.image}
+                      alt={project.title}
+                      fill
+                      className="object-cover transition-transform duration-700 group-hover:scale-110"
+                      loading="lazy"
+                      sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                      quality={75}
+                      placeholder="blur"
+                      blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/4gHYSUNDX1BST0ZJTEUAAQEAAAHIAAAAAAQwAABtbnRyUkdCIFhZWiAH4AABAAEAAAAAAABhY3NwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAA9tYAAQAAAADTLQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAlkZXNjAAAA8AAAACRyWFlaAAABFAAAABRnWFlaAAABKAAAABRiWFlaAAABPAAAABR3dHB0AAABUAAAABRyVFJDAAABZAAAAChnVFJDAAABZAAAAChiVFJDAAABZAAAAChjcHJ0AAABjAAAADxtbHVjAAAAAAAAAAEAAAAMZW5VUwAAAAgAAAAcAHMAUgBHAEJYWVogAAAAAAAAb6IAADj1AAADkFhZWiAAAAAAAABimQAAt4UAABjaWFlaIAAAAAAAACSgAAAPhAAAts9YWVogAAAAAAAA9tYAAQAAAADTLXBhcmEAAAAAAAQAAAACZmYAAPKnAAANWQAAE9AAAApbAAAAAAAAAABtbHVjAAAAAAAAAAEAAAAMZW5VUwAAACAAAAAcAEcAbwBvAGcAbABlACAASQBuAGMALgAgADIAMAAxADb/2wBDABQODxIPDRQSEBIXFRQdHx4eHRoaHSQtJSEkLzYvLy02Ky8wOUQ5OjtKLzZFRVVLS1JWW1xbN0RkcmdiVmJWW1b/2wBDARUXFx4aHR4eHVZOTlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlb/wAARCAAIAAoDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAb/xAAUEAEAAAAAAAAAAAAAAAAAAAAA/8QAFQEBAQAAAAAAAAAAAAAAAAAAAAX/xAAUEQEAAAAAAAAAAAAAAAAAAAAA/9oADAMBAAIRAxEAPwCdABmX/9k="
+                    />
+                  </Suspense>
                   <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                     <div className="absolute bottom-0 left-0 right-0 p-4">
                       {/* Tags */}
                       <div className="flex flex-wrap gap-2 translate-y-10 group-hover:translate-y-0 transition-transform duration-300">
-                        {project.tags.slice(0, 3).map((tag, index) => (
-                          <motion.span
+                  {project.tags.slice(0, 3).map((tag, index) => (
+                    <motion.span
                             key={tag}
                             initial={isMounted ? { opacity: 0, y: 10 } : false}
                             animate={isMounted ? { opacity: 1, y: 0 } : false}
                             transition={{ duration: 0.3, delay: index * 0.1 }}
                             className="px-2 py-1 bg-white/10 backdrop-blur-sm text-white/90 text-[10px] rounded-full border border-white/10 hover:bg-white/20 hover:border-white/20 transition-all duration-300"
-                          >
-                            {tag}
-                          </motion.span>
-                        ))}
-                        {project.tags.length > 3 && (
-                          <motion.span
+                    >
+                      {tag}
+                    </motion.span>
+                  ))}
+                  {project.tags.length > 3 && (
+                    <motion.span
                             initial={isMounted ? { opacity: 0, y: 10 } : false}
                             animate={isMounted ? { opacity: 1, y: 0 } : false}
                             transition={{ duration: 0.3, delay: 0.3 }}
                             className="px-2 py-1 bg-white/10 backdrop-blur-sm text-white/60 text-[10px] rounded-full border border-white/10 hover:bg-white/20 hover:border-white/20 transition-all duration-300"
-                          >
+                    >
                             +{project.tags.length - 3}
-                          </motion.span>
-                        )}
-                      </div>
+                    </motion.span>
+                  )}
                     </div>
-                  </div>
+                    </div>
+                    </div>
                 </div>
 
                 {/* Content */}
@@ -422,205 +486,19 @@ export default function ProjectsSection() {
         </div>
 
         {/* Project Modal */}
-        {isMounted && (
-          <AnimatePresence>
-            {selectedProject && (
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: 0.4, ease: "easeInOut" }}
-                className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 md:p-6"
-                onClick={handleModalBackdropClick}
-              >
-                <motion.div
-                  ref={modalRef}
-                  initial={{ opacity: 0, scale: 0.8, y: 30 }}
-                  animate={{ opacity: 1, scale: 1, y: 0 }}
-                  exit={{ opacity: 0, scale: 0.9, y: 10 }}
-                  transition={{
-                    type: "spring",
-                    damping: 30,
-                    stiffness: 250,
-                    mass: 1,
-                    duration: 0.5,
-                  }}
-                  className="bg-black/90 border border-white/10 rounded-lg w-full max-w-4xl max-h-[90vh] overflow-y-auto relative modal-glow-border"
-                  style={{
-                    boxShadow: "0 0 30px rgba(220, 38, 38, 0.3), 0 0 15px rgba(255, 255, 255, 0.15)",
-                    perspective: "1000px",
-                  }}
-                  onClick={(e) => e.stopPropagation()}
-                >
-                  {/* Moving glow border effect */}
-                  <div className="absolute inset-0 rounded-lg overflow-hidden pointer-events-none">
-                    <div className="glow-line glow-line-top"></div>
-                    <div className="glow-line glow-line-right"></div>
-                    <div className="glow-line glow-line-bottom"></div>
-                    <div className="glow-line glow-line-left"></div>
-                  </div>
-
-                  {/* Modal header */}
-                  <div className="sticky top-0 bg-black/90 backdrop-blur-md z-10 flex justify-between items-center p-4 border-b border-white/10">
-                    <motion.h2
-                      initial={{ x: -10, opacity: 0 }}
-                      animate={{ x: 0, opacity: 1 }}
-                      className="text-xl font-bold text-white italic"
-                      style={{ textShadow: "0 0 10px rgba(255,255,255,0.4)" }}
-                    >
-                      {selectedProject.title}
-                    </motion.h2>
-                    <motion.button
-                      whileHover={{ rotate: 90, scale: 1.1 }}
-                      whileTap={{ scale: 0.9 }}
-                      onClick={closeProjectModal}
-                      className="p-1 rounded-full hover:bg-white/10 transition-colors"
-                    >
-                      <X className="h-5 w-5 text-white/70 hover:text-white" />
-                    </motion.button>
-                  </div>
-
-                  {/* Modal content */}
-                  <div className="p-4 md:p-6 grid gap-6 md:grid-cols-[1fr_1.5fr]">
-                    {/* Left column - Image and links */}
-                    <div className="space-y-4">
-                      <motion.div
-                        initial={{ opacity: 0, scale: 0.95, y: 10 }}
-                        animate={{ opacity: 1, scale: 1, y: 0 }}
-                        transition={{ duration: 0.4 }}
-                        whileHover={{
-                          scale: 1.03,
-                          boxShadow: "0 0 25px rgba(220, 38, 38, 0.3), 0 0 15px rgba(255, 255, 255, 0.2)",
-                        }}
-                        className="w-full aspect-video rounded-lg overflow-hidden bg-white/5 border border-white/5 relative"
-                      >
-                        <Image
-                          src={selectedProject.image}
-                          alt={selectedProject.title}
-                          fill
-                          className="object-cover"
-                        />
-                        <div className="absolute inset-0 bg-gradient-to-tr from-red-600/10 to-white/5 mix-blend-overlay" />
-                      </motion.div>
-
-                      {/* Project links */}
-                      <div className="flex gap-3">
-                        {selectedProject.links.map((link, index) => {
-                          const isDemo = link.icon === ExternalLink;
-                          return (
-                            <motion.a
-                              key={index}
-                              href={link.url}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              initial={{ opacity: 0, y: 20 }}
-                              animate={{ opacity: 1, y: 0 }}
-                              transition={{ delay: 0.2 + index * 0.1 }}
-                              whileHover={{
-                                scale: 1.05,
-                                y: -2,
-                                boxShadow: isDemo 
-                                  ? "0 10px 20px -5px rgba(227, 18, 102, 0.3), 0 0 15px rgba(227, 18, 102, 0.2)"
-                                  : "0 10px 20px -5px rgba(255, 255, 255, 0.2), 0 0 15px rgba(255, 255, 255, 0.1)"
-                              }}
-                              whileTap={{ scale: 0.95 }}
-                              className={`flex-1 py-3 rounded-lg flex items-center justify-center gap-2 text-sm font-medium transition-all duration-300 ${
-                                isDemo 
-                                  ? "bg-[#e31266] hover:bg-[#e31266]/90 text-white" 
-                                  : "bg-white/5 hover:bg-white/10 text-white/90 hover:text-white border border-white/10 hover:border-white/20"
-                              }`}
-                            >
-                              {isDemo ? (
-                                <>
-                                  <ExternalLink className="w-4 h-4" />
-                                  <span>{selectedProject.links.find((l: { icon: any }) => l.icon === Github) ? "Live Demo" : "Working"}</span>
-                                </>
-                              ) : (
-                                <>
-                                  <Github className="w-4 h-4" />
-                                  <span>View Code</span>
-                                </>
-                              )}
-                            </motion.a>
-                          );
-                        })}
-                      </div>
-
-                      {/* Project tags */}
-                      <motion.div
-                        initial={{ opacity: 0, y: 10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.4 }}
-                      >
-                        <div className="flex items-center mb-2">
-                          <Tag className="h-4 w-4 mr-2 text-[#e31266]" />
-                          <span className="text-sm text-white/80 italic">Technologies</span>
-                        </div>
-                        <div className="flex flex-wrap gap-2">
-                          {selectedProject.tags.map((tag, index) => (
-                            <motion.span
-                              key={index}
-                              initial={{ opacity: 0, scale: 0.8 }}
-                              animate={{ opacity: 1, scale: 1 }}
-                              transition={{ delay: 0.5 + index * 0.05 }}
-                              whileHover={{
-                                scale: 1.1,
-                                backgroundColor: "rgba(227, 18, 102, 0.15)",
-                                boxShadow: "0 0 10px rgba(227, 18, 102, 0.2), 0 0 5px rgba(255, 255, 255, 0.1)",
-                              }}
-                              className="inline-flex items-center px-2.5 py-1 text-xs rounded-full bg-[#e31266]/5 text-white/90 border border-[#e31266]/20 cursor-default transition-all duration-300"
-                            >
-                              {tag}
-                            </motion.span>
-                          ))}
-                        </div>
-                      </motion.div>
-                    </div>
-
-                    {/* Right column - Description */}
-                    <div className="space-y-4">
-                      <motion.h3
-                        initial={{ opacity: 0, y: 5 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.3 }}
-                        className="text-lg font-semibold text-white italic"
-                        style={{ textShadow: "0 0 8px rgba(255,255,255,0.3)" }}
-                      >
-                        Project Overview
-                      </motion.h3>
-                      <motion.div
-                        initial={{ opacity: 0, y: 10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.4, delay: 0.4 }}
-                        className="space-y-3 text-white/90"
-                      >
-                        {selectedProject.description.split("\n\n").map((point, idx) => (
-                          <motion.div
-                            key={idx}
-                            initial={{ opacity: 0, x: 10 }}
-                            animate={{ opacity: 1, x: 0 }}
-                            transition={{ duration: 0.4, delay: 0.3 + idx * 0.07 }}
-                            whileHover={{
-                              x: 3,
-                              textShadow: "0 0 5px rgba(255, 255, 255, 0.2)",
-                            }}
-                            className="flex items-start group"
-                          >
-                            <CheckCircle2 className="h-5 w-5 mr-3 mt-0.5 flex-shrink-0 text-white/60 group-hover:text-white/90 transition-colors duration-200" />
-                            <p className="text-sm md:text-base leading-relaxed group-hover:text-white transition-colors duration-200">
-                              {point.startsWith("• ") ? point.substring(2) : point}
-                            </p>
-                          </motion.div>
-                        ))}
-                      </motion.div>
-                    </div>
-                  </div>
-                </motion.div>
-              </motion.div>
-            )}
-          </AnimatePresence>
+        {isMounted && selectedProject && (
+          <Suspense fallback={
+            <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center">
+              <div className="animate-pulse w-16 h-16 rounded-full bg-white/10" />
+            </div>
+          }>
+            <ProjectModal 
+              project={selectedProject} 
+              onClose={() => setSelectedProject(null)} 
+            />
+          </Suspense>
         )}
-      </div>
+    </div>
     </section>
   )
 }

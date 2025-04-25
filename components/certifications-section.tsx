@@ -208,7 +208,7 @@ export default function CertificationsSection() {
                 <div className="p-4 sm:p-5">
                   {/* Logo and Title Section */}
                   <div className="flex items-start gap-4 mb-3">
-                    <div className="relative w-16 h-16 sm:w-20 sm:h-20 rounded-lg overflow-hidden flex-shrink-0 bg-white/5">
+                    <div className="relative w-20 h-20 sm:w-24 sm:h-24 rounded-lg overflow-hidden flex-shrink-0 bg-white/5">
                       <Image
                         src={cert.image}
                         alt={cert.issuer}
@@ -338,9 +338,9 @@ export default function CertificationsSection() {
                 </div>
 
                 {/* Modal content */}
-                <div className="p-4 md:p-6 grid gap-6 md:grid-cols-[1fr_1.5fr]">
+                <div className="p-3 sm:p-4 md:p-6 grid grid-cols-1 md:grid-cols-[1fr_1.5fr] gap-4 sm:gap-6">
                   {/* Left column - Image and details */}
-                  <div className="space-y-4">
+                  <div className="space-y-3 sm:space-y-4">
                     <motion.div
                       initial={{ opacity: 0, scale: 0.95, y: 10 }}
                       animate={{ opacity: 1, scale: 1, y: 0 }}
@@ -351,7 +351,9 @@ export default function CertificationsSection() {
                         src={selectedCert.image}
                         alt={selectedCert.title}
                         fill
-                        className="object-contain p-6"
+                        className="object-contain p-2 sm:p-4"
+                        sizes="(max-width: 768px) 100vw, 50vw"
+                        quality={90}
                       />
                       <div className="absolute inset-0 bg-gradient-to-tr from-red-600/10 to-white/5 mix-blend-overlay" />
                     </motion.div>
@@ -361,67 +363,98 @@ export default function CertificationsSection() {
                       initial={{ opacity: 0, y: 10 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ delay: 0.2 }}
-                      className="space-y-4"
+                      className="space-y-3"
                     >
                       <div className="flex items-center justify-between">
                         <div className="flex items-center gap-2">
                           <Award className="h-4 w-4 text-[#e31266]" />
-                          <span className="text-sm text-white/80">Issuer</span>
+                          <span className="text-xs sm:text-sm text-white/80">Issuer</span>
                         </div>
-                        <span className="text-sm text-white">{selectedCert.issuer}</span>
+                        <span className="text-xs sm:text-sm text-white">{selectedCert.issuer}</span>
                       </div>
 
                       <div className="flex items-center justify-between">
                         <div className="flex items-center gap-2">
                           <Calendar className="h-4 w-4 text-[#e31266]" />
-                          <span className="text-sm text-white/80">Date</span>
+                          <span className="text-xs sm:text-sm text-white/80">Date</span>
                         </div>
-                        <span className="text-sm text-white">{selectedCert.date}</span>
+                        <span className="text-xs sm:text-sm text-white">{selectedCert.date}</span>
                       </div>
 
                       {selectedCert.credentialId && (
                         <div className="flex items-center justify-between">
                           <div className="flex items-center gap-2">
                             <CheckCircle className="h-4 w-4 text-[#e31266]" />
-                            <span className="text-sm text-white/80">Credential ID</span>
+                            <span className="text-xs sm:text-sm text-white/80">Credential ID</span>
                           </div>
-                          <span className="text-sm text-white">{selectedCert.credentialId}</span>
+                          <span className="text-xs sm:text-sm text-white break-all">{selectedCert.credentialId}</span>
                         </div>
                       )}
                     </motion.div>
 
-                    {/* Verify button */}
+                    {/* Verify button - Only show in modal */}
                     {new Date(selectedCert.date) <= new Date() && selectedCert.credentialURL && (
-                      <motion.a
-                        href={Array.isArray(selectedCert.credentialURL) ? selectedCert.credentialURL[0].url : selectedCert.credentialURL}
-                        target="_blank"
-                        rel="noopener noreferrer"
+                      <motion.div
                         initial={{ opacity: 0, y: 10 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: 0.3 }}
-                        whileHover={{
-                          scale: 1.02,
-                          backgroundColor: "rgba(227, 18, 102, 0.15)",
-                          boxShadow: "0 0 15px rgba(227, 18, 102, 0.3), 0 0 10px rgba(255, 255, 255, 0.1)",
-                        }}
-                        whileTap={{ scale: 0.98 }}
-                        className="w-full flex items-center justify-center gap-2 px-4 py-2 rounded-md bg-[#e31266]/5 text-white/90 border border-[#e31266]/20 transition-all duration-300"
+                        className="space-y-2"
                       >
-                        <ExternalLink className="h-4 w-4" />
-                        <span>Verify Credential</span>
-                      </motion.a>
+                        {Array.isArray(selectedCert.credentialURL) ? (
+                          <>
+                            <div className="flex items-center gap-2 mb-2">
+                              <ExternalLink className="h-4 w-4 text-[#e31266]" />
+                              <span className="text-xs sm:text-sm text-white/80">Verify Credentials</span>
+                            </div>
+                            {selectedCert.credentialURL.map((credential, index) => (
+                              <motion.a
+                                key={index}
+                                href={credential.url}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                whileHover={{
+                                  scale: 1.02,
+                                  backgroundColor: "rgba(227, 18, 102, 0.15)",
+                                  boxShadow: "0 0 15px rgba(227, 18, 102, 0.3), 0 0 10px rgba(255, 255, 255, 0.1)",
+                                }}
+                                whileTap={{ scale: 0.98 }}
+                                className="w-full flex items-center justify-between px-3 sm:px-4 py-2 rounded-md bg-[#e31266]/5 text-white/90 border border-[#e31266]/20 transition-all duration-300"
+                              >
+                                <span className="text-xs sm:text-sm truncate mr-2">{credential.title}</span>
+                                <ExternalLink className="h-4 w-4 flex-shrink-0" />
+                              </motion.a>
+                            ))}
+                          </>
+                        ) : (
+                          <motion.a
+                            href={selectedCert.credentialURL}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            whileHover={{
+                              scale: 1.02,
+                              backgroundColor: "rgba(227, 18, 102, 0.15)",
+                              boxShadow: "0 0 15px rgba(227, 18, 102, 0.3), 0 0 10px rgba(255, 255, 255, 0.1)",
+                            }}
+                            whileTap={{ scale: 0.98 }}
+                            className="w-full flex items-center justify-center gap-2 px-3 sm:px-4 py-2 rounded-md bg-[#e31266]/5 text-white/90 border border-[#e31266]/20 transition-all duration-300"
+                          >
+                            <ExternalLink className="h-4 w-4" />
+                            <span className="text-xs sm:text-sm">Verify Credential</span>
+                          </motion.a>
+                        )}
+                      </motion.div>
                     )}
                   </div>
 
                   {/* Right column - Description and skills */}
-                  <div className="space-y-6">
+                  <div className="space-y-4 sm:space-y-6">
                     {/* Description */}
-                    <div className="space-y-4">
+                    <div className="space-y-3 sm:space-y-4">
                       <motion.h3
                         initial={{ opacity: 0, y: 5 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: 0.3 }}
-                        className="text-lg font-semibold text-white italic"
+                        className="text-base sm:text-lg font-semibold text-white italic"
                         style={{ textShadow: "0 0 8px rgba(255,255,255,0.3)" }}
                       >
                         Description
@@ -430,7 +463,7 @@ export default function CertificationsSection() {
                         initial={{ opacity: 0, y: 10 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.4, delay: 0.4 }}
-                        className="text-sm md:text-base text-white/80 leading-relaxed"
+                        className="text-xs sm:text-sm md:text-base text-white/80 leading-relaxed"
                       >
                         {selectedCert.description}
                       </motion.p>
@@ -441,13 +474,13 @@ export default function CertificationsSection() {
                       initial={{ opacity: 0, y: 10 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ delay: 0.5 }}
-                      className="space-y-4"
+                      className="space-y-3 sm:space-y-4"
                     >
                       <div className="flex items-center gap-2">
                         <Tag className="h-4 w-4 text-[#e31266]" />
-                        <span className="text-sm text-white/80 italic">Skills & Technologies</span>
+                        <span className="text-xs sm:text-sm text-white/80 italic">Skills & Technologies</span>
                       </div>
-                      <div className="flex flex-wrap gap-2">
+                      <div className="flex flex-wrap gap-1.5 sm:gap-2">
                         {selectedCert.skills.map((skill, index) => (
                           <motion.span
                             key={index}
@@ -459,7 +492,7 @@ export default function CertificationsSection() {
                               backgroundColor: "rgba(227, 18, 102, 0.15)",
                               boxShadow: "0 0 10px rgba(227, 18, 102, 0.2), 0 0 5px rgba(255, 255, 255, 0.1)",
                             }}
-                            className="px-2.5 py-1 text-sm rounded-full bg-[#e31266]/5 text-white/90 border border-[#e31266]/20 transition-all duration-300"
+                            className="px-2 sm:px-2.5 py-1 text-xs sm:text-sm rounded-full bg-[#e31266]/5 text-white/90 border border-[#e31266]/20 transition-all duration-300"
                           >
                             {skill}
                           </motion.span>
