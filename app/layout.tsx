@@ -9,16 +9,8 @@ export const metadata: Metadata = {
   title: "Arhaan Girdhar | Portfolio",
   description: "Full-stack developer and AI/ML enthusiast",
   icons: {
-    icon: [
-      { url: '/faviconn.png', sizes: 'any' },
-      { url: '/faviconn.png', type: 'image/png', sizes: '32x32' },
-      { url: '/faviconn.png', type: 'image/png', sizes: '180x180' }
-    ],
-    apple: [
-      { url: '/faviconn.png', sizes: '180x180' }
-    ]
-  },
-  manifest: '/manifest.json'
+    icon: '/faviconn.png'
+  }
 }
 
 export default function RootLayout({
@@ -29,6 +21,7 @@ export default function RootLayout({
   return (
     <html lang="en" className="scroll-smooth">
       <head>
+        <link rel="icon" type="image/png" href="/faviconn.png" />
         {/* Preload critical resources */}
         <link 
           rel="preload" 
@@ -72,14 +65,6 @@ export default function RootLayout({
           #__next {
             min-height: 100vh;
             background-color: black;
-          }
-          link[rel="icon"] {
-            border-radius: 50%;
-            overflow: hidden;
-          }
-          link[rel="apple-touch-icon"] {
-            border-radius: 50%;
-            overflow: hidden;
           }
         `}</style>
       </head>
