@@ -662,6 +662,31 @@ export default function ProgressSection() {
                           </div>
                         </CardContent>
                       </Card>
+
+                      <Card className="bg-black/20 backdrop-blur-sm border-white/5 hover:border-white/10 transition-all duration-300">
+                        <CardHeader className="text-center">
+                          <CardTitle className="text-lg sm:text-xl text-white" style={{ textShadow: "0 0 10px rgba(255,255,255,0.3)" }}>Rankings</CardTitle>
+                          <CardDescription className="text-xs sm:text-sm text-white/60">Global and Contest Ranking</CardDescription>
+                        </CardHeader>
+                        <CardContent>
+                          <div className="grid grid-cols-2 gap-3 sm:gap-4">
+                            <div className="text-center p-3 sm:p-4 rounded-lg bg-black/30">
+                              <p className="text-xs sm:text-sm text-white/60 mb-1">Global Rank</p>
+                              <p className="text-lg sm:text-3xl font-bold text-white" style={{ textShadow: "0 0 10px rgba(255,255,255,0.3)" }}>
+                                #  {leetcodeStats.globalRank.toLocaleString()}
+                              </p>
+                              <p className="text-xs text-white/60 mt-1">Top {leetcodeStats.topPercentage.toFixed(1)}%</p>
+                            </div>
+                            <div className="text-center p-3 sm:p-4 rounded-lg bg-black/30">
+                              <p className="text-xs sm:text-sm text-white/60 mb-1">Contest Rating</p>
+                              <p className="text-lg sm:text-3xl font-bold text-white" style={{ textShadow: "0 0 10px rgba(255,255,255,0.3)" }}>
+                                #  {Math.ceil(leetcodeStats.contestRating)}
+                              </p>
+                              <p className="text-xs text-white/60 mt-1">{leetcodeStats.attendedContests} contests</p>
+                            </div>
+                          </div>
+                        </CardContent>
+                      </Card>
                     </>
                   )}
                 </motion.div>
