@@ -40,7 +40,7 @@ interface ProjectModalProps {
 }
 
 const ProjectModal: React.FC<ProjectModalProps> = ({ project, onClose }) => {
-  const projectColor = PROJECT_COLORS[project.title] || "rgba(220, 38, 38, 0.4)"
+  const projectColor = PROJECT_COLORS[project.title as keyof typeof PROJECT_COLORS] || "rgba(220, 38, 38, 0.4)"
 
   const gradientStyle = {
     background: `linear-gradient(90deg, 
