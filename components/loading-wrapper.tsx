@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import LoadingAnimation from './loading-animation'
 import Navbar from './navbar'
 import { ScrollAnimation } from './scroll-animation'
@@ -10,6 +10,12 @@ import { SpeedInsights } from "@vercel/speed-insights/next"
 export default function LoadingWrapper({ children }: { children: React.ReactNode }) {
   const [isLoading, setIsLoading] = useState(true)
   const [showNavbar, setShowNavbar] = useState(false)
+  const experienceRef = useRef<HTMLDivElement>(null)
+  const projectsRef = useRef<HTMLDivElement>(null)
+  const skillsRef = useRef<HTMLDivElement>(null)
+  const certificationsRef = useRef<HTMLDivElement>(null)
+  const resumeRef = useRef<HTMLDivElement>(null)
+  const progressRef = useRef<HTMLDivElement>(null)
   
   useEffect(() => {
     // Preload critical images
@@ -25,7 +31,7 @@ export default function LoadingWrapper({ children }: { children: React.ReactNode
     }
 
     // Simulate minimum loading time for smooth transition
-    const minLoadTime = 3000 // 3 seconds minimum (increased from 1 second)
+    const minLoadTime = 4000 // 4 seconds minimum (reduced from 5 seconds)
     const loadStartTime = Date.now()
 
     const finishLoading = () => {
@@ -33,11 +39,14 @@ export default function LoadingWrapper({ children }: { children: React.ReactNode
       const remainingTime = Math.max(0, minLoadTime - elapsed)
 
       setTimeout(() => {
+        // First, hide the loading screen
         setIsLoading(false)
-        // Add a small delay before showing navbar to ensure smooth transition
+        
+        // Wait for loading screen to completely fade out (500ms)
+        // Then wait an additional 500ms to ensure smooth transition
         setTimeout(() => {
           setShowNavbar(true)
-        }, 200)
+        }, 1000) // Total delay of 1 second after loading screen starts fading
         
         if (typeof window !== 'undefined' && 'performance' in window) {
           performance.mark('app-loading-end')
@@ -57,7 +66,17 @@ export default function LoadingWrapper({ children }: { children: React.ReactNode
     <>
       <LoadingAnimation onLoadingComplete={() => setIsLoading(false)} />
       <div className="min-h-screen w-full bg-black overflow-x-hidden">
-        {showNavbar && <Navbar isLoading={false} />}
+        {showNavbar && (
+          <Navbar 
+            experienceRef={experienceRef}
+            projectsRef={projectsRef}
+            skillsRef={skillsRef}
+            certificationsRef={certificationsRef}
+            resumeRef={resumeRef}
+            progressRef={progressRef}
+            isLoading={false}
+          />
+        )}
         {!isLoading && (
           <ScrollAnimation>
             {children}

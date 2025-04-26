@@ -86,106 +86,103 @@ export default function LandingPage({ experienceRef, videoRef }: LandingPageProp
   return (
     <section
       id="home"
-      className="relative h-screen flex flex-col items-center justify-center overflow-hidden"
+      className="relative h-screen flex flex-col items-center justify-between overflow-hidden py-20"
     >
       {/* Star field with parallax effect */}
       <div className="absolute inset-0 w-full h-full overflow-hidden pointer-events-none z-0">
         <StarField />
       </div>
 
-      {/* Content */}
-      <div className="z-10 text-center px-4 max-w-3xl">
+      {/* Main Content */}
+      <div className="flex-1 relative z-10 text-center px-4 w-full flex flex-col items-center justify-center">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, ease: "easeOut" }}
-          className="flex items-center justify-center mb-4"
+          className="flex flex-col items-center text-center max-w-4xl mx-auto"
         >
-          <Terminal className="w-8 h-8 mr-2 text-white/70" />
-          <motion.h1
-            className="text-4xl md:text-6xl lg:text-7xl font-bold"
-            style={titleGradientStyle}
-          >
-            <>
-              Hi, I'm <br /> Arhaan Girdhar
-            </>
+          <motion.h1 
+            initial={{ scale: 0.95, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            transition={{ 
+              duration: 1,
+              ease: [0.19, 1, 0.22, 1]
+            }}
+            className="text-5xl md:text-7xl lg:text-8xl font-bold mb-4 tracking-tight"
+            style={{
+              background: "linear-gradient(45deg, #DCB4FF, #910A67, #3C0753)",
+              backgroundSize: "200% 200%",
+              WebkitBackgroundClip: "text",
+              backgroundClip: "text",
+              color: "transparent",
+              animation: "gradient 6s ease infinite",
+              transform: "perspective(1000px) rotateX(10deg)",
+              textShadow: "-1px -1px 0 #DCB4FF, -2px -2px 0 #910A67, -3px -3px 0 #3C0753",
+              filter: "drop-shadow(0 0 8px rgba(220, 180, 255, 0.2))",
+            }}>
+            Hi, I'm <br /> Arhaan Girdhar
           </motion.h1>
-        </motion.div>
 
-        <motion.p
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
-          className="text-lg md:text-xl mb-4 font-mono"
-          style={taglineStyle}
-        >
-          $ Full Stack Developer
-        </motion.p>
-
-        <motion.p
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.3, ease: "easeOut" }}
-          className="text-base mb-10 max-w-2xl mx-auto italic font-mono"
-          style={descriptionStyle}
-        >
-          // Aspiring Software Engineer @ MIT, Manipal
-          <br />
-          // Specializing in AI & ML
-        </motion.p>
-
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.4, ease: "easeOut" }}
-          className="flex flex-wrap justify-center gap-4 mb-12"
-        >
-          <motion.div
-            whileHover={{ 
-              scale: 1.03, 
-              transition: { type: "spring", stiffness: 400, damping: 10 } 
+          <motion.p 
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.3, duration: 0.8 }}
+            className="text-xl md:text-2xl text-white/80 font-mono mb-8 relative"
+            style={{
+              textShadow: "0 0 10px rgba(255, 255, 255, 0.3)",
             }}
           >
-            <Button
-              variant="outline"
-              className="px-6 py-5 bg-black/30 text-white rounded-full border border-white/30 transition-all duration-300 backdrop-blur-sm group hover:border-white/50 hover:bg-white/5 overflow-hidden relative font-mono"
-              onClick={scrollToExperience}
-            >
-              <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent opacity-0 group-hover:opacity-100 translate-x-[-100%] group-hover:translate-x-[100%] transition-all duration-1000 ease-in-out"></span>
-              <span
-                className="relative z-2 group-hover:text-white transition-colors duration-300"
-                style={{
-                  textShadow: `0 0 4px rgba(255, 255, 255, 0.3)`,
-                  transition: "text-shadow 0.3s ease-out, color 0.3s ease-out",
-                }}
-              >
-                $ view_projects
-              </span>
-            </Button>
-          </motion.div>
+            <span className="relative">
+              <span className="absolute -left-4 text-[#DCB4FF]/70">$</span>
+              AI / ML Engineer
+            </span>
+          </motion.p>
 
-          <motion.div
-            whileHover={{ 
-              scale: 1.03, 
-              transition: { type: "spring", stiffness: 400, damping: 10 } 
+          <motion.p 
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.5, duration: 0.8 }}
+            className="text-base text-white/60 font-mono italic relative"
+            style={{
+              textShadow: "0 0 8px rgba(255, 255, 255, 0.1)",
             }}
           >
-            <Button
-              variant="outline"
-              className="px-6 py-5 bg-black/30 text-white rounded-full border border-white/30 transition-all duration-300 backdrop-blur-sm group hover:border-white/50 hover:bg-white/5 overflow-hidden relative font-mono"
-              onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}
-            >
-              <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent opacity-0 group-hover:opacity-100 translate-x-[-100%] group-hover:translate-x-[100%] transition-all duration-1000 ease-in-out"></span>
-              <span
-                className="relative z-2 group-hover:text-white transition-colors duration-300"
-                style={{
-                  textShadow: `0 0 4px rgba(255, 255, 255, 0.3)`,
-                  transition: "text-shadow 0.3s ease-out, color 0.3s ease-out",
-                }}
+            <span className="relative">
+              <span className="absolute -left-4 text-[#910A67]/70">//</span>
+              Aspiring Software Engineer @ MIT, Manipal
+            </span>
+            <br />
+            <span className="relative">
+              <span className="absolute -left-4 text-[#910A67]/70">//</span>
+              Specializing in AI & ML
+            </span>
+          </motion.p>
+
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.7, duration: 0.8 }}
+            className="flex flex-wrap justify-center gap-4 mt-12"
+          >
+            <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
+              <Button
+                variant="outline"
+                className="px-6 py-5 bg-black/30 text-white rounded-full border border-white/30 transition-all duration-300 backdrop-blur-sm group hover:border-white/50 hover:bg-white/5 hover:shadow-[0_0_20px_rgba(220,180,255,0.15)]"
+                onClick={scrollToExperience}
               >
-                $ contact_me
-              </span>
-            </Button>
+                <span className="font-mono group-hover:text-[#DCB4FF] transition-colors">$ view_projects</span>
+              </Button>
+            </motion.div>
+
+            <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
+              <Button
+                variant="outline"
+                className="px-6 py-5 bg-black/30 text-white rounded-full border border-white/30 transition-all duration-300 backdrop-blur-sm group hover:border-white/50 hover:bg-white/5 hover:shadow-[0_0_20px_rgba(220,180,255,0.15)]"
+                onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}
+              >
+                <span className="font-mono group-hover:text-[#DCB4FF] transition-colors">$ contact_me</span>
+              </Button>
+            </motion.div>
           </motion.div>
         </motion.div>
 
@@ -193,90 +190,50 @@ export default function LandingPage({ experienceRef, videoRef }: LandingPageProp
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.5, ease: "easeOut" }}
-          className="flex justify-center space-x-6 mb-16"
+          transition={{ delay: 0.9, duration: 0.8 }}
+          className="flex justify-center gap-6 mt-16"
         >
-          <motion.a
-            href="https://www.linkedin.com/in/arhaan17/"
-            target="_blank"
-            rel="noopener noreferrer"
-            whileHover={{
-              scale: 1.2,
-              filter: `drop-shadow(0 0 8px rgba(255, 255, 255, 0.5))`,
-              transition: { type: "spring", stiffness: 400, damping: 10 },
-            }}
-            style={{
-              color: `rgba(255, 255, 255, ${0.6 + glowIntensity * 0.1})`,
-              filter: `drop-shadow(0 0 ${1 + glowIntensity}px rgba(255, 255, 255, ${0.1 + glowIntensity * 0.05}))`,
-              transition: "color 0.5s ease, filter 0.5s ease",
-            }}
-          >
-            <Linkedin className="w-5 h-5" />
-          </motion.a>
-          <motion.a
-            href="https://github.com/17arhaan"
-            target="_blank"
-            rel="noopener noreferrer"
-            whileHover={{
-              scale: 1.2,
-              filter: `drop-shadow(0 0 8px rgba(255, 255, 255, 0.5))`,
-              transition: { type: "spring", stiffness: 400, damping: 10 },
-            }}
-            style={{
-              color: `rgba(255, 255, 255, ${0.6 + glowIntensity * 0.1})`,
-              filter: `drop-shadow(0 0 ${1 + glowIntensity}px rgba(255, 255, 255, ${0.1 + glowIntensity * 0.05}))`,
-              transition: "color 0.5s ease, filter 0.5s ease",
-            }}
-          >
-            <Github className="w-5 h-5" />
-          </motion.a>
-          <motion.a
-            href="https://leetcode.com/u/arhaan17/"
-            target="_blank"
-            rel="noopener noreferrer"
-            whileHover={{
-              scale: 1.2,
-              filter: `drop-shadow(0 0 8px rgba(255, 255, 255, 0.5))`,
-              transition: { type: "spring", stiffness: 400, damping: 10 },
-            }}
-            style={{
-              color: `rgba(255, 255, 255, ${0.6 + glowIntensity * 0.1})`,
-              filter: `drop-shadow(0 0 ${1 + glowIntensity}px rgba(255, 255, 255, ${0.1 + glowIntensity * 0.05}))`,
-              transition: "color 0.5s ease, filter 0.5s ease",
-            }}
-          >
-            <Code className="w-5 h-5" />
-          </motion.a>
-          <motion.a
-            href="mailto:17arhaan.connect@gmail.com"
-            whileHover={{
-              scale: 1.2,
-              filter: `drop-shadow(0 0 8px rgba(255, 255, 255, 0.5))`,
-              transition: { type: "spring", stiffness: 400, damping: 10 },
-            }}
-            style={{
-              color: `rgba(255, 255, 255, ${0.6 + glowIntensity * 0.1})`,
-              filter: `drop-shadow(0 0 ${1 + glowIntensity}px rgba(255, 255, 255, ${0.1 + glowIntensity * 0.05}))`,
-              transition: "color 0.5s ease, filter 0.5s ease",
-            }}
-          >
-            <Mail className="w-5 h-5" />
-          </motion.a>
+          {[
+            { href: "https://www.linkedin.com/in/arhaan17/", Icon: Linkedin },
+            { href: "https://github.com/17arhaan", Icon: Github },
+            { href: "https://leetcode.com/u/arhaan17/", Icon: Code },
+            { href: "mailto:17arhaan.connect@gmail.com", Icon: Mail }
+          ].map((social, index) => (
+            <motion.a
+              key={social.href}
+              href={social.href}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-white/60 hover:text-[#DCB4FF] transition-all duration-300 hover:shadow-[0_0_20px_rgba(220,180,255,0.2)]"
+              whileHover={{ scale: 1.1, y: -2 }}
+              whileTap={{ scale: 0.95 }}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.9 + index * 0.1, duration: 0.5 }}
+            >
+              <social.Icon className="w-5 h-5" />
+            </motion.a>
+          ))}
         </motion.div>
+      </div>
 
-        {/* Scroll indicator */}
+      {/* Scroll indicator at bottom */}
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 1.5, duration: 0.5 }}
+        className="relative z-10 mb-8 w-6 h-6"
+      >
         <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 1, duration: 0.5 }}
-          className="absolute bottom-8 left-1/2 transform -translate-x-1/2"
+          animate={{ y: [0, 5, 0] }}
+          transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
         >
           <ChevronDown
-            className="w-6 h-6 text-white/50 animate-bounce cursor-pointer"
+            className="w-full h-full text-white/50 cursor-pointer hover:text-[#DCB4FF] transition-colors duration-300"
             onClick={scrollToExperience}
           />
         </motion.div>
-      </div>
+      </motion.div>
     </section>
   )
 }

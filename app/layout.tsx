@@ -9,7 +9,7 @@ export const metadata: Metadata = {
   title: "Arhaan Girdhar | Portfolio",
   description: "Full-stack developer and AI/ML enthusiast",
   icons: {
-    icon: '/faviconn.png'
+    icon: '/favcionn.png'
   }
 }
 
@@ -21,7 +21,7 @@ export default function RootLayout({
   return (
     <html lang="en" className="scroll-smooth">
       <head>
-        <link rel="icon" type="image/png" href="/faviconn.png" />
+        <link rel="icon" type="image/png" href="/favcionn.png" />
         {/* Preload critical resources */}
         <link 
           rel="preload" 

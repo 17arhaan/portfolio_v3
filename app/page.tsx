@@ -1,7 +1,6 @@
 "use client"
 
 import { useRef, useState, useEffect } from "react"
-import Navbar from "@/components/navbar"
 import LandingPage from "@/components/landing-page"
 import WorkTimeline from "@/components/work-timeline"
 import ProjectsSection from "@/components/projects-section"
@@ -55,16 +54,6 @@ export default function Home() {
       <div className="fixed inset-0 pointer-events-none">
         <GradientBubbles />
       </div>
-
-      {/* Navbar */}
-      <Navbar 
-        experienceRef={experienceRef} 
-        projectsRef={projectsRef} 
-        skillsRef={skillsRef} 
-        certificationsRef={certificationsRef}
-        resumeRef={resumeRef}
-        progressRef={progressRef}
-      />
 
       {/* Landing Page */}
       <LandingPage experienceRef={experienceRef} />

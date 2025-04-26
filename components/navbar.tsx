@@ -178,7 +178,7 @@ export default function Navbar({
         ease: [0.19, 1, 0.22, 1],
         delay: 0.2
       }}
-      className="fixed top-0 left-0 right-0 z-50 transition-all duration-500 bg-black/50 backdrop-blur-md py-1 sm:py-2"
+      className="fixed top-0 left-0 right-0 z-50 transition-all duration-500 bg-black/20 backdrop-blur-[6px] py-0.5"
     >
       <div className="max-w-[95vw] sm:max-w-[90vw] mx-auto flex flex-col md:flex-row items-center justify-between">
         {/* Signature Logo */}

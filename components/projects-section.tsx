@@ -392,28 +392,65 @@ export default function ProjectsSection() {
               />
               <Card
                 onClick={() => openProjectModal(project)}
-                className="relative cursor-pointer overflow-hidden bg-black/40 backdrop-blur-sm border border-white/10 hover:border-white/20 transition-all duration-300 z-10"
+                className="relative cursor-pointer overflow-hidden bg-black/40 backdrop-blur-sm border border-white/10 hover:border-white/20 transition-all duration-500 z-10 group"
               >
-                {/* Image Container */}
-                <div className="aspect-video relative overflow-hidden">
-                  <Suspense fallback={<ImagePlaceholder />}>
-                    <Image
-                      src={project.image}
-                      alt={project.title}
-                      fill
-                      className="object-cover"
-                      loading="lazy"
-                      sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                      quality={75}
-                      placeholder="blur"
-                      blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/4gHYSUNDX1BST0ZJTEUAAQEAAAHIAAAAAAQwAABtbnRyUkdCIFhZWiAH4AABAAEAAAAAAABhY3NwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAA9tYAAQAAAADTLQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAlkZXNjAAAA8AAAACRyWFlaAAABFAAAABRnWFlaAAABKAAAABRiWFlaAAABPAAAABR3dHB0AAABUAAAABRyVFJDAAABZAAAAChnVFJDAAABZAAAAChiVFJDAAABZAAAAChjcHJ0AAABjAAAADxtbHVjAAAAAAAAAAEAAAAMZW5VUwAAAAgAAAAcAHMAUgBHAEJYWVogAAAAAAAAb6IAADj1AAADkFhZWiAAAAAAAABimQAAt4UAABjaWFlaIAAAAAAAACSgAAAPhAAAts9YWVogAAAAAAAA9tYAAQAAAADTLXBhcmEAAAAAAAQAAAACZmYAAPKnAAANWQAAE9AAAApbAAAAAAAAAABtbHVjAAAAAAAAAAEAAAAMZW5VUwAAACAAAAAcAEcAbwBvAGcAbABlACAASQBuAGMALgAgADIAMAAxADb/2wBDABQODxIPDRQSEBIXFRQdHx4eHRoaHSQtJSEkLzYvLy02Ky8wOUQ5OjtKLzZFRVVLS1JWW1xbN0RkcmdiVmJWW1b/2wBDARUXFx4aHR4eHVZOTlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlb/wAARCAAIAAoDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAb/xAAUEAEAAAAAAAAAAAAAAAAAAAAA/8QAFQEBAQAAAAAAAAAAAAAAAAAAAAX/xAAUEQEAAAAAAAAAAAAAAAAAAAAA/9oADAMBAAIRAxEAPwCdABmX/9k="
-                    />
-                  </Suspense>
+                {/* Image Container with Zoom Out Effect */}
+                <div className="aspect-video relative overflow-hidden group">
+                  <motion.div
+                    whileHover={{ scale: 1.05 }}
+                    transition={{ duration: 0.5, ease: [0.19, 1, 0.22, 1] }}
+                    className="w-full h-full relative"
+                  >
+                    <Suspense fallback={<ImagePlaceholder />}>
+                      <Image
+                        src={project.image}
+                        alt={project.title}
+                        fill
+                        className="object-cover transition-transform duration-500 group-hover:scale-105"
+                        loading="lazy"
+                        sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                        quality={75}
+                        placeholder="blur"
+                        blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/4gHYSUNDX1BST0ZJTEUAAQEAAAHIAAAAAAQwAABtbnRyUkdCIFhZWiAH4AABAAEAAAAAAABhY3NwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAA9tYAAQAAAADTLQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAlkZXNjAAAA8AAAACRyWFlaAAABFAAAABRnWFlaAAABKAAAABRiWFlaAAABPAAAABR3dHB0AAABUAAAABRyVFJDAAABZAAAAChnVFJDAAABZAAAAChiVFJDAAABZAAAAChjcHJ0AAABjAAAADxtbHVjAAAAAAAAAAEAAAAMZW5VUwAAAAgAAAAcAHMAUgBHAEJYWVogAAAAAAAAb6IAADj1AAADkFhZWiAAAAAAAABimQAAt4UAABjaWFlaIAAAAAAAACSgAAAPhAAAts9YWVogAAAAAAAA9tYAAQAAAADTLXBhcmEAAAAAAAQAAAACZmYAAPKnAAANWQAAE9AAAApbAAAAAAAAAABtbHVjAAAAAAAAAAEAAAAMZW5VUwAAACAAAAAcAEcAbwBvAGcAbABlACAASQBuAGMALgAgADIAMAAxADb/2wBDABQODxIPDRQSEBIXFRQdHx4eHRoaHSQtJSEkLzYvLy02Ky8wOUQ5OjtKLzZFRVVLS1JWW1xbN0RkcmdiVmJWW1b/2wBDARUXFx4aHR4eHVZOTlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlb/wAARCAAIAAoDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAb/xAAUEAEAAAAAAAAAAAAAAAAAAAAA/8QAFQEBAQAAAAAAAAAAAAAAAAAAAAX/xAAUEQEAAAAAAAAAAAAAAAAAAAAA/9oADAMBAAIRAxEAPwCdABmX/9k="
+                      />
+                    </Suspense>
+                    {/* Hover Overlay */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                  </motion.div>
                 </div>
 
                 {/* Content */}
-                <div className="p-4">
-                  <h3 className="text-lg font-medium text-white text-center">{project.title}</h3>
+                <div className="p-4 relative">
+                  <motion.div
+                    initial={false}
+                    whileHover={{ scale: 1.02 }}
+                    transition={{ duration: 0.4 }}
+                  >
+                    <h3 className="text-lg font-medium text-white text-center group-hover:text-[#DCB4FF] transition-colors duration-500">
+                      {project.title}
+                    </h3>
+                  </motion.div>
+                  
+                  {/* Tags Preview */}
+                  <motion.div 
+                    className="flex flex-wrap justify-center gap-2 mt-3 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+                    initial={false}
+                    whileHover={{ y: -2 }}
+                  >
+                    {project.tags.slice(0, 3).map((tag, index) => (
+                      <span 
+                        key={index}
+                        className="text-xs px-2 py-0.5 rounded-full bg-white/5 text-white/60 border border-white/10"
+                      >
+                        {tag}
+                      </span>
+                    ))}
+                    {project.tags.length > 3 && (
+                      <span className="text-xs px-2 py-0.5 rounded-full bg-white/5 text-white/40">
+                        +{project.tags.length - 3}
+                      </span>
+                    )}
+                  </motion.div>
                 </div>
               </Card>
             </motion.div>
