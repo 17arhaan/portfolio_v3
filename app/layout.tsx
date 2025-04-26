@@ -8,6 +8,17 @@ const inter = Inter({ subsets: ["latin"] })
 export const metadata: Metadata = {
   title: "Arhaan Girdhar | Portfolio",
   description: "Full-stack developer and AI/ML enthusiast",
+  icons: {
+    icon: [
+      { url: '/faviconn.png', sizes: 'any' },
+      { url: '/faviconn.png', type: 'image/png', sizes: '32x32' },
+      { url: '/faviconn.png', type: 'image/png', sizes: '180x180' }
+    ],
+    apple: [
+      { url: '/faviconn.png', sizes: '180x180' }
+    ]
+  },
+  manifest: '/manifest.json'
 }
 
 export default function RootLayout({
