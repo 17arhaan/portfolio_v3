@@ -63,7 +63,7 @@ const ProjectModal: React.FC<ProjectModalProps> = ({ project, onClose }) => {
         exit={{ scale: 0.95, opacity: 0 }}
         transition={{ duration: 0.3 }}
         onClick={(e) => e.stopPropagation()}
-        className="w-full max-w-4xl bg-black/90 backdrop-blur-md rounded-xl overflow-hidden relative"
+        className="w-full max-w-[95vw] sm:max-w-4xl bg-black/90 backdrop-blur-md rounded-xl overflow-hidden relative"
       >
         {/* Glowing border animation */}
         <div className="absolute -inset-[1px] rounded-xl z-0">
@@ -92,9 +92,9 @@ const ProjectModal: React.FC<ProjectModalProps> = ({ project, onClose }) => {
           </div>
 
           {/* Content */}
-          <div className="grid md:grid-cols-2 gap-6 p-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 p-4 sm:p-6">
             {/* Left Column - Image and Links */}
-            <div className="space-y-4">
+            <div className="space-y-3 sm:space-y-4">
               <motion.div 
                 className="relative aspect-video rounded-lg overflow-hidden"
                 whileHover={{
@@ -113,7 +113,7 @@ const ProjectModal: React.FC<ProjectModalProps> = ({ project, onClose }) => {
                 <div className="absolute inset-0 bg-gradient-to-tr from-black/80 via-black/50 to-transparent" />
               </motion.div>
 
-              <div className="flex flex-wrap gap-3">
+              <div className="flex flex-wrap gap-2 sm:gap-3">
                 {project.links.map((link, index) => {
                   const Icon = link.icon
                   return (
@@ -127,10 +127,10 @@ const ProjectModal: React.FC<ProjectModalProps> = ({ project, onClose }) => {
                         boxShadow: `0 0 20px ${projectColor}, 0 0 10px rgba(255, 255, 255, 0.1)`
                       }}
                       whileTap={{ scale: 0.95 }}
-                      className="flex items-center gap-2 px-4 py-2 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 transition-colors"
+                      className="flex items-center gap-2 px-3 sm:px-4 py-2 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 transition-colors text-sm"
                     >
-                      <Icon className="w-5 h-5" />
-                      <span className="text-sm text-white/90">
+                      <Icon className="w-4 h-4 sm:w-5 sm:h-5" />
+                      <span className="text-white/90">
                         {Icon === Github ? "View on GitHub" : "View Live Demo"}
                       </span>
                     </motion.a>
@@ -146,51 +146,16 @@ const ProjectModal: React.FC<ProjectModalProps> = ({ project, onClose }) => {
                       scale: 1.05,
                       boxShadow: `0 0 15px ${projectColor}, 0 0 8px rgba(255, 255, 255, 0.1)`
                     }}
-                    className="text-sm px-3 py-1 rounded-full bg-white/5 hover:bg-white/10 border border-white/10 transition-colors"
+                    className="text-xs sm:text-sm px-2 sm:px-3 py-1 rounded-full bg-white/5 hover:bg-white/10 border border-white/10 transition-colors"
                   >
                     {tag}
                   </motion.span>
                 ))}
               </div>
-
-              <div className="flex flex-wrap gap-2">
-                {project.projectGithubLink && (
-                  <motion.a
-                    href={project.projectGithubLink}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    whileHover={{ 
-                      scale: 1.05,
-                      boxShadow: `0 0 20px ${projectColor}, 0 0 10px rgba(255, 255, 255, 0.1)`
-                    }}
-                    whileTap={{ scale: 0.95 }}
-                    className="flex items-center gap-2 px-4 py-2 bg-white/5 hover:bg-white/10 border border-white/10 rounded-lg text-white/80 text-sm font-medium transition-all duration-300"
-                  >
-                    <Github className="w-4 h-4" />
-                    <span>View on GitHub</span>
-                  </motion.a>
-                )}
-                {project.projectDemoLink && (
-                  <motion.a
-                    href={project.projectDemoLink}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    whileHover={{ 
-                      scale: 1.05,
-                      boxShadow: `0 0 20px ${projectColor}, 0 0 10px rgba(255, 255, 255, 0.1)`
-                    }}
-                    whileTap={{ scale: 0.95 }}
-                    className="flex items-center gap-2 px-4 py-2 bg-white/5 hover:bg-white/10 border border-white/10 rounded-lg text-white/80 text-sm font-medium transition-all duration-300"
-                  >
-                    <ExternalLink className="w-4 h-4" />
-                    <span>View Demo</span>
-                  </motion.a>
-                )}
-              </div>
             </div>
 
             {/* Right Column - Description */}
-            <div className="space-y-4">
+            <div className="space-y-3 sm:space-y-4">
               <div className="prose prose-invert max-w-none">
                 {project.description.split("\n\n").map((paragraph, index) => (
                   <motion.div
@@ -205,7 +170,7 @@ const ProjectModal: React.FC<ProjectModalProps> = ({ project, onClose }) => {
                     className="flex items-start group mb-2"
                   >
                     <motion.span 
-                      className="w-2.5 h-2.5 rounded-full border-2 border-white/40 mr-3 mt-1.5 flex-shrink-0"
+                      className="w-2 h-2 sm:w-2.5 sm:h-2.5 rounded-full border-2 border-white/40 mr-2 sm:mr-3 mt-1.5 flex-shrink-0"
                       whileHover={{
                         scale: 1.2,
                         borderColor: projectColor,
@@ -213,7 +178,7 @@ const ProjectModal: React.FC<ProjectModalProps> = ({ project, onClose }) => {
                       }}
                       transition={{ duration: 0.2 }}
                     />
-                    <p className="text-white/80 group-hover:text-white transition-colors duration-200">
+                    <p className="text-sm sm:text-base text-white/80 group-hover:text-white transition-colors duration-200">
                       {paragraph.startsWith("• ") ? paragraph.substring(2) : paragraph}
                     </p>
                   </motion.div>
@@ -231,7 +196,7 @@ const ProjectModal: React.FC<ProjectModalProps> = ({ project, onClose }) => {
                       scale: 1.05,
                       boxShadow: `0 0 15px ${projectColor}, 0 0 8px rgba(255, 255, 255, 0.1)`
                     }}
-                    className="text-sm px-3 py-1 rounded-full bg-white/5 hover:bg-white/10 border border-white/10 transition-colors"
+                    className="text-xs sm:text-sm px-2 sm:px-3 py-1 rounded-full bg-white/5 hover:bg-white/10 border border-white/10 transition-colors"
                     style={{
                       backgroundColor: projectColor.replace("0.4", "0.1"),
                       borderColor: projectColor
