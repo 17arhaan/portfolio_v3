@@ -26,9 +26,34 @@ const ImagePlaceholder = () => (
 )
 
 // Projects data
-const projects = [
+const projects: Project[] = [
   {
     id: 1,
+    title: "Morpheus 3D",
+    description:
+      "• Developed a 3D model generation platform using Hyper3D Rodin API with React and Three.js\n\n• Implemented text-to-3D and image-to-3D model generation with customizable quality settings\n\n• Created a user-friendly interface with real-time 3D model preview and orbit controls\n\n• Integrated multiple output formats (GLB, USDZ, FBX, OBJ, STL) with quality options\n\n• Built a responsive UI with shadcn/ui components and React Three Fiber for 3D rendering\n\n• Implemented advanced features like T/A pose for human models and material customization",
+    image: "/3d_l.png",
+    tags: [
+      "Next.js",
+      "C++",
+      "TypeScript",
+      "React",
+      "Hyper3D API",
+      "WebGL",
+      "shadcn/ui",
+      "React Three Fiber",
+      "Tailwind CSS",
+    ],
+    links: [
+      { url: "https://github.com/17arhaan/Morpheus3D", icon: Github },
+      { url: "https://morpheus3-d.vercel.app/", icon: ExternalLink },
+    ],
+    categories: ["web development", "artificial intelligence", "deep learning"],
+    projectGithubLink: "https://github.com/17arhaan/Morpheus3D",
+    projectDemoLink: "https://morpheus3-d.vercel.app/"
+  },
+  {
+    id: 2,
     title: "J.A.R.V.I.S",
     description:
       "• Built a sophisticated AI assistant with multi-modal capabilities using Python, TensorFlow, and advanced NLP models\n\n• Implemented real-time object detection with YOLOv8 achieving 91% mAP, and speech recognition with 95% accuracy\n\n• Developed a CNN-based face authentication system with 98% accuracy, supporting multi-user profiles and dynamic learning\n\n• Created a modular architecture with 20+ custom plugins for task automation, system control, and API integrations\n\n• Integrated OpenAI's GPT models for context-aware conversations and task understanding\n\n• Engineered a custom wake word detection system with 99% accuracy using MFCC features and Deep Learning",
@@ -50,9 +75,11 @@ const projects = [
       { url: "https://github.com/17arhaan/J.A.R.V.I.S", icon: Github },
     ],
     categories: ["artificial intelligence", "deep learning"],
+    projectGithubLink: "https://github.com/17arhaan/J.A.R.V.I.S",
+    projectDemoLink: "https://github.com/17arhaan/J.A.R.V.I.S"
   },
   {
-    id: 2,
+    id: 3,
     title: "Humanoid Simulation",
     description:
       "• Developed a physics-based humanoid robot simulation using Python and PyBullet\n\n• Implemented reinforcement learning algorithms for bipedal locomotion control\n\n• Created custom reward functions and state representations for stable walking\n\n• Integrated motion capture data for natural movement patterns\n\n• Built a real-time visualization system with PyOpenGL\n\n• Implemented collision detection and response for realistic interactions\n\n• Added support for different terrains and environmental conditions",
@@ -73,9 +100,11 @@ const projects = [
       { url: "https://github.com/17arhaan/Humanoid_Simulation", icon: Github },
     ],
     categories: ["deep learning"],
+    projectGithubLink: "https://github.com/17arhaan/Humanoid_Simulation",
+    projectDemoLink: "https://github.com/17arhaan/Humanoid_Simulation"
   },
   {
-    id: 3,
+    id: 4,
     title: "W.E.A.L.T.H",
     description:
       "• Engineered a full-stack finance tracking application with Next.js 13, TypeScript, and PostgreSQL\n\n• Implemented real-time transaction tracking with WebSocket integration for live updates\n\n• Built a RESTful API with Express.js featuring JWT authentication and role-based access control\n\n• Designed a responsive UI with Tailwind CSS and Framer Motion for smooth animations\n\n• Integrated Plaid API for secure bank account linking and automated transaction imports\n\n• Developed custom analytics dashboard with Chart.js for visualizing spending patterns\n\n• Implemented automated bill detection and recurring payment tracking using ML algorithms",
@@ -97,9 +126,11 @@ const projects = [
       { url: "https://github.com/17arhaan/W.E.A.L.T.H", icon: Github },
     ],
     categories: ["web development"],
+    projectGithubLink: "https://github.com/17arhaan/W.E.A.L.T.H",
+    projectDemoLink: "https://wealth-pi.vercel.app/"
   },
   {
-    id: 4,
+    id: 5,
     title: "Twitter Sentiment Analysis",
     description:
       "• Built a real-time Twitter sentiment analysis platform using Next.js and Python\n\n• Implemented custom NLP models with 92% accuracy for sentiment classification\n\n• Created an interactive dashboard with real-time sentiment visualization using Chart.js\n\n• Developed a secure authentication system with JWT and password hashing\n\n• Built a responsive UI with shadcn/ui components and Tailwind CSS\n\n• Integrated Twitter API for real-time tweet fetching and analysis\n\n• Added user profiles with analysis history and saved searches",
@@ -110,9 +141,11 @@ const projects = [
       { url: "https://github.com/17arhaan/Sentiment_Analysis", icon: Github },
     ],
     categories: ["data science", "artificial intelligence", "machine learning"],
+    projectGithubLink: "https://github.com/17arhaan/Sentiment_Analysis",
+    projectDemoLink: "https://sentiment-analysis-sepia.vercel.app/"
   },
   {
-    id: 5,
+    id: 6,
     title: "SnakeCV",
     description:
       "• Developed a multi-mode Snake Game with computer vision controls using Python, OpenCV, and React\n\n• Implemented real-time hand gesture recognition with 98% accuracy using MediaPipe and custom CV models\n\n• Created an AI agent using Q-learning achieving average scores of 50+ points\n\n• Built a responsive web version with React and TypeScript featuring custom animations\n\n• Designed a replay system storing game states in IndexedDB for offline access\n\n• Integrated WebRTC for real-time multiplayer functionality with <100ms latency\n\n• Added leaderboard system with Firebase real-time database integration",
@@ -133,9 +166,11 @@ const projects = [
       { url: "https://github.com/17arhaan/Snake_CV_ML", icon: Github },
     ],
     categories: ["computer vision", "machine learning", "web development"],
+    projectGithubLink: "https://github.com/17arhaan/Snake_CV_ML",
+    projectDemoLink: "https://github.com/17arhaan/Snake_CV_ML"
   },
   {
-    id: 6,
+    id: 7,
     title: "TherapAI",
     description:
       "• Built an AI-powered mental health platform using Python, FastAPI, and React\n\n• Integrated GPT-4 with custom fine-tuning for therapeutic conversations achieving 90% user satisfaction\n\n• Implemented real-time emotion detection from text and voice with 94% accuracy\n\n• Developed secure user authentication and HIPAA-compliant data storage\n\n• Created a progressive web app with offline support and push notifications\n\n• Built an emergency response system with automated escalation protocols\n\n• Integrated with external mental health resources and crisis hotlines",
@@ -156,9 +191,11 @@ const projects = [
       { url: "https://github.com/17arhaan/TherapAI", icon: Github },
     ],
     categories: ["artificial intelligence", "machine learning"],
+    projectGithubLink: "https://github.com/17arhaan/TherapAI",
+    projectDemoLink: "https://github.com/17arhaan/TherapAI"
   },
   {
-    id: 7,
+    id: 8,
     title: "Speedy",
     description:
       "• Built an interactive reaction time test with Next.js and Framer Motion\n\n• Implemented random delay system to prevent anticipation\n\n• Created performance metrics and feedback system\n\n• Added dark mode support and responsive design\n\n• Integrated beautiful animations and transitions\n\n• Developed tracking system for best times\n\n• Deployed on Vercel with automatic CI/CD pipeline",
@@ -179,9 +216,11 @@ const projects = [
       { url: "https://github.com/17arhaan/Speedy", icon: Github },
     ],
     categories: ["web development"],
+    projectGithubLink: "https://github.com/17arhaan/Speedy",
+    projectDemoLink: "https://speedy-green.vercel.app/"
   },
   {
-    id: 8,
+    id: 9,
     title: "Mind Mapper",
     description:
       "• Built an AI-powered mind map generator using Next.js and React Flow\n\n• Integrated Google Gemini API for intelligent content generation with robust error handling\n\n• Implemented interactive node-based visualization with drag-and-drop functionality\n\n• Created custom node and edge components for enhanced visual appeal\n\n• Added export functionality for saving mind maps as high-quality PNG images\n\n• Developed a responsive design with dark mode support\n\n• Implemented real-time node expansion and connection management\n\n• Added comprehensive error handling and user feedback system",
@@ -202,6 +241,8 @@ const projects = [
       { url: "https://github.com/17arhaan/Mind_Mapper", icon: Github },
     ],
     categories: ["web development", "artificial intelligence"],
+    projectGithubLink: "https://github.com/17arhaan/Mind_Mapper",
+    projectDemoLink: "https://v0-mindmap-app-sigma.vercel.app"
   },
 ]
 
@@ -382,9 +423,9 @@ export default function ProjectsSection() {
                 className="absolute -inset-1 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"
                 style={{
                   background: `linear-gradient(90deg, 
-                    ${PROJECT_COLORS[project.title]}, 
+                    ${project.title === "Morpheus 3D" ? "rgba(255, 255, 255, 0.4)" : PROJECT_COLORS[project.title]}, 
                     rgba(255, 255, 255, 0.2), 
-                    ${PROJECT_COLORS[project.title]}
+                    ${project.title === "Morpheus 3D" ? "rgba(255, 255, 255, 0.4)" : PROJECT_COLORS[project.title]}
                   )`,
                   filter: 'blur(8px)',
                   zIndex: 0

@@ -16,6 +16,7 @@ const PROJECT_COLORS = {
   "TherapAI": "rgba(255, 152, 0, 0.4)", // orange
   "Speedy": "rgba(0, 188, 212, 0.4)", // cyan
   "Mind Mapper": "rgba(244, 67, 54, 0.4)", // red
+  "Morpheus 3D": "rgba(255, 255, 255, 0.4)", // white
 }
 
 export interface Project {
@@ -29,8 +30,8 @@ export interface Project {
     icon: ForwardRefExoticComponent<Omit<LucideProps, "ref"> & RefAttributes<SVGSVGElement>>
   }[]
   categories: string[]
-  projectGithubLink?: string
-  projectDemoLink?: string
+  projectGithubLink: string
+  projectDemoLink: string
 }
 
 interface ProjectModalProps {
