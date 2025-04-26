@@ -197,9 +197,9 @@ export default function Navbar({
           whileTap={{ scale: 0.95 }}
           onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
           style={{ cursor: "pointer" }}
-          className="relative mx-auto md:mx-0"
+          className="relative mx-auto md:mx-0 flex items-center justify-center"
         >
-          <div className="w-36 h-14 sm:w-56 sm:h-20 relative">
+          <div className="w-36 h-14 sm:w-56 sm:h-20 relative flex items-center justify-center">
             <Image
               src="/sign.png"
               alt="Signature"
@@ -261,15 +261,6 @@ function NavItem({ label, isActive, onClick, id }: NavItemProps) {
       }`}
     >
       {label}
-      {isActive && (
-        <motion.div
-          layoutId="activeNavIndicator"
-          className="absolute -bottom-1 left-0 right-0 mx-auto w-2/3 h-0.5 rounded-full bg-gradient-to-r from-[#3C0753] via-[#720455] to-[#910A67]"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.3 }}
-        />
-      )}
     </motion.button>
   )
 }

@@ -1,21 +1,40 @@
-import { Rubik } from 'next/font/google'
-import './globals.css'
-import LoadingWrapper from '@/components/loading-wrapper'
-import { metadata } from './metadata'
+import type { Metadata } from "next"
+import { Inter } from "next/font/google"
+import "./globals.css"
+import LoadingWrapper from "@/components/loading-wrapper"
 
-const rubik = Rubik({ subsets: ['latin'] })
+const inter = Inter({ subsets: ["latin"] })
 
-export { metadata }
+export const metadata: Metadata = {
+  title: "Arhaan Girdhar | Portfolio",
+  description: "Full-stack developer and AI/ML enthusiast",
+}
 
 export default function RootLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode
-}>) {
+}) {
   return (
     <html lang="en" className="scroll-smooth">
       <head>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+        {/* Preload critical resources */}
+        <link 
+          rel="preload" 
+          href="/sign.png" 
+          as="image"
+          type="image/png"
+        />
+        <link 
+          rel="preconnect" 
+          href="https://fonts.googleapis.com" 
+        />
+        <link 
+          rel="preconnect" 
+          href="https://fonts.gstatic.com" 
+          crossOrigin="anonymous"
+        />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
         <meta name="theme-color" content="#000000" />
         <meta name="msapplication-TileColor" content="#000000" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -53,7 +72,7 @@ export default function RootLayout({
           }
         `}</style>
       </head>
-      <body className={`${rubik.className} min-h-screen w-full bg-black`}>
+      <body className={inter.className}>
         <LoadingWrapper>
           {children}
         </LoadingWrapper>

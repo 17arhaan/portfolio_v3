@@ -39,6 +39,7 @@ export default function LoadingAnimation({ onLoadingComplete }: LoadingAnimation
         if (newProgress >= 100) {
           clearInterval(interval);
           clearInterval(glitchInterval);
+          // Add a small delay before completing to ensure smooth transition
           setTimeout(() => {
             setLoading(false);
             onLoadingComplete();
