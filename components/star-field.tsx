@@ -69,19 +69,19 @@ export default function StarField() {
     const perspective = 800
     const depth = 1500
     // Expanded boundaries for wider distribution
-    const spaceWidth = canvas.width * 2.5
-    const spaceHeight = canvas.height * 2.5
+    const spaceWidth = canvas.width * 3 // Increased from 2.5 for wider distribution
+    const spaceHeight = canvas.height * 3 // Increased from 2.5 for wider distribution
     const spaceOffsetX = (spaceWidth - canvas.width) / 2
     const spaceOffsetY = (spaceHeight - canvas.height) / 2
 
     // Increased star count
-    const starCount = Math.min(120, Math.floor((window.innerWidth * window.innerHeight) / 10000))
+    const starCount = Math.min(150, Math.floor((window.innerWidth * window.innerHeight) / 8000)) // Increased from 120 and reduced divisor
     const stars: Star3D[] = []
 
     // Increased connection parameters
-    const connectionDistance = 350 // Increased from 320
-    const connectionProbability = 0.003 // Increased from 0.001 (3x more frequent)
-    const maxConnections = 3 // Increased from 2
+    const connectionDistance = 400 // Increased from 350
+    const connectionProbability = 0.005 // Increased from 0.003
+    const maxConnections = 4 // Increased from 3
     const mouseRadius = 300
     const mouseDepthInfluence = 400
 
@@ -108,9 +108,9 @@ export default function StarField() {
         vy: (Math.random() - 0.5) * 0.08,
         vz: (Math.random() - 0.5) * 0.05,
         connections: [],
-        alpha: Math.random() * 0.5 + 0.1,
-        targetAlpha: Math.random() * 0.5 + 0.5,
-        connectionTimer: Math.random() * 1000, // Reduced from 2000 for faster initial connections
+        alpha: Math.random() * 0.6 + 0.2, // Increased base and random alpha
+        targetAlpha: Math.random() * 0.6 + 0.6, // Increased target alpha
+        connectionTimer: Math.random() * 800, // Reduced from 1000 for faster initial connections
         hue: Math.random() * 40 + 200, // Bluish hue variation
         pulsePhase: Math.random() * Math.PI * 2,
         pulseSpeed: 0.01 + Math.random() * 0.02,

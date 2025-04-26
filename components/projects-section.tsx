@@ -216,6 +216,18 @@ const allCategories = [
   "computer vision"
 ]
 
+// Projects data
+const PROJECT_COLORS: { [key: string]: string } = {
+  "J.A.R.V.I.S": "rgba(255, 62, 122, 0.4)", // reddish pink
+  "Humanoid Simulation": "rgba(79, 195, 247, 0.4)", // light blue
+  "W.E.A.L.T.H": "rgba(76, 175, 80, 0.4)", // green
+  "Twitter Sentiment Analysis": "rgba(255, 235, 59, 0.4)", // yellow
+  "SnakeCV": "rgba(156, 39, 176, 0.4)", // purple
+  "TherapAI": "rgba(255, 152, 0, 0.4)", // orange
+  "Speedy": "rgba(0, 188, 212, 0.4)", // cyan
+  "Mind Mapper": "rgba(244, 67, 54, 0.4)", // red
+}
+
 export default function ProjectsSection() {
   const [activeCategory, setActiveCategory] = useState("all")
   const [filteredProjects, setFilteredProjects] = useState<Project[]>(projects)
@@ -361,17 +373,27 @@ export default function ProjectsSection() {
             <motion.div
               key={project.id}
               initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-50px" }}
-              transition={{ duration: 0.5 }}
-              className="group p-2"
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              transition={{ duration: 0.3 }}
+              className="relative group"
             >
               <motion.div
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-                onClick={() => setSelectedProject(project)}
-                className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-lg overflow-hidden cursor-pointer h-full flex flex-col transition-all duration-300"
-            >
+                className="absolute -inset-1 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                style={{
+                  background: `linear-gradient(90deg, 
+                    ${PROJECT_COLORS[project.title]}, 
+                    rgba(255, 255, 255, 0.2), 
+                    ${PROJECT_COLORS[project.title]}
+                  )`,
+                  filter: 'blur(8px)',
+                  zIndex: 0
+                }}
+              />
+              <Card
+                onClick={() => openProjectModal(project)}
+                className="relative cursor-pointer overflow-hidden bg-black/40 backdrop-blur-sm border border-white/10 hover:border-white/20 transition-all duration-300 z-10"
+              >
                 {/* Image Container */}
                 <div className="aspect-video relative overflow-hidden">
                   <Suspense fallback={<ImagePlaceholder />}>
@@ -393,7 +415,7 @@ export default function ProjectsSection() {
                 <div className="p-4">
                   <h3 className="text-lg font-medium text-white text-center">{project.title}</h3>
                 </div>
-              </motion.div>
+              </Card>
             </motion.div>
           ))}
         </div>

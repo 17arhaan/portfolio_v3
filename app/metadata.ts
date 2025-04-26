@@ -22,41 +22,37 @@ export const metadata: Metadata = {
   authors: [{ name: 'Arhaan Girdhar' }],
   creator: 'Arhaan Girdhar',
   publisher: 'Arhaan Girdhar',
+  applicationName: 'Arhaan Girdhar Portfolio',
+  referrer: 'origin-when-cross-origin',
+  formatDetection: {
+    email: false,
+    address: false,
+    telephone: false,
+  },
   icons: {
-    icon: [
-      {
-        url: '/favcionn.png',
-        sizes: '32x32',
-        type: 'image/png',
-      },
-      {
-        url: '/favcionn.png',
-        sizes: '192x192',
-        type: 'image/png',
-      },
-    ],
+    icon: '/favcionn.png',
     shortcut: '/favcionn.png',
-    apple: [
+    apple: '/favcionn.png',
+    other: [
       {
+        rel: 'image_src',
         url: '/favcionn.png',
-        sizes: '180x180',
-        type: 'image/png',
       },
     ],
   },
+  manifest: '/manifest.json',
   openGraph: {
     title: 'Arhaan Girdhar | Portfolio',
     description: 'Personal portfolio website showcasing projects in web development, artificial intelligence, and computer vision.',
     url: 'https://arhaanportfolio.in',
     siteName: 'Arhaan Girdhar Portfolio',
-    images: [
-      {
-        url: 'https://arhaanportfolio.in/favcionn.png',
-        width: 192,
-        height: 192,
-        alt: 'Arhaan Girdhar Portfolio',
-      },
-    ],
+    images: {
+      url: 'https://arhaanportfolio.in/favcionn.png',
+      width: 192,
+      height: 192,
+      alt: 'Arhaan Girdhar Portfolio',
+      type: 'image/png',
+    },
     locale: 'en_US',
     type: 'website',
   },
@@ -64,9 +60,17 @@ export const metadata: Metadata = {
     card: 'summary',
     title: 'Arhaan Girdhar | Portfolio',
     description: 'Personal portfolio website showcasing projects in web development, artificial intelligence, and computer vision.',
-    images: ['https://arhaanportfolio.in/favcionn.png'],
     creator: '@ArhaanGirdhar',
-    site: '@ArhaanGirdhar',
+    images: {
+      url: 'https://arhaanportfolio.in/favcionn.png',
+      width: 192,
+      height: 192,
+      alt: 'Arhaan Girdhar Portfolio',
+      type: 'image/png',
+    },
+  },
+  alternates: {
+    canonical: 'https://arhaanportfolio.in',
   },
   robots: {
     index: true,

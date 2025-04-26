@@ -68,15 +68,25 @@ const config = {
           from: { height: "var(--radix-accordion-content-height)" },
           to: { height: "0" },
         },
-        "spin-slow": {
-          "0%": { transform: "rotate(0deg)" },
-          "100%": { transform: "rotate(360deg)" },
+        "slow-spin": {
+          from: { transform: "rotate(0deg)" },
+          to: { transform: "rotate(360deg)" },
         },
+        "border-glow": {
+          "0%": { transform: "rotate(0deg)" },
+          "100%": { transform: "rotate(360deg)" }
+        },
+        "border-glow-delayed": {
+          "0%": { transform: "rotate(180deg)" },
+          "100%": { transform: "rotate(540deg)" }
+        }
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
-        "spin-slow": "spin-slow 8s linear infinite",
+        "slow-spin": "slow-spin 60s linear infinite",
+        "border-glow": "border-glow 4s linear infinite",
+        "border-glow-delayed": "border-glow-delayed 4s linear infinite"
       },
     },
   },

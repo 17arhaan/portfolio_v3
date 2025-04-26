@@ -10,27 +10,52 @@ interface LoadingAnimationProps {
 export default function LoadingAnimation({ onLoadingComplete }: LoadingAnimationProps) {
   const [loading, setLoading] = useState(true)
   const [progress, setProgress] = useState(0)
+  const [loadingText, setLoadingText] = useState('Initializing')
+  const [glitchEffect, setGlitchEffect] = useState(false)
 
   useEffect(() => {
+    const loadingPhrases = [
+      'Initializing Systems',
+      'Loading Neural Networks',
+      'Compiling Projects',
+      'Optimizing Experience',
+      'Calibrating Skills',
+      'Synchronizing Data',
+      'Finalizing Portfolio'
+    ];
+
+    // Glitch effect interval
+    const glitchInterval = setInterval(() => {
+      setGlitchEffect(true);
+      setTimeout(() => setGlitchEffect(false), 150);
+    }, 3000);
+
     const interval = setInterval(() => {
       setProgress((prev) => {
-        if (prev >= 100) {
-          clearInterval(interval)
-          setTimeout(() => {
-            setLoading(false)
-            onLoadingComplete()
-          }, 500)
-          return 100
-        }
-        return prev + 1
-      })
-    }, 20)
+        const newProgress = prev + 1;
+        const textIndex = Math.floor((newProgress / 100) * (loadingPhrases.length - 1));
+        setLoadingText(loadingPhrases[textIndex]);
 
-    return () => clearInterval(interval)
-  }, [onLoadingComplete])
+        if (newProgress >= 100) {
+          clearInterval(interval);
+          clearInterval(glitchInterval);
+          setTimeout(() => {
+            setLoading(false);
+            onLoadingComplete();
+          }, 500);
+          return 100;
+        }
+        return newProgress;
+      });
+    }, 30);
+
+    return () => {
+      clearInterval(interval);
+      clearInterval(glitchInterval);
+    };
+  }, [onLoadingComplete]);
 
   const generateBinary = (index: number) => {
-    // Create a deterministic pattern based on the index
     const patterns = [
       "10101010101010101010",
       "11001100110011001100",
@@ -54,7 +79,7 @@ export default function LoadingAnimation({ onLoadingComplete }: LoadingAnimation
       "11110011000011110000"
     ];
     return patterns[index % patterns.length];
-  }
+  };
 
   const generateParticles = () => {
     // Fixed positions and sizes for particles
@@ -121,12 +146,110 @@ export default function LoadingAnimation({ onLoadingComplete }: LoadingAnimation
           transition={{ duration: 0.5 }}
           className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-black overflow-hidden"
         >
-          {/* Background particles */}
-          <div className="absolute inset-0">
+          {/* Animated background gradient */}
+          <motion.div
+            className="absolute inset-0 bg-gradient-to-br from-black via-[#3C0753] to-black opacity-30"
+            animate={{
+              scale: [1, 1.2, 1],
+              opacity: [0.3, 0.5, 0.3],
+            }}
+            transition={{
+              duration: 3,
+              repeat: Infinity,
+              ease: "easeInOut",
+            }}
+          />
+
+          {/* Binary rain with enhanced effects - Now in two columns */}
+          <div className="absolute inset-0 flex justify-between overflow-hidden pointer-events-none">
+            {/* Left column */}
+            <div className="w-1/4 h-full flex flex-col justify-between py-4">
+              {Array.from({ length: 25 }).map((_, i) => (
+                <motion.div
+                  key={`left-${i}`}
+                  initial={{ y: -20, opacity: 0 }}
+                  animate={{ 
+                    y: 0, 
+                    opacity: [0.3, 0.7, 0.3],
+                    filter: glitchEffect ? "blur(2px)" : "blur(0px)",
+                  }}
+                  transition={{
+                    duration: 0.5,
+                    delay: i * 0.1,
+                    repeat: Infinity,
+                    repeatDelay: 1
+                  }}
+                  className="text-[#720455] font-mono text-sm tracking-wider transform-gpu"
+                  style={{
+                    textShadow: "0 0 5px #720455",
+                  }}
+                >
+                  {generateBinary(i)}
+                </motion.div>
+              ))}
+            </div>
+            
+            {/* Right column */}
+            <div className="w-1/4 h-full flex flex-col justify-between py-4">
+              {Array.from({ length: 25 }).map((_, i) => (
+                <motion.div
+                  key={`right-${i}`}
+                  initial={{ y: -20, opacity: 0 }}
+                  animate={{ 
+                    y: 0, 
+                    opacity: [0.3, 0.7, 0.3],
+                    filter: glitchEffect ? "blur(2px)" : "blur(0px)",
+                  }}
+                  transition={{
+                    duration: 0.5,
+                    delay: i * 0.1 + 0.25,
+                    repeat: Infinity,
+                    repeatDelay: 1
+                  }}
+                  className="text-[#720455] font-mono text-sm tracking-wider text-right transform-gpu"
+                  style={{
+                    textShadow: "0 0 5px #720455",
+                  }}
+                >
+                  {generateBinary(i + 25)}
+                </motion.div>
+              ))}
+            </div>
+
+            {/* Middle column for additional effect */}
+            <div className="absolute left-1/2 -translate-x-1/2 w-1/4 h-full flex flex-col justify-between py-4 opacity-30">
+              {Array.from({ length: 25 }).map((_, i) => (
+                <motion.div
+                  key={`middle-${i}`}
+                  initial={{ y: -20, opacity: 0 }}
+                  animate={{ 
+                    y: 0, 
+                    opacity: [0.2, 0.5, 0.2],
+                    filter: glitchEffect ? "blur(3px)" : "blur(1px)",
+                  }}
+                  transition={{
+                    duration: 0.5,
+                    delay: i * 0.1 + 0.5,
+                    repeat: Infinity,
+                    repeatDelay: 1
+                  }}
+                  className="text-[#720455] font-mono text-sm tracking-wider text-center transform-gpu"
+                  style={{
+                    textShadow: "0 0 5px #720455",
+                  }}
+                >
+                  {generateBinary(i + 50)}
+                </motion.div>
+              ))}
+            </div>
+          </div>
+
+          {/* Background particles with enhanced effects */}
+          <div className="absolute inset-0 pointer-events-none">
             {generateParticles().map((particle, index) => (
               <motion.div
                 key={index}
-                className="absolute rounded-full bg-[#720455] opacity-30"
+                className="absolute rounded-full bg-gradient-to-r from-[#720455] to-[#910A67] opacity-30"
                 style={{
                   width: `${particle.size}px`,
                   height: `${particle.size}px`,
@@ -136,6 +259,8 @@ export default function LoadingAnimation({ onLoadingComplete }: LoadingAnimation
                 animate={{
                   y: [0, -20, 0],
                   opacity: [0.3, 0.6, 0.3],
+                  scale: [1, 1.2, 1],
+                  filter: ["blur(0px)", "blur(2px)", "blur(0px)"],
                 }}
                 transition={{
                   duration: 3,
@@ -147,19 +272,21 @@ export default function LoadingAnimation({ onLoadingComplete }: LoadingAnimation
             ))}
           </div>
 
-          {/* Glitch effect lines */}
-          <div className="absolute inset-0 overflow-hidden">
-            {Array.from({ length: 10 }).map((_, i) => (
+          {/* Enhanced glitch effect lines */}
+          <div className="absolute inset-0 overflow-hidden pointer-events-none">
+            {Array.from({ length: 20 }).map((_, i) => (
               <motion.div
                 key={i}
-                className="absolute w-full h-[1px] bg-[#3C0753] opacity-30"
-                style={{ top: `${i * 10}%` }}
+                className="absolute w-full h-[1px] bg-gradient-to-r from-transparent via-[#3C0753] to-transparent opacity-30"
+                style={{ top: `${i * 5}%` }}
                 animate={{
                   x: [0, 10, -10, 0],
                   opacity: [0.3, 0.1, 0.3],
+                  scaleX: [1, 1.2, 0.8, 1],
+                  filter: glitchEffect ? "blur(1px)" : "blur(0px)",
                 }}
                 transition={{
-                  duration: 1 + Math.random(),
+                  duration: 2 + Math.random(),
                   repeat: Infinity,
                   delay: i * 0.1,
                 }}
@@ -167,59 +294,109 @@ export default function LoadingAnimation({ onLoadingComplete }: LoadingAnimation
             ))}
           </div>
 
-          <div className="relative w-full max-w-2xl h-64 overflow-hidden">
-            {/* Matrix-style binary rain */}
-            <div className="absolute inset-0 flex flex-col gap-2">
-              {Array.from({ length: 20 }).map((_, i) => (
+          {/* Central content container */}
+          <div className="relative w-full max-w-md mx-auto px-4 h-64 flex flex-col items-center justify-center backdrop-blur-sm z-10">
+            <motion.div
+              initial={{ scale: 0.8, opacity: 0 }}
+              animate={{ 
+                scale: 1, 
+                opacity: 1,
+                filter: glitchEffect ? "blur(3px)" : "blur(0px)",
+              }}
+              transition={{ duration: 0.5 }}
+              className="text-white text-2xl font-mono mb-8 relative text-center"
+            >
+              <span className="relative z-10">{loadingText}</span>
+              <motion.span
+                className="absolute inset-0 bg-gradient-to-r from-[#3C0753] via-[#720455] to-[#910A67] opacity-20 blur-lg"
+                animate={{
+                  scale: [1, 1.2, 1],
+                  opacity: [0.2, 0.4, 0.2],
+                }}
+                transition={{
+                  duration: 2,
+                  repeat: Infinity,
+                }}
+              />
+            </motion.div>
+
+            {/* Enhanced progress bar */}
+            <div className="w-full max-w-xs h-2 bg-gray-800 rounded-full overflow-hidden relative">
+              <motion.div
+                initial={{ width: 0 }}
+                animate={{ width: `${progress}%` }}
+                transition={{ duration: 0.2 }}
+                className="h-full bg-gradient-to-r from-[#3C0753] via-[#720455] to-[#910A67] relative"
+              >
                 <motion.div
-                  key={i}
-                  initial={{ y: -20, opacity: 0 }}
-                  animate={{ y: 0, opacity: 1 }}
-                  transition={{
-                    duration: 0.5,
-                    delay: i * 0.1,
-                    repeat: Infinity,
-                    repeatDelay: 1
+                  className="absolute inset-0 bg-white"
+                  animate={{
+                    opacity: [0.3, 0, 0.3],
                   }}
-                  className="text-[#720455] font-mono text-sm"
-                >
-                  {generateBinary(i)}
-                </motion.div>
-              ))}
-            </div>
-            
-            {/* Loading text and progress bar */}
-            <div className="absolute inset-0 flex flex-col items-center justify-center">
-              <motion.div
-                initial={{ scale: 0.8, opacity: 0 }}
-                animate={{ scale: 1, opacity: 1 }}
-                transition={{ duration: 0.5 }}
-                className="text-white text-2xl font-mono mb-4"
-              >
-                Loading Portfolio...
-              </motion.div>
-              
-              <div className="w-64 h-2 bg-gray-800 rounded-full overflow-hidden">
-                <motion.div
-                  initial={{ width: 0 }}
-                  animate={{ width: `${progress}%` }}
-                  transition={{ duration: 0.2 }}
-                  className="h-full bg-gradient-to-r from-[#3C0753] via-[#720455] to-[#910A67]"
+                  transition={{
+                    duration: 1,
+                    repeat: Infinity,
+                  }}
                 />
-              </div>
-              
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ duration: 0.5, delay: 0.5 }}
-                className="text-gray-400 text-sm font-mono mt-2"
-              >
-                {progress}%
               </motion.div>
             </div>
+
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ 
+                opacity: 1,
+                filter: glitchEffect ? "blur(2px)" : "blur(0px)",
+              }}
+              transition={{ duration: 0.5, delay: 0.5 }}
+              className="text-gray-400 text-sm font-mono mt-4 relative"
+            >
+              <span className="relative z-10">{progress}%</span>
+              <motion.span
+                className="absolute inset-0 bg-gradient-to-r from-[#3C0753] via-[#720455] to-[#910A67] opacity-20 blur-sm"
+                animate={{
+                  scale: [1, 1.2, 1],
+                  opacity: [0.2, 0.4, 0.2],
+                }}
+                transition={{
+                  duration: 1.5,
+                  repeat: Infinity,
+                }}
+              />
+            </motion.div>
+          </div>
+
+          {/* Enhanced corner decorations */}
+          <div className="absolute top-0 left-0 w-32 h-32 pointer-events-none">
+            <motion.div
+              className="absolute w-full h-full border-l-2 border-t-2 border-[#720455]"
+              animate={{
+                scale: [1, 1.1, 1],
+                opacity: [0.3, 0.6, 0.3],
+                filter: glitchEffect ? "blur(2px)" : "blur(0px)",
+              }}
+              transition={{
+                duration: 2,
+                repeat: Infinity,
+              }}
+            />
+          </div>
+          <div className="absolute bottom-0 right-0 w-32 h-32 pointer-events-none">
+            <motion.div
+              className="absolute w-full h-full border-r-2 border-b-2 border-[#720455]"
+              animate={{
+                scale: [1, 1.1, 1],
+                opacity: [0.3, 0.6, 0.3],
+                filter: glitchEffect ? "blur(2px)" : "blur(0px)",
+              }}
+              transition={{
+                duration: 2,
+                repeat: Infinity,
+                delay: 1,
+              }}
+            />
           </div>
         </motion.div>
       )}
     </AnimatePresence>
-  )
+  );
 } 

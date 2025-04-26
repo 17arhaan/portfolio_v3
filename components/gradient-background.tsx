@@ -24,20 +24,20 @@ export default function GradientBackground() {
     const generateBubbles = () => {
       // Subtle colors with slightly increased opacity
       const colors = [
-        "rgba(3, 6, 55, 0.15)", // #030637 (deep blue)
-        "rgba(60, 7, 83, 0.15)", // #3C0753 (deep purple)
-        "rgba(114, 4, 85, 0.15)", // #720455 (magenta purple)
-        "rgba(145, 10, 103, 0.15)", // #910A67 (bright magenta)
-        "rgba(255, 255, 255, 0.03)", // White with very low opacity
-        "rgba(3, 6, 55, 0.2)", // Slightly more visible versions
-        "rgba(60, 7, 83, 0.2)",
-        "rgba(114, 4, 85, 0.2)",
+        "rgba(3, 6, 55, 0.2)", // #030637 (deep blue) - increased from 0.15
+        "rgba(60, 7, 83, 0.2)", // #3C0753 (deep purple) - increased from 0.15
+        "rgba(114, 4, 85, 0.2)", // #720455 (magenta purple) - increased from 0.15
+        "rgba(145, 10, 103, 0.2)", // #910A67 (bright magenta) - increased from 0.15
+        "rgba(255, 255, 255, 0.04)", // White with very low opacity - increased from 0.03
+        "rgba(3, 6, 55, 0.25)", // Slightly more visible versions - increased from 0.2
+        "rgba(60, 7, 83, 0.25)", // increased from 0.2
+        "rgba(114, 4, 85, 0.25)", // increased from 0.2
       ]
 
       const newBubbles: Bubble[] = []
 
       // Generate significantly more bubbles
-      const bubbleCount = Math.floor(Math.random() * 10) + 25 // 25-35 bubbles
+      const bubbleCount = Math.floor(Math.random() * 15) + 30 // 30-45 bubbles (increased from 25-35)
 
       for (let i = 0; i < bubbleCount; i++) {
         // More variety in bubble sizes
@@ -84,8 +84,8 @@ export default function GradientBackground() {
   return (
     <div className="absolute inset-0 overflow-hidden pointer-events-none bg-black">
       {/* Subtle grid pattern */}
-      <div className="absolute inset-0 opacity-[0.01]">
-        <div className="h-full w-full bg-grid-white/[0.1]" />
+      <div className="absolute inset-0 opacity-[0.015]">
+        <div className="h-full w-full bg-grid-white/[0.15]" />
       </div>
 
       {bubbles.map((bubble) => (

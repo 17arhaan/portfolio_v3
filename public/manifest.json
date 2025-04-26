@@ -1,0 +1,23 @@
+{
+  "name": "Arhaan Girdhar Portfolio",
+  "short_name": "AG Portfolio",
+  "description": "Personal portfolio website showcasing projects in web development, artificial intelligence, and computer vision.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#000000",
+  "theme_color": "#720455",
+  "icons": [
+    {
+      "src": "/favcionn.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/favcionn.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+} 

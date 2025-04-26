@@ -731,3 +731,79 @@ body::after {
                 0 0 20px rgba(145, 10, 103, 0.3);
   }
 }
+
+@keyframes glow {
+  0% {
+    box-shadow: 0 0 5px #720455,
+                0 0 10px #720455,
+                0 0 20px #720455;
+  }
+  50% {
+    box-shadow: 0 0 10px #720455,
+                0 0 20px #720455,
+                0 0 30px #720455;
+  }
+  100% {
+    box-shadow: 0 0 5px #720455,
+                0 0 10px #720455,
+                0 0 20px #720455;
+  }
+}
+
+@keyframes borderGlow {
+  0%, 100% {
+    border-image: linear-gradient(45deg, #720455, #910A67, #720455) 1;
+  }
+  50% {
+    border-image: linear-gradient(45deg, #910A67, #720455, #910A67) 1;
+  }
+}
+
+@keyframes rotateBorder {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.glow-on-hover {
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+.glow-on-hover::before {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  background: linear-gradient(45deg, #720455, #910A67, #720455);
+  background-size: 200% 200%;
+  animation: rotateBorder 3s ease infinite;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  border-radius: inherit;
+  z-index: -1;
+}
+
+.glow-on-hover:hover::before {
+  opacity: 1;
+}
+
+.modal-glow {
+  position: relative;
+}
+
+.modal-glow::before {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  background: linear-gradient(45deg, #720455, #910A67, #720455, #910A67);
+  background-size: 400% 400%;
+  animation: rotateBorder 8s linear infinite;
+  border-radius: inherit;
+  z-index: -1;
+}

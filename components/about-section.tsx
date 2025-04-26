@@ -4,9 +4,11 @@ import { motion } from "framer-motion"
 import Image from "next/image"
 import { Brain, Code2, Target, BarChart2, Users, MessageSquare } from "lucide-react"
 import { useState } from "react"
+import TypeWriter from './type-writer'
 
 export default function AboutSection() {
   const [activeSkill, setActiveSkill] = useState<string | null>(null)
+  const [summaryComplete, setSummaryComplete] = useState(false)
 
   const skillDetails = {
     "ai-ml": {
@@ -132,6 +134,8 @@ export default function AboutSection() {
     }
   }
 
+  const summaryText = "I'm a passionate software developer and AI enthusiast with a knack for turning complex problems into elegant solutions. Currently pursuing my B.Tech in Computer Science at MIT Manipal, I specialize in full-stack development, machine learning, and computer vision. My goal is to create technology that makes a meaningful impact while continuously learning and growing in this ever-evolving field."
+
   return (
     <section id="about" className="py-12 sm:py-20 relative w-full">
       <div className="max-w-[95vw] sm:max-w-[90vw] mx-auto">
@@ -188,7 +192,7 @@ export default function AboutSection() {
               <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
             </div>
 
-            {/* Summary */}
+            {/* Summary with TypeWriter */}
             <motion.div
               initial={{ opacity: 0, y: 10 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -197,13 +201,14 @@ export default function AboutSection() {
               className="relative px-4 sm:px-0 lg:px-0"
             >
               <div className="absolute -top-4 -left-4 text-3xl sm:text-4xl text-white/20">"</div>
-              <div className="absolute -bottom-4 -right-4 text-3xl sm:text-4xl text-white/20">"</div>
-              <p className="text-sm sm:text-base md:text-lg leading-relaxed italic relative z-10">
-                I'm a passionate software engineer with a keen interest in building innovative solutions that make a difference. 
-                Currently pursuing Computer Science with a Minor Specialization in AI & ML at MIT, Manipal, I'm constantly 
-                exploring new technologies and pushing the boundaries of what's possible.
+              <p className="text-sm sm:text-base text-white/90 leading-relaxed text-center lg:text-left">
+                <TypeWriter 
+                  text={summaryText}
+                  delay={40}
+                  className="font-light tracking-wide"
+                />
               </p>
-              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent opacity-0 hover:opacity-100 transition-opacity duration-300" />
+              <div className="absolute -bottom-4 -right-4 text-3xl sm:text-4xl text-white/20">"</div>
             </motion.div>
           </motion.div>
 

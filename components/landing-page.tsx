@@ -93,14 +93,6 @@ export default function LandingPage({ experienceRef, videoRef }: LandingPageProp
         <StarField />
       </div>
 
-      {/* Terminal-like border */}
-      <div className="absolute inset-0 border-2 border-white/10 rounded-lg m-4 pointer-events-none z-0">
-        <div className="absolute top-0 left-0 w-3 h-3 border-t-2 border-l-2 border-white/20"></div>
-        <div className="absolute top-0 right-0 w-3 h-3 border-t-2 border-r-2 border-white/20"></div>
-        <div className="absolute bottom-0 left-0 w-3 h-3 border-b-2 border-l-2 border-white/20"></div>
-        <div className="absolute bottom-0 right-0 w-3 h-3 border-b-2 border-r-2 border-white/20"></div>
-      </div>
-
       {/* Content */}
       <div className="z-10 text-center px-4 max-w-3xl">
         <motion.div
