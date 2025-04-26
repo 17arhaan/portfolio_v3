@@ -334,7 +334,7 @@ export default function ProgressSection() {
             </div>
 
             <div className="relative">
-              <AnimatePresence mode="popLayout" initial={false} custom={direction}>
+              <AnimatePresence mode="sync" initial={false} custom={direction}>
                 <motion.div
                   key={page}
                   custom={direction}

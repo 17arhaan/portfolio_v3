@@ -410,7 +410,7 @@ export default function TestimonialsSection() {
         </motion.div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
-          <AnimatePresence mode="wait">
+          <AnimatePresence mode="sync">
             {displayedTestimonials.map((testimonial) => (
               <motion.div
                 key={testimonial.id}

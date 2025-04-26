@@ -61,7 +61,7 @@ const TypeWriter: React.FC<TypeWriterProps> = ({
     >
       {/* Main text */}
       <span className="text-white relative z-10 whitespace-pre-wrap break-words">
-        <AnimatePresence mode="popLayout">
+        <AnimatePresence mode="sync">
           {displayedText.split(/(\s+)/).map((segment, index) => (
             <motion.span
               key={index}

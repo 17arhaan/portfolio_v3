@@ -345,7 +345,7 @@ export default function WorkTimeline() {
 
       {/* Experience details */}
       <div className="w-full max-w-5xl relative z-10">
-        <AnimatePresence mode="wait" custom={direction}>
+        <AnimatePresence mode="sync" custom={direction}>
           <motion.div
             key={activeIndex}
             custom={direction}

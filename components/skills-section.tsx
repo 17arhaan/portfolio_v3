@@ -822,7 +822,7 @@ export default function SkillsSection() {
         )}
 
         {/* Skill Description Section */}
-        <AnimatePresence mode="wait">
+        <AnimatePresence mode="sync">
           {selectedSkillDetails && (
             <motion.div
               initial={{ opacity: 0, y: 20 }}
