@@ -604,32 +604,32 @@ export default function ProgressSection() {
                         </CardContent>
                       </Card>
 
-                      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
-                        <Card className="bg-black/20 backdrop-blur-sm border-white/5 hover:border-white/10 transition-all duration-300">
-                          <CardContent className="p-4 sm:p-6 flex flex-col items-center justify-center">
-                            <p className="text-xs sm:text-sm text-white/60 mb-1">Total Solved</p>
-                            <p className="text-xl sm:text-3xl font-bold text-white" style={{ textShadow: "0 0 10px rgba(255,255,255,0.3)" }}>{leetcodeStats.totalSolved}</p>
-                          </CardContent>
-                        </Card>
-                        <Card className="bg-black/20 backdrop-blur-sm border-white/5 hover:border-white/10 transition-all duration-300">
-                          <CardContent className="p-4 sm:p-6 flex flex-col items-center justify-center">
-                            <p className="text-xs sm:text-sm text-white/60 mb-1">Total Submissions</p>
-                            <p className="text-xl sm:text-3xl font-bold text-white" style={{ textShadow: "0 0 10px rgba(255,255,255,0.3)" }}>{leetcodeStats.totalSubmissions}</p>
-                          </CardContent>
-                        </Card>
-                        <Card className="bg-black/20 backdrop-blur-sm border-white/5 hover:border-white/10 transition-all duration-300">
-                          <CardContent className="p-4 sm:p-6 flex flex-col items-center justify-center">
-                            <p className="text-xs sm:text-sm text-white/60 mb-1">Completion Rate</p>
-                            <p className="text-xl sm:text-3xl font-bold text-white" style={{ textShadow: "0 0 10px rgba(255,255,255,0.3)" }}>{leetcodeStats.completionRate.toFixed(1)}%</p>
-                          </CardContent>
-                        </Card>
-                        <Card className="bg-black/20 backdrop-blur-sm border-white/5 hover:border-white/10 transition-all duration-300">
-                          <CardContent className="p-4 sm:p-6 flex flex-col items-center justify-center">
-                            <p className="text-xs sm:text-sm text-white/60 mb-1">Acceptance Rate</p>
-                            <p className="text-xl sm:text-3xl font-bold text-white" style={{ textShadow: "0 0 10px rgba(255,255,255,0.3)" }}>{leetcodeStats.acceptanceRate.toFixed(1)}%</p>
-                          </CardContent>
-                        </Card>
-                      </div>
+                      <Card className="bg-black/20 backdrop-blur-sm border-white/5 hover:border-white/10 transition-all duration-300">
+                        <CardHeader className="text-center">
+                          <CardTitle className="text-lg sm:text-xl text-white" style={{ textShadow: '0 0 10px rgba(255,255,255,0.3)' }}>LeetCode Stats</CardTitle>
+                          <CardDescription className="text-xs sm:text-sm text-white/60">Key problem-solving metrics</CardDescription>
+                        </CardHeader>
+                        <CardContent>
+                          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
+                            <div className="text-center p-3 sm:p-4 rounded-lg bg-black/30">
+                              <p className="text-xs sm:text-sm text-white/60 mb-1">Total Solved</p>
+                              <p className="text-lg sm:text-3xl font-bold text-white" style={{ textShadow: '0 0 10px rgba(255,255,255,0.3)' }}>{leetcodeStats.totalSolved}</p>
+                            </div>
+                            <div className="text-center p-3 sm:p-4 rounded-lg bg-black/30">
+                              <p className="text-xs sm:text-sm text-white/60 mb-1">Total Submissions</p>
+                              <p className="text-lg sm:text-3xl font-bold text-white" style={{ textShadow: '0 0 10px rgba(255,255,255,0.3)' }}>{leetcodeStats.totalSubmissions}</p>
+                            </div>
+                            <div className="text-center p-3 sm:p-4 rounded-lg bg-black/30">
+                              <p className="text-xs sm:text-sm text-white/60 mb-1">Completion Rate</p>
+                              <p className="text-lg sm:text-3xl font-bold text-white" style={{ textShadow: '0 0 10px rgba(255,255,255,0.3)' }}>{leetcodeStats.completionRate.toFixed(1)}%</p>
+                            </div>
+                            <div className="text-center p-3 sm:p-4 rounded-lg bg-black/30">
+                              <p className="text-xs sm:text-sm text-white/60 mb-1">Acceptance Rate</p>
+                              <p className="text-lg sm:text-3xl font-bold text-white" style={{ textShadow: '0 0 10px rgba(255,255,255,0.3)' }}>{leetcodeStats.acceptanceRate.toFixed(1)}%</p>
+                            </div>
+                          </div>
+                        </CardContent>
+                      </Card>
 
                       <Card className="bg-black/20 backdrop-blur-sm border-white/5 hover:border-white/10 transition-all duration-300">
                         <CardHeader className="text-center">
@@ -675,7 +675,7 @@ export default function ProgressSection() {
                               <p className="text-lg sm:text-3xl font-bold text-white" style={{ textShadow: "0 0 10px rgba(255,255,255,0.3)" }}>
                                 #  {leetcodeStats.globalRank.toLocaleString()}
                               </p>
-                              <p className="text-xs text-white/60 mt-1">Top {leetcodeStats.topPercentage.toFixed(1)}%</p>
+                              <p className="text-xs text-white/60 mt-1">50 Days Badge</p>
                             </div>
                             <div className="text-center p-3 sm:p-4 rounded-lg bg-black/30">
                               <p className="text-xs sm:text-sm text-white/60 mb-1">Contest Rating</p>
