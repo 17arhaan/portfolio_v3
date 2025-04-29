@@ -186,6 +186,7 @@ export default function AboutSection() {
                 src="/pfp.png"
                 alt="Arhaan Girdhar"
                 fill
+                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                 className="object-cover"
                 priority
               />

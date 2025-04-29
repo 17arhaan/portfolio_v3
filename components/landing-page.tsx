@@ -15,22 +15,26 @@ interface LandingPageProps {
 export default function LandingPage({ experienceRef, videoRef }: LandingPageProps) {
   const [gradientPosition, setGradientPosition] = useState(0)
   const [glowIntensity, setGlowIntensity] = useState(0)
+  const [showStarField, setShowStarField] = useState(false)
 
   // Animate gradient and glow effects with smoother transitions
   useEffect(() => {
     // Animate gradient position more slowly and smoothly
     const gradientInterval = setInterval(() => {
-      setGradientPosition((prev) => (prev >= 100 ? 0 : prev + 0.2))
-    }, 50)
+      setGradientPosition((prev) => (prev >= 100 ? 0 : prev + 0.1))
+    }, 100)
 
     // Animate glow intensity with smoother sine wave
     const glowInterval = setInterval(() => {
-      setGlowIntensity((prev) => Math.sin(Date.now() * 0.0003) * 0.2 + 0.2)
-    }, 16)
+      setGlowIntensity((prev) => Math.sin(Date.now() * 0.0005) * 0.2 + 0.2)
+    }, 32)
 
+    // Defer StarField animation for better FCP/LCP
+    const timeout = setTimeout(() => setShowStarField(true), 1000)
     return () => {
       clearInterval(gradientInterval)
       clearInterval(glowInterval)
+      clearTimeout(timeout)
     }
   }, [])
 
@@ -90,23 +94,24 @@ export default function LandingPage({ experienceRef, videoRef }: LandingPageProp
     >
       {/* Star field with parallax effect */}
       <div className="absolute inset-0 w-full h-full overflow-hidden pointer-events-none z-0">
-        <StarField />
+        {showStarField && <StarField />}
       </div>
 
       {/* Main Content */}
       <div className="flex-1 relative z-10 text-center px-4 w-full flex flex-col items-center justify-center">
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, ease: "easeOut" }}
+          initial="hidden"
+          animate="show"
+          variants={{
+            hidden: {},
+            show: { transition: { staggerChildren: 0.18 } }
+          }}
           className="flex flex-col items-center text-center max-w-4xl mx-auto"
         >
           <motion.h1 
-            initial={{ scale: 0.95, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            transition={{ 
-              duration: 1,
-              ease: [0.19, 1, 0.22, 1]
+            variants={{
+              hidden: { scale: 0.95, opacity: 0 },
+              show: { scale: 1, opacity: 1, transition: { duration: 1, ease: [0.19, 1, 0.22, 1] } }
             }}
             className="text-5xl md:text-7xl lg:text-8xl font-bold mb-4 tracking-tight"
             style={{
@@ -124,9 +129,10 @@ export default function LandingPage({ experienceRef, videoRef }: LandingPageProp
           </motion.h1>
 
           <motion.p 
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.3, duration: 0.8 }}
+            variants={{
+              hidden: { opacity: 0, y: 10 },
+              show: { opacity: 1, y: 0, transition: { duration: 0.8 } }
+            }}
             className="text-xl md:text-2xl text-white/80 font-mono mb-8 relative"
             style={{
               textShadow: "0 0 10px rgba(255, 255, 255, 0.3)",
@@ -139,9 +145,10 @@ export default function LandingPage({ experienceRef, videoRef }: LandingPageProp
           </motion.p>
 
           <motion.p 
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.5, duration: 0.8 }}
+            variants={{
+              hidden: { opacity: 0, y: 10 },
+              show: { opacity: 1, y: 0, transition: { duration: 0.8 } }
+            }}
             className="text-base text-white/60 font-mono italic relative"
             style={{
               textShadow: "0 0 8px rgba(255, 255, 255, 0.1)",
@@ -159,9 +166,10 @@ export default function LandingPage({ experienceRef, videoRef }: LandingPageProp
           </motion.p>
 
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.7, duration: 0.8 }}
+            variants={{
+              hidden: { opacity: 0, y: 20 },
+              show: { opacity: 1, y: 0, transition: { duration: 0.8 } }
+            }}
             className="flex flex-wrap justify-center gap-4 mt-12"
           >
             <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>

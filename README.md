@@ -1,4 +1,7 @@
-# Portfolio 
+# Portfolio v3
+
+**Performance Note:**
+For best FCP/LCP results, compress all large images in the `public/` directory using a tool like [TinyPNG](https://tinypng.com/) or JPEGoptim. Keep them as PNG/JPG, just reduce file size as much as possible without quality loss.
 
 A modern, responsive portfolio website built with Next.js, TypeScript, and Tailwind CSS. This portfolio showcases my professional work, skills, and achievements in a clean and interactive interface.
 

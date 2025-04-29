@@ -4,8 +4,7 @@ import { useState, useEffect, useRef } from 'react'
 import LoadingAnimation from './loading-animation'
 import Navbar from './navbar'
 import { ScrollAnimation } from './scroll-animation'
-import { Analytics } from "@vercel/analytics/react"
-import { SpeedInsights } from "@vercel/speed-insights/next"
+import dynamic from 'next/dynamic'
 
 export default function LoadingWrapper({ children }: { children: React.ReactNode }) {
   const [isLoading, setIsLoading] = useState(true)
@@ -16,6 +15,8 @@ export default function LoadingWrapper({ children }: { children: React.ReactNode
   const certificationsRef = useRef<HTMLDivElement>(null)
   const resumeRef = useRef<HTMLDivElement>(null)
   const progressRef = useRef<HTMLDivElement>(null)
+  const [AnalyticsComponent, setAnalyticsComponent] = useState<React.ReactNode>(null)
+  const [SpeedInsightsComponent, setSpeedInsightsComponent] = useState<React.ReactNode>(null)
   
   useEffect(() => {
     // Preload critical images
@@ -60,6 +61,14 @@ export default function LoadingWrapper({ children }: { children: React.ReactNode
       // Add any other critical resources to load here
       document.fonts.ready,
     ]).then(finishLoading)
+
+    // Dynamically import analytics after main content is interactive
+    setTimeout(() => {
+      const Analytics = dynamic(() => import("@vercel/analytics/react").then(mod => mod.Analytics), { ssr: false })
+      const SpeedInsights = dynamic(() => import("@vercel/speed-insights/next").then(mod => mod.SpeedInsights), { ssr: false })
+      setAnalyticsComponent(<Analytics />)
+      setSpeedInsightsComponent(<SpeedInsights />)
+    }, 0)
   }, [])
 
   return (
@@ -82,8 +91,9 @@ export default function LoadingWrapper({ children }: { children: React.ReactNode
             {children}
           </ScrollAnimation>
         )}
-        <Analytics />
-        <SpeedInsights />
+        {/* Defer analytics and speed insights until after main content is interactive */}
+        {AnalyticsComponent}
+        {SpeedInsightsComponent}
       </div>
     </>
   )

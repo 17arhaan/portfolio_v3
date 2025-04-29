@@ -28,6 +28,14 @@ export default function RootLayout({
           href="/sign.png" 
           as="image"
           type="image/png"
+          fetchPriority="high"
+        />
+        <link 
+          rel="preload" 
+          href="/pfp.png" 
+          as="image"
+          type="image/png"
+          fetchPriority="high"
         />
         <link 
           rel="preconnect" 

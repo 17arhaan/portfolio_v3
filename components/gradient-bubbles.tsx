@@ -1,8 +1,16 @@
 "use client"
 
 import { motion } from "framer-motion"
+import { useState, useEffect } from "react"
 
 export default function GradientBubbles() {
+  const [showBubbles, setShowBubbles] = useState(false)
+  useEffect(() => {
+    const timeout = setTimeout(() => setShowBubbles(true), 800)
+    return () => clearTimeout(timeout)
+  }, [])
+  if (!showBubbles) return null
+
   return (
     <div className="absolute inset-0 overflow-hidden">
       <div className="absolute inset-0 bg-gradient-to-b from-black/90 via-black/70 to-black/50" />

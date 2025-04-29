@@ -12,6 +12,7 @@ export default function LoadingAnimation({ onLoadingComplete }: LoadingAnimation
   const [progress, setProgress] = useState(0)
   const [loadingText, setLoadingText] = useState('Initializing')
   const [glitchEffect, setGlitchEffect] = useState(false)
+  const [currentIndex, setCurrentIndex] = useState(0)
 
   useEffect(() => {
     const loadingPhrases = [
@@ -55,6 +56,39 @@ export default function LoadingAnimation({ onLoadingComplete }: LoadingAnimation
       clearInterval(glitchInterval);
     };
   }, [onLoadingComplete]);
+
+  // Optimize animation intervals
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentIndex((prev) => (prev + 1) % 3)
+    }, 2000) // Increased from 1500ms to 2000ms for better performance
+
+    return () => clearInterval(interval)
+  }, [])
+
+  // Optimize animation variants
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        duration: 0.5,
+        staggerChildren: 0.1,
+      },
+    },
+  }
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: 0.3,
+        ease: "easeOut",
+      },
+    },
+  }
 
   const generateBinary = (index: number) => {
     const patterns = [
