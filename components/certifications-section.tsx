@@ -13,6 +13,18 @@ import { AnimatePresence } from "framer-motion"
 // Sample certifications data
 const certificationsData = [
   {
+    id: 10,
+    title: "Leading Teams: Developing as a Leader",
+    issuer: "University of Illinois",
+    date: "Jan 2025",
+    expiryDate: null,
+    description: "In this foundational course, I was challenged to develop as a leader. I explored the concept of leadership, assessed required competencies for today's leaders, learned more about myself and how I can make effective and ethical decisions, identified how to build trusting relationships with others, and articulated a practice for growing as a leader.",
+    credentialId: "ZU3G2X5YR2VG",
+    credentialURL: "https://www.coursera.org/account/accomplishments/certificate/ZU3G2X5YR2VG",
+    skills: ["Leadership", "Team Management", "Decision Making", "Ethical Leadership", "Relationship Building", "Personal Development", "Strategic Thinking", "Communication"],
+    image: "/igies.png",
+  },
+  {
     id: 8,
     title: "Meta Back-End Developer Professional Certificate",
     issuer: "Meta",
