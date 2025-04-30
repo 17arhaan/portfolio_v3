@@ -2,25 +2,46 @@ import { NextResponse } from 'next/server';
 
 export async function GET() {
   try {
-    // Fetch user stats
-    const statsResponse = await fetch(`https://leetcode-stats-api.herokuapp.com/arhaan17`, {
-      headers: {
-        'Content-Type': 'application/json',
-        'Accept': 'application/json',
-      },
-      next: {
-        revalidate: 300 // 5 minutes
-      }
-    });
+    let statsData = null;
+    
+    // Try to fetch user stats with fallback
+    try {
+      const statsResponse = await fetch(`https://leetcode-stats-api.herokuapp.com/arhaan17`, {
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+        },
+        next: {
+          revalidate: 300 // 5 minutes
+        }
+      });
 
-    if (!statsResponse.ok) {
-      throw new Error(`Failed to fetch LeetCode data: ${statsResponse.status} ${statsResponse.statusText}`);
+      if (statsResponse.ok) {
+        const data = await statsResponse.json();
+        if (data && data.status === 'success') {
+          statsData = data;
+        }
+      }
+    } catch (error) {
+      console.warn('Failed to fetch LeetCode stats from herokuapp:', error);
     }
 
-    const statsData = await statsResponse.json();
-
-    if (!statsData || statsData.status !== 'success') {
-      throw new Error('Invalid LeetCode data received');
+    // If stats API failed, use fallback data
+    if (!statsData) {
+      statsData = {
+        status: 'success',
+        totalSolved: 0,
+        totalQuestions: 0,
+        easySolved: 0,
+        easyTotal: 0,
+        mediumSolved: 0,
+        mediumTotal: 0,
+        hardSolved: 0,
+        hardTotal: 0,
+        acceptanceRate: 0,
+        submissionCalendar: {},
+        completionRate: 0
+      };
     }
 
     // Fetch contest history
@@ -186,7 +207,7 @@ export async function GET() {
       attendedContests: contestRanking.attendedContestsCount || 0,
       contestBadge: contestRanking.badge?.name || null,
       recentContests,
-      acceptanceRate: 70.38,
+      acceptanceRate: statsData.acceptanceRate || 0,
       completionRate: statsData.completionRate || 0,
       totalSubmissions: totalSubmissions || 0,
     });
