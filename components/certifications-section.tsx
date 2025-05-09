@@ -366,6 +366,8 @@ export default function CertificationsSection() {
                         className="object-contain p-2 sm:p-4"
                         sizes="(max-width: 768px) 100vw, 50vw"
                         quality={90}
+                        placeholder="blur"
+                        blurDataURL="/placeholder-cert.png"
                       />
                       <div className="absolute inset-0 bg-gradient-to-tr from-red-600/10 to-white/5 mix-blend-overlay" />
                     </motion.div>

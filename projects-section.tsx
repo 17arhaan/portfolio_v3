@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from "framer-motion"
 import { Tag, ExternalLink, Github, Star, X, CheckCircle2, ArrowUpRight, Filter } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import GradientBubbles from "./gradient-bubbles"
+import Image from "next/image"
 
 // Projects data
 const projects = [
@@ -543,10 +544,14 @@ export default function ProjectsSection() {
                       transformStyle: "preserve-3d",
                     }}
                   >
-                    <img
+                    <Image
                       src={selectedProject.image || "/placeholder.svg"}
                       alt={`${selectedProject.title} screenshot`}
+                      width={800}
+                      height={450}
                       className="w-full h-full object-cover"
+                      placeholder="blur"
+                      blurDataURL="/placeholder-project.png"
                     />
 
                     {/* Gradient overlay */}

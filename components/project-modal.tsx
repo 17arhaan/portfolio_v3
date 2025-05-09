@@ -115,6 +115,8 @@ const ProjectModal: React.FC<ProjectModalProps> = ({ project, onClose }) => {
                   className="object-cover"
                   sizes="(max-width: 768px) 100vw, 50vw"
                   quality={90}
+                  placeholder="blur"
+                  blurDataURL="/placeholder-project.png"
                 />
                 <div className="absolute inset-0 bg-gradient-to-tr from-black/80 via-black/50 to-transparent" />
               </motion.div>
