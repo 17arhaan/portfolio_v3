@@ -2,7 +2,7 @@ import { motion } from "framer-motion"
 
 export function GradientBackground() {
   return (
-    <div className="absolute inset-0 -z-10 overflow-hidden">
+    <div className="fixed inset-0 w-screen h-screen z-[-1] pointer-events-none overflow-hidden">
       {/* Base gradient with faster movement */}
       <motion.div
         className="absolute inset-0 bg-gradient-to-br from-purple-900/40 via-black to-blue-900/40"

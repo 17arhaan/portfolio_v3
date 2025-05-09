@@ -101,6 +101,7 @@ export async function GET() {
     // Calculate streak from submission calendar
     const submissionCalendar = statsData.submissionCalendar || {};
     const today = new Date();
+    today.setHours(0, 0, 0, 0); // Set to start of day
     const yesterday = new Date(today);
     yesterday.setDate(yesterday.getDate() - 1);
     
@@ -110,27 +111,44 @@ export async function GET() {
     const hasSolvedToday = submissionCalendar[todayKey] > 0;
     const hasSolvedYesterday = submissionCalendar[yesterdayKey] > 0;
 
-    // Calculate current streak
-    let currentStreak = 0;
-    const sortedDates = Object.keys(submissionCalendar)
-      .map(key => parseInt(key))
-      .sort((a, b) => b - a); // Sort in descending order
+    // Get the most recent submission date
+    const lastSolvedTimestamp = Math.max(...Object.keys(submissionCalendar).map(Number));
+    const lastSolved = new Date(lastSolvedTimestamp * 1000);
 
-    for (let i = 0; i < sortedDates.length; i++) {
-      const currentDate = new Date(sortedDates[i] * 1000);
-      const nextDate = i < sortedDates.length - 1 ? new Date(sortedDates[i + 1] * 1000) : null;
+    // Reset current streak to 0
+    let currentStreak = 0;
+
+    // Only start counting streak if solved today
+    if (hasSolvedToday) {
+      currentStreak = 1;
       
-      if (submissionCalendar[sortedDates[i].toString()] > 0) {
-        currentStreak++;
-        
+      // Continue counting streak from today
+      const sortedDates = Object.keys(submissionCalendar)
+        .map(key => parseInt(key))
+        .sort((a, b) => b - a); // Sort in descending order
+
+      for (let i = 0; i < sortedDates.length; i++) {
+        const currentDate = new Date(sortedDates[i] * 1000);
+        currentDate.setHours(0, 0, 0, 0); // Set to start of day
+        const nextDate = i < sortedDates.length - 1 ? new Date(sortedDates[i + 1] * 1000) : null;
         if (nextDate) {
-          const dayDiff = Math.floor((currentDate.getTime() - nextDate.getTime()) / (1000 * 60 * 60 * 24));
-          if (dayDiff > 1) {
-            break;
-          }
+          nextDate.setHours(0, 0, 0, 0); // Set to start of day
         }
-      } else {
-        break;
+        
+        if (submissionCalendar[sortedDates[i].toString()] > 0) {
+          if (currentStreak > 0 || i === 0) {
+            currentStreak++;
+          }
+          
+          if (nextDate) {
+            const dayDiff = Math.floor((currentDate.getTime() - nextDate.getTime()) / (1000 * 60 * 60 * 24));
+            if (dayDiff > 1) {
+              break;
+            }
+          }
+        } else {
+          break;
+        }
       }
     }
 
@@ -148,7 +166,11 @@ export async function GET() {
 
     for (let i = 0; i < sortedDatesForMax.length; i++) {
       const currentDate = new Date(sortedDatesForMax[i] * 1000);
+      currentDate.setHours(0, 0, 0, 0); // Set to start of day
       const nextDate = i < sortedDatesForMax.length - 1 ? new Date(sortedDatesForMax[i + 1] * 1000) : null;
+      if (nextDate) {
+        nextDate.setHours(0, 0, 0, 0); // Set to start of day
+      }
       
       if (submissionCalendar[sortedDatesForMax[i].toString()] > 0) {
         currentStreakCount++;
@@ -200,7 +222,7 @@ export async function GET() {
       streak: currentStreak,
       maxStreak: maxStreak,
       totalDays: totalActiveDays,
-      lastSolved: new Date().toISOString(),
+      lastSolved: lastSolved.toISOString(),
       contestRating: contestRanking.rating || 0,
       globalRank: globalRank,
       topPercentage: contestRanking.topPercentage || 0,

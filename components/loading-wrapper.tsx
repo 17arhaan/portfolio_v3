@@ -31,34 +31,18 @@ export default function LoadingWrapper({ children }: { children: React.ReactNode
       performance.mark('app-loading-start')
     }
 
-    // Simulate minimum loading time for smooth transition
-    const minLoadTime = 4000 // 4 seconds minimum (reduced from 5 seconds)
-    const loadStartTime = Date.now()
-
+    // Remove artificial minimum loading time
     const finishLoading = () => {
-      const elapsed = Date.now() - loadStartTime
-      const remainingTime = Math.max(0, minLoadTime - elapsed)
-
-      setTimeout(() => {
-        // First, hide the loading screen
-        setIsLoading(false)
-        
-        // Wait for loading screen to completely fade out (500ms)
-        // Then wait an additional 500ms to ensure smooth transition
-        setTimeout(() => {
-          setShowNavbar(true)
-        }, 1000) // Total delay of 1 second after loading screen starts fading
-        
-        if (typeof window !== 'undefined' && 'performance' in window) {
-          performance.mark('app-loading-end')
-          performance.measure('app-loading', 'app-loading-start', 'app-loading-end')
-        }
-      }, remainingTime)
+      setIsLoading(false)
+      setShowNavbar(true)
+      if (typeof window !== 'undefined' && 'performance' in window) {
+        performance.mark('app-loading-end')
+        performance.measure('app-loading', 'app-loading-start', 'app-loading-end')
+      }
     }
 
     // Start loading sequence
     Promise.all([
-      // Add any other critical resources to load here
       document.fonts.ready,
     ]).then(finishLoading)
 

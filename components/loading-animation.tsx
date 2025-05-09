@@ -28,28 +28,27 @@ export default function LoadingAnimation({ onLoadingComplete }: LoadingAnimation
     // Glitch effect interval
     const glitchInterval = setInterval(() => {
       setGlitchEffect(true);
-      setTimeout(() => setGlitchEffect(false), 150);
-    }, 3000);
+      setTimeout(() => setGlitchEffect(false), 75);
+    }, 1000);
 
     const interval = setInterval(() => {
       setProgress((prev) => {
-        const newProgress = prev + 1;
+        const newProgress = prev + 2;
         const textIndex = Math.floor((newProgress / 100) * (loadingPhrases.length - 1));
         setLoadingText(loadingPhrases[textIndex]);
 
         if (newProgress >= 100) {
           clearInterval(interval);
           clearInterval(glitchInterval);
-          // Add a small delay before completing to ensure smooth transition
           setTimeout(() => {
             setLoading(false);
             onLoadingComplete();
-          }, 500);
+          }, 100);
           return 100;
         }
         return newProgress;
       });
-    }, 30);
+    }, 10);
 
     return () => {
       clearInterval(interval);

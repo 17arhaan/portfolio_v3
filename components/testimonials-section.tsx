@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import testimonialsData from "@/data/testimonials.json"
+import Image from "next/image"
 
 interface Testimonial {
   id: string
@@ -40,6 +41,7 @@ function shuffleArray<T>(array: T[]): T[] {
 export default function TestimonialsSection() {
   const [isClient, setIsClient] = useState(false);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [isTestimonialDialogOpen, setIsTestimonialDialogOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitSuccess, setSubmitSuccess] = useState(false);
   const [isShuffling, setIsShuffling] = useState(false);
@@ -61,6 +63,7 @@ export default function TestimonialsSection() {
   });
   const [preview, setPreview] = useState<string | null>(null);
   const [hoveredRating, setHoveredRating] = useState(0);
+  const [selectedTestimonial, setSelectedTestimonial] = useState<Testimonial | null>(null);
   
   // Initialize with empty arrays to prevent hydration mismatch
   const [allTestimonials, setAllTestimonials] = useState<Testimonial[]>([]);
@@ -319,6 +322,8 @@ export default function TestimonialsSection() {
                               src={preview}
                               alt="Preview"
                               className="w-8 h-8 sm:w-9 sm:h-9 rounded-full object-cover"
+                              width={36}
+                              height={36}
                             />
                             <button
                               onClick={() => {
@@ -418,14 +423,22 @@ export default function TestimonialsSection() {
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -20 }}
                 transition={{ duration: 0.3 }}
-                className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-lg p-5 sm:p-6"
+                className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-lg p-5 sm:p-6 cursor-pointer hover:bg-white/10 transition-colors"
+                onClick={() => {
+                  setSelectedTestimonial(testimonial);
+                  setIsTestimonialDialogOpen(true);
+                }}
               >
                 <div className="flex items-start gap-4">
                   <div className="flex-shrink-0">
-                    <img
+                    <Image
                       src={testimonial.image}
                       alt={testimonial.name}
+                      width={56}
+                      height={56}
                       className="w-12 h-12 sm:w-14 sm:h-14 rounded-full object-cover"
+                      placeholder="blur"
+                      blurDataURL="/placeholder-profile.png"
                     />
                   </div>
                   <div className="flex-1 min-w-0">
@@ -489,6 +502,91 @@ export default function TestimonialsSection() {
             ))}
           </AnimatePresence>
         </div>
+
+        {/* Full Testimonial Dialog */}
+        <Dialog open={isTestimonialDialogOpen} onOpenChange={setIsTestimonialDialogOpen}>
+          <DialogContent className="bg-black/40 backdrop-blur-md border-white/10 text-white max-w-[95vw] sm:max-w-2xl">
+            {selectedTestimonial && (
+              <>
+                <DialogTitle className="text-xl sm:text-2xl font-bold mb-4 flex items-center gap-2">
+                  <Quote className="w-5 h-5 sm:w-6 sm:h-6 text-yellow-400" />
+                  Testimonial
+                </DialogTitle>
+                <div className="flex items-start gap-4">
+                  <div className="flex-shrink-0">
+                    <Image
+                      src={selectedTestimonial.image}
+                      alt={selectedTestimonial.name}
+                      width={64}
+                      height={64}
+                      className="w-16 h-16 sm:w-20 sm:h-20 rounded-full object-cover"
+                      placeholder="blur"
+                      blurDataURL="/placeholder-profile.png"
+                    />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <h3 className="text-lg sm:text-xl font-medium text-white">{selectedTestimonial.name}</h3>
+                        <p className="text-sm sm:text-base text-white/60">
+                          {selectedTestimonial.role} at {selectedTestimonial.company}
+                        </p>
+                      </div>
+                      <div className="flex items-center gap-1">
+                        {[...Array(5)].map((_, i) => (
+                          <Star
+                            key={i}
+                            className={`w-4 h-4 sm:w-5 sm:h-5 ${
+                              i < selectedTestimonial.rating ? "text-yellow-400 fill-yellow-400" : "text-white/30"
+                            }`}
+                          />
+                        ))}
+                      </div>
+                    </div>
+                    <p className="mt-6 text-base sm:text-lg text-white/80 whitespace-pre-wrap">
+                      {selectedTestimonial.content}
+                    </p>
+                    <div className="mt-6 flex items-center gap-4">
+                      {selectedTestimonial.website && (
+                        <a
+                          href={selectedTestimonial.website}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-white/60 hover:text-white text-sm sm:text-base flex items-center gap-2"
+                        >
+                          <Globe className="w-4 h-4" />
+                          Website
+                        </a>
+                      )}
+                      {selectedTestimonial.socialMedia?.github && (
+                        <a
+                          href={`https://github.com/${selectedTestimonial.socialMedia.github}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-white/60 hover:text-white text-sm sm:text-base flex items-center gap-2"
+                        >
+                          <Github className="w-4 h-4" />
+                          GitHub
+                        </a>
+                      )}
+                      {selectedTestimonial.socialMedia?.linkedin && (
+                        <a
+                          href={selectedTestimonial.socialMedia.linkedin}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-white/60 hover:text-white text-sm sm:text-base flex items-center gap-2"
+                        >
+                          <Linkedin className="w-4 h-4" />
+                          LinkedIn
+                        </a>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              </>
+            )}
+          </DialogContent>
+        </Dialog>
 
         {allTestimonials.length > 3 && (
           <motion.div 

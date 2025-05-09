@@ -77,6 +77,7 @@ export default function RootLayout({
         `}</style>
       </head>
       <body className={inter.className}>
+        <div id="bg-fallback" style={{position:'fixed',inset:0,zIndex:-9999,background:'#000',width:'100vw',height:'100vh'}}></div>
         <LoadingWrapper>
           {children}
         </LoadingWrapper>

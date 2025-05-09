@@ -178,9 +178,9 @@ export default function Navbar({
         ease: [0.19, 1, 0.22, 1],
         delay: 0.2
       }}
-      className="fixed top-0 left-0 right-0 z-50 transition-all duration-500 bg-black/20 backdrop-blur-[6px] py-0.5"
+      className="fixed top-0 left-0 right-0 z-50 transition-all duration-500 bg-black/20 backdrop-blur-[6px] py-0 font-poppins text-white text-center text-sm sm:text-base"
     >
-      <div className="max-w-[95vw] sm:max-w-[90vw] mx-auto flex flex-col md:flex-row items-center justify-between">
+      <div className="w-full flex flex-row items-center justify-center h-20 gap-12 md:gap-20">
         {/* Signature Logo */}
         <motion.div
           initial={{ scale: 0.8, opacity: 0 }}
@@ -197,7 +197,7 @@ export default function Navbar({
           whileTap={{ scale: 0.95 }}
           onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
           style={{ cursor: "pointer" }}
-          className="relative mx-auto md:mx-0 flex items-center justify-center"
+          className="relative flex items-center justify-center h-full"
         >
           <div className="w-36 h-14 sm:w-56 sm:h-20 relative flex items-center justify-center">
             <Image
@@ -213,7 +213,7 @@ export default function Navbar({
         </motion.div>
 
         {/* Desktop Navigation Links */}
-        <div className="hidden md:flex items-center gap-2" ref={navRef}>
+        <div className="hidden md:flex items-center justify-center gap-2 h-full" ref={navRef}>
           {navItems.map((item, index) => (
             <motion.div
               key={item.id}
@@ -256,7 +256,7 @@ function NavItem({ label, isActive, onClick, id }: NavItemProps) {
       whileHover={{ scale: 1.05 }}
       whileTap={{ scale: 0.95 }}
       onClick={onClick}
-      className={`text-sm sm:text-base transition-all duration-200 px-3 py-2 relative ${
+      className={`text-sm sm:text-base transition-all duration-200 px-3 py-2 relative nav-item-glow ${
         isActive ? "text-white font-medium" : "text-white/60 hover:text-white"
       }`}
     >

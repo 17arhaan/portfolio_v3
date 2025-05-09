@@ -82,7 +82,7 @@ export default function GradientBackground() {
   }, [])
 
   return (
-    <div className="absolute inset-0 overflow-hidden pointer-events-none bg-black">
+    <div className="fixed inset-0 w-screen h-screen z-[-1] pointer-events-none overflow-hidden bg-black">
       {/* Subtle grid pattern */}
       <div className="absolute inset-0 opacity-[0.015]">
         <div className="h-full w-full bg-grid-white/[0.15]" />
