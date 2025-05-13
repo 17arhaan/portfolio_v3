@@ -64,19 +64,19 @@ const workExperience = [
   },
   {
     id: 0,
-    role: "Coming Soon",
-    company: "Coming Soon",
-    location: "Coming Soon",
-    period: "Coming Soon",
+    role: "AI Intern",
+    company: "Concur IP",
+    location: "Noida, Uttar Pradesh, India · On-site",
+    period: "Present",
     description: [
-      "Coming Soon",
-      "Coming Soon",
-      "Coming Soon",
-      "Coming Soon",
-      "Coming Soon"
+      "Collaborated with AI engineers to optimize and build machine learning models for IP-related tasks.",
+      "Worked on model architecture, training, and participated in code reviews.",
+      "Assisted with data preprocessing and feature engineering for ML pipelines.",
+      "Maintained technical documentation for ongoing projects and experiments.",
+      "Utilized Python, TensorFlow, and strong team collaboration skills throughout the ML lifecycle."
     ],
-    skills: ["Coming Soon"],
-    logoUrl: "/placeholder.svg",
+    skills: ["Artificial Intelligence", "Machine Learning", "Python", "TensorFlow","Model Building" ,"Team Collaboration"],
+    logoUrl: "/questel.jpg",
   },
 ]
 
